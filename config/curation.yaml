@@ -1,0 +1,113 @@
+# Curation Rules Configuration
+# Weights for relevance scoring and AI summarization
+
+user_interests:
+  # Category weights (multiplier applied to base score)
+  categories:
+    tech_ai: 1.5
+    montreal: 1.3
+    finance: 1.2
+    geopolitics: 1.1
+    quebec: 1.1
+    canada: 1.0
+    economics: 1.0
+
+  # High-priority keywords (boost articles containing these)
+  keywords:
+    high_priority:  # +0.3 to score
+      - Claude
+      - Anthropic
+      - NVIDIA
+      - OpenAI
+      - GPT
+      - LLM
+      - transformer
+      - neural network
+      - machine learning
+      - deep learning
+      - robotics
+      - autonomous
+      - AGI
+
+    medium_priority:  # +0.2 to score
+      - Montreal
+      - Quebec
+      - Canada
+      - AI regulation
+      - tech layoffs
+      - startup
+      - venture capital
+      - cryptocurrency
+      - Bitcoin
+      - Ethereum
+
+    low_priority:  # +0.1 to score
+      - automation
+      - productivity
+      - remote work
+      - cloud computing
+
+# Scoring thresholds
+scoring:
+  # Minimum score to include in daily brief (0.0 - 1.0)
+  min_score: 0.3
+
+  # Top N articles for daily brief
+  daily_brief_count: 10
+
+  # Cross-reference bonus when multiple sources report same story
+  cross_reference_bonus: 0.15
+
+  # Penalty for lower reliability sources
+  reliability_weight: 0.25
+
+# Summary generation
+summaries:
+  # Max tokens for individual article summary
+  article_max_tokens: 200
+
+  # Max tokens for daily brief overview
+  brief_max_tokens: 500
+
+  # Include "Why It Matters" section
+  include_why_it_matters: true
+
+  # Include key takeaways bullets
+  include_takeaways: true
+  max_takeaways: 5
+
+# Deduplication
+dedup:
+  # Similarity threshold for considering articles duplicates (0.0 - 1.0)
+  similarity_threshold: 0.7
+
+  # When duplicates found, prefer source with higher reliability
+  prefer_reliable: true
+
+# Daily brief structure
+daily_brief:
+  sections:
+    - name: Top Stories
+      count: 3
+
+    - name: AI & Tech
+      category: tech_ai
+      count: 3
+
+    - name: Local Montreal
+      category: montreal
+      count: 2
+
+    - name: What to Watch
+      description: Developing stories and upcoming events
+      count: 2
+
+# TTS settings
+tts:
+  # Speaking rate (words per minute)
+  rate: 160
+
+  # Voices
+  voices:
+    en: en_US-amy-medium
+    fr: fr_FR-siwis-medium

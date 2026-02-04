@@ -1,0 +1,118 @@
+# News Sources Configuration
+# Reliability scores: 0.0 (unreliable) to 1.0 (highly reliable)
+
+sources:
+  # Montreal Local
+  montreal:
+    - name: CTV Montreal
+      url: https://montreal.ctvnews.ca/rss/ctvnews-ca-montreal-public-rss-1.822423
+      language: en
+      reliability: 0.85
+
+    - name: Montreal Gazette
+      url: https://montrealgazette.com/feed
+      language: en
+      reliability: 0.85
+
+    - name: CBC Montreal
+      url: https://www.cbc.ca/webfeed/rss/rss-canada-montreal
+      language: en
+      reliability: 0.90
+
+    - name: TVA Nouvelles Montreal
+      url: https://www.tvanouvelles.ca/rss/montreal
+      language: fr
+      reliability: 0.80
+
+  # Quebec Provincial
+  quebec:
+    - name: Journal de Montreal
+      url: https://www.journaldemontreal.com/rss
+      language: fr
+      reliability: 0.75
+
+    - name: Le Devoir
+      url: https://www.ledevoir.com/rss/manchettes.xml
+      language: fr
+      reliability: 0.90
+
+    - name: Radio-Canada Quebec
+      url: https://ici.radio-canada.ca/rss/4159
+      language: fr
+      reliability: 0.90
+
+  # Canada National
+  canada:
+    - name: CBC News
+      url: https://www.cbc.ca/webfeed/rss/rss-topstories
+      language: en
+      reliability: 0.90
+
+    - name: Global News
+      url: https://globalnews.ca/feed/
+      language: en
+      reliability: 0.85
+
+    - name: CTV News
+      url: https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009
+      language: en
+      reliability: 0.85
+
+  # Geopolitics
+  geopolitics:
+    - name: Reuters World
+      url: https://www.reutersagency.com/feed/?best-topics=world
+      language: en
+      reliability: 0.95
+
+    - name: Al Jazeera
+      url: https://www.aljazeera.com/xml/rss/all.xml
+      language: en
+      reliability: 0.85
+
+  # Finance
+  finance:
+    - name: Bloomberg Markets
+      url: https://feeds.bloomberg.com/markets/news.rss
+      language: en
+      reliability: 0.90
+
+    - name: BNN Bloomberg
+      url: https://www.bnnbloomberg.ca/arc/outboundfeeds/rss/?outputType=xml
+      language: en
+      reliability: 0.85
+
+  # AI & Robotics
+  tech_ai:
+    - name: TechCrunch AI
+      url: https://techcrunch.com/category/artificial-intelligence/feed/
+      language: en
+      reliability: 0.80
+
+    - name: The Verge AI
+      url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+      language: en
+      reliability: 0.80
+
+    - name: ArXiv AI/ML
+      url: https://rss.arxiv.org/rss/cs.AI
+      language: en
+      reliability: 1.0
+
+    - name: ScienceDaily Robotics
+      url: https://www.sciencedaily.com/rss/computers_math/robotics.xml
+      language: en
+      reliability: 0.95
+
+  # Economics
+  economics:
+    - name: The Economist
+      url: https://www.economist.com/finance-and-economics/rss.xml
+      language: en
+      reliability: 0.95
+
+# Fetch settings
+fetch:
+  timeout: 30
+  max_articles_per_feed: 20
+  user_agent: "NewsAggregator/1.0 (+https://news.bezman.ca)"

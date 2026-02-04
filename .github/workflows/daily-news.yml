@@ -1,0 +1,67 @@
+name: Daily News Brief
+
+on:
+  schedule:
+    # 6 AM EST = 11 AM UTC (EST is UTC-5)
+    - cron: '0 11 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install piper-tts and ffmpeg
+        run: |
+          # Install ffmpeg
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+          # Download piper binary
+          wget -q https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_amd64.tar.gz
+          tar -xzf piper_amd64.tar.gz
+          sudo mv piper/piper /usr/local/bin/
+          rm -rf piper piper_amd64.tar.gz
+
+          # Download voice models
+          mkdir -p ~/.local/share/piper/voices
+          cd ~/.local/share/piper/voices
+
+          # English voice
+          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx
+          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx.json
+
+          # French voice
+          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx
+          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json
+
+      - name: Generate news brief
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python src/main.py --no-tts
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add index.html audio/ || true
+          git diff --staged --quiet || git commit -m "Daily news brief update"
+          git push
