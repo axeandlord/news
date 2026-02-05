@@ -41,6 +41,9 @@ pytest-asyncio>=0.23.0
 # Text similarity for dedup
 scikit-learn>=1.4.0
 
+# Full article extraction
+trafilatura>=1.8.0
+
 # Local TTS reader (optional - not used in CI)
 # TTS>=0.22.0  # Coqui TTS with XTTS v2
 # sounddevice>=0.4.6

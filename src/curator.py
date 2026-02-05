@@ -105,13 +105,43 @@ def calculate_base_score(
     if article.reliability >= 0.9:
         score += scoring.get("high_reliability_bonus", 0.1)
 
-    # Recency bonus (articles from last 6 hours get boost)
+    # Recency bonus (steeper curve - reward fresh content more)
     now = datetime.now(timezone.utc)
     age = now - article.published
-    if age < timedelta(hours=6):
+    if age < timedelta(hours=3):
+        score += 0.15
+    elif age < timedelta(hours=6):
         score += 0.1
     elif age < timedelta(hours=12):
         score += 0.05
+    # >24h old gets no bonus
+
+    # Content quality signals (from full article extraction)
+    if hasattr(article, 'full_text') and article.full_text:
+        # Article length bonus - substantive content
+        if len(article.full_text) > 500:
+            score += 0.1
+
+        # Has quotes or data - indicates real reporting
+        if '"' in article.full_text or "'" in article.full_text:
+            score += 0.05
+        if re.search(r'\d+(?:\.\d+)?\s*(?:percent|%|million|billion|thousand)', article.full_text, re.IGNORECASE):
+            score += 0.05
+    else:
+        # Extraction failed - possibly paywalled or low quality
+        if article.link and 'arxiv' not in article.link:
+            score -= 0.1
+
+    # Clickbait penalty
+    title_upper = article.title.upper()
+    clickbait_patterns = [
+        r'\bYOU WON\'?T BELIEVE\b', r'\bSHOCKING\b', r'\bBREAKING\b.*!',
+        r'^\d+\s+(?:THINGS|WAYS|REASONS)\b', r'\bWHAT HAPPENS NEXT\b',
+    ]
+    for pattern in clickbait_patterns:
+        if re.search(pattern, title_upper):
+            score -= 0.15
+            break
 
     return min(score, 2.0)  # Cap at 2.0
 
@@ -157,66 +187,109 @@ def generate_ai_summary(
     articles: list[CuratedArticle],
     config: dict
 ) -> list[CuratedArticle]:
-    """Generate AI summaries using OpenRouter API."""
-    api_key = os.environ.get("OPENROUTER_API_KEY")
-    if not api_key:
-        print("  [WARN] No OPENROUTER_API_KEY, skipping AI summaries")
-        return articles
+    """Generate AI summaries using local Ollama (free) or OpenRouter fallback.
 
+    Uses full article text when available for better summaries.
+    """
     summary_config = config.get("summaries", {})
     include_why = summary_config.get("include_why_it_matters", True)
 
-    # Summarize more articles for BRIEF v2 (top 20)
+    # Summarize top articles for HTML display
     top_articles = articles[:20]
-
     print(f"Generating AI summaries for {len(top_articles)} articles...")
+
+    # Try local Ollama first (free)
+    ollama_available = _check_ollama()
 
     for curated in top_articles:
         article = curated.article
+        # Use full text if available, otherwise RSS summary
+        content = article.full_text if hasattr(article, 'full_text') and article.full_text else article.summary
+        if not content:
+            continue
 
         prompt = f"""Summarize this news article in 2-3 sentences. Be factual and concise.
 
 Title: {article.title}
 Source: {article.source}
-Content: {article.summary[:1000]}
+Content: {content[:2000]}
 
 Respond in this exact format:
 SUMMARY: [your summary]
 {"WHY IT MATTERS: [one sentence on broader significance]" if include_why else ""}"""
 
-        try:
-            with httpx.Client(timeout=30) as client:
-                resp = client.post(
-                    "https://openrouter.ai/api/v1/chat/completions",
-                    headers={
-                        "Authorization": f"Bearer {api_key}",
-                        "HTTP-Referer": "https://news.bezman.ca",
-                    },
-                    json={
-                        "model": "anthropic/claude-3-haiku",
-                        "messages": [{"role": "user", "content": prompt}],
-                        "max_tokens": 300,
-                    },
-                )
+        result = None
+        if ollama_available:
+            result = _call_ollama_simple(prompt, max_tokens=300)
 
-                if resp.status_code == 200:
-                    content = resp.json()["choices"][0]["message"]["content"]
+        if not result:
+            # Fallback to OpenRouter
+            api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
+            if api_key:
+                result = _call_openrouter_simple(prompt, api_key)
 
-                    # Parse response
-                    summary_match = re.search(r"SUMMARY:\s*(.+?)(?=WHY IT MATTERS:|$)", content, re.DOTALL)
-                    why_match = re.search(r"WHY IT MATTERS:\s*(.+)", content, re.DOTALL)
+        if result:
+            summary_match = re.search(r"SUMMARY:\s*(.+?)(?=WHY IT MATTERS:|$)", result, re.DOTALL)
+            why_match = re.search(r"WHY IT MATTERS:\s*(.+)", result, re.DOTALL)
 
-                    if summary_match:
-                        curated.ai_summary = summary_match.group(1).strip()
-                    if why_match:
-                        curated.why_it_matters = why_match.group(1).strip()
-                else:
-                    print(f"  [WARN] API error: {resp.status_code}")
-
-        except Exception as e:
-            print(f"  [WARN] Summary failed: {e}")
+            if summary_match:
+                curated.ai_summary = summary_match.group(1).strip()
+            if why_match:
+                curated.why_it_matters = why_match.group(1).strip()
 
     return articles
+
+
+def _check_ollama() -> bool:
+    """Check if Ollama is running."""
+    try:
+        resp = httpx.get("http://localhost:11434/api/tags", timeout=5)
+        return resp.status_code == 200
+    except Exception:
+        return False
+
+
+def _call_ollama_simple(prompt: str, max_tokens: int = 300) -> str | None:
+    """Quick Ollama call for summaries."""
+    try:
+        resp = httpx.post(
+            "http://localhost:11434/api/chat",
+            json={
+                "model": "qwen2.5:14b",
+                "messages": [{"role": "user", "content": prompt}],
+                "stream": False,
+                "options": {"num_predict": max_tokens, "temperature": 0.3},
+            },
+            timeout=120,
+        )
+        if resp.status_code == 200:
+            return resp.json()["message"]["content"]
+    except Exception:
+        pass
+    return None
+
+
+def _call_openrouter_simple(prompt: str, api_key: str) -> str | None:
+    """Quick OpenRouter call for summaries (fallback)."""
+    try:
+        resp = httpx.post(
+            "https://openrouter.ai/api/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "HTTP-Referer": "https://news.bezman.ca",
+            },
+            json={
+                "model": "anthropic/claude-3-haiku",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 300,
+            },
+            timeout=30,
+        )
+        if resp.status_code == 200:
+            return resp.json()["choices"][0]["message"]["content"]
+    except Exception:
+        pass
+    return None
 
 
 def curate_articles(

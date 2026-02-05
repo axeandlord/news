@@ -2,10 +2,17 @@
 
 Transforms raw news into personalized, conversational briefings.
 NOT a newsreader - a brilliant friend who synthesizes what matters.
+
+Pipeline:
+  1. Per-article summaries (Ollama - free, local)
+  2. Cross-reference pass (Ollama - finds story clusters & threads)
+  3. Final briefing script (Claude Sonnet via OpenRouter - quality)
+  4. Fallback: Ollama for script, then template
 """
 
 import os
 import random
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -17,11 +24,12 @@ from .curator import CuratedArticle
 # Local Ollama API (free, uses local GPU)
 OLLAMA_API_URL = "http://localhost:11434/api/chat"
 LOCAL_MODEL = "qwen2.5:14b"  # Fast and capable on RTX 4080
-MAX_ARTICLES_FOR_AI = 25  # Limit for reasonable response time
+MAX_ARTICLES_FOR_AI = 30  # Limit for reasonable response time
 
-# Fallback to OpenRouter if local unavailable
+# OpenRouter API for final script (Sonnet for quality)
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_MODEL = "anthropic/claude-3-haiku"
+SCRIPT_MODEL = "anthropic/claude-sonnet-4-20250514"  # Sonnet for final script quality
+SUMMARY_MODEL = "anthropic/claude-3-haiku"  # Haiku fallback for summaries
 
 
 def load_persona(config_path: str = "config/persona.yaml") -> dict:
@@ -68,24 +76,382 @@ def get_time_context(persona: dict) -> dict:
     }
 
 
-def build_system_prompt(persona: dict) -> str:
-    """Build the JARVIS system prompt from persona config."""
+# ============================================================
+# PASS 1: Per-article summaries (Ollama - free)
+# ============================================================
+
+def summarize_articles_ollama(
+    sections: dict[str, list[CuratedArticle]],
+) -> dict[str, list[CuratedArticle]]:
+    """Generate concise summaries for each article using local Ollama.
+
+    Uses full article text when available, falls back to RSS summary.
+    Updates ai_summary and why_it_matters on each CuratedArticle.
+    """
+    print("  Pass 1: Summarizing articles with Ollama...")
+
+    count = 0
+    for section_name, articles in sections.items():
+        for item in articles:
+            article = item.article
+            # Use full text if available, otherwise RSS summary
+            content = article.full_text if hasattr(article, 'full_text') and article.full_text else article.summary
+            if not content:
+                continue
+
+            prompt = f"""Summarize this news article in 3-4 concise sentences. Include key facts, numbers, and quotes if present. Then add one sentence on why this matters.
+
+Title: {article.title}
+Source: {article.source}
+Content: {content[:2000]}
+
+Respond in this exact format:
+SUMMARY: [your 3-4 sentence summary]
+WHY: [one sentence on broader significance]"""
+
+            result = _call_ollama(prompt, max_tokens=400, temperature=0.3)
+            if result:
+                summary_match = re.search(r"SUMMARY:\s*(.+?)(?=WHY:|$)", result, re.DOTALL)
+                why_match = re.search(r"WHY:\s*(.+)", result, re.DOTALL)
+                if summary_match:
+                    item.ai_summary = summary_match.group(1).strip()
+                if why_match:
+                    item.why_it_matters = why_match.group(1).strip()
+                count += 1
+
+    print(f"    Summarized {count} articles")
+    return sections
+
+
+# ============================================================
+# PASS 2: Cross-reference (Ollama - finds story clusters)
+# ============================================================
+
+def cross_reference_stories(
+    sections: dict[str, list[CuratedArticle]],
+) -> str:
+    """Identify related stories, thematic threads, and contradictions.
+
+    Returns a cross-reference map as text for the final script generator.
+    """
+    print("  Pass 2: Cross-referencing stories with Ollama...")
+
+    # Build a flat list of all story summaries with IDs
+    story_list = []
+    idx = 0
+    for section_name, articles in sections.items():
+        for item in articles:
+            summary = item.ai_summary or item.article.summary or item.article.title
+            story_list.append(f"[{idx}] ({section_name}) {item.article.title}: {summary[:200]}")
+            idx += 1
+
+    if len(story_list) < 3:
+        return ""
+
+    stories_text = "\n".join(story_list)
+
+    prompt = f"""Analyze these news stories and find connections between them.
+
+{stories_text}
+
+Identify:
+1. CLUSTERS: Groups of stories about the same event or topic (list the story numbers)
+2. THREADS: Thematic threads that span multiple sections (e.g., "AI regulation" appearing in tech and geopolitics)
+3. TENSIONS: Any contradictions or different perspectives between sources on the same topic
+
+Be concise. Use story numbers to reference articles. Only include genuine connections, not forced ones.
+
+Format:
+CLUSTERS:
+- [numbers]: brief description
+THREADS:
+- brief description connecting [numbers]
+TENSIONS:
+- [numbers]: what they disagree on"""
+
+    result = _call_ollama(prompt, max_tokens=800, temperature=0.3)
+    if result:
+        print(f"    Found cross-references ({len(result)} chars)")
+        return result
+
+    print("    No cross-references generated")
+    return ""
+
+
+# ============================================================
+# PASS 3: Final briefing script (Sonnet via OpenRouter)
+# ============================================================
+
+def build_script_prompt(
+    sections: dict[str, list[CuratedArticle]],
+    cross_refs: str,
+    persona: dict,
+    time_ctx: dict,
+) -> tuple[str, str]:
+    """Build the system and user prompts for the final script generation."""
 
     user_name = persona.get("user", {}).get("name", "sir")
     humor = persona.get("humor", {})
     humor_style = humor.get("style", "dry british wit")
     humor_examples = humor.get("examples", [])
-
     interests = persona.get("interests", {})
-    primary_interests = interests.get("primary", [])
     expert_topics = interests.get("expert_level", [])
-
     context_notes = persona.get("context", [])
 
-    # Build examples string
     examples_str = ""
     if humor_examples:
-        examples_str = "\n".join(f"  - {ex}" for ex in random.sample(humor_examples, min(2, len(humor_examples))))
+        examples_str = "\n".join(f"  - {ex}" for ex in random.sample(humor_examples, min(3, len(humor_examples))))
+
+    system_prompt = f"""You are writing a 15-minute PODCAST SCRIPT for {user_name}. This will be read aloud by text-to-speech.
+
+PERSONA: Smart, warm, dry British wit. Like a brilliant well-informed friend catching them up. You're not a news anchor, you're a thoughtful companion who reads everything and picks out what's genuinely interesting.
+
+Humor style: {humor_style}
+Example tone:
+{examples_str}
+
+NARRATIVE STRUCTURE:
+1. Start with the personalized greeting provided, then immediately hook with the single most compelling story of the day
+2. Flow through 3-4 thematic sections (3-4 minutes each), leading each with the strongest story
+3. Connect related stories across sections: "This feeds directly into something happening in..." / "Remember that AI story? Well..."
+4. Close with one forward-looking thought that ties the briefing together
+
+DEPTH REQUIREMENTS:
+- Top 5 stories: Explain WHY it matters, WHO benefits or loses, WHAT happens next
+- Other stories: 2-3 sentences with one genuine insight
+- When sources disagree, say so: "Reuters reports X, but Al Jazeera frames it as Y"
+- {user_name} knows: {', '.join(expert_topics[:4]) if expert_topics else 'AI, tech, LLMs'} - skip basic explanations, go deeper
+
+ABSOLUTE TTS RULES (text-to-speech will sound terrible otherwise):
+- ZERO SYMBOLS: no hashtags, asterisks, bullets, dashes, percent signs, dollar signs
+- ZERO STRUCTURE: no headers, no lists, no numbered items, no "firstly/secondly"
+- Write ALL numbers as words: "fifty million dollars" not "$50M", "about thirty percent" not "30%"
+- Use contractions always: it's, they've, that's, won't, can't
+- Smooth transitions only: "Meanwhile", "Speaking of which", "Now here's where it gets interesting"
+
+CONTEXT:
+{chr(10).join(f"- {c}" for c in context_notes[:4]) if context_notes else "- Tech-savvy listener who appreciates depth over breadth"}
+
+OUTPUT: Pure spoken text. No formatting. No metadata. Just words that flow naturally when read aloud."""
+
+    # Build structured news content
+    stories_text = []
+    for section_name, articles in sections.items():
+        if not articles:
+            continue
+        section_stories = []
+        for item in articles:
+            article = item.article
+            summary = clean_summary(item.ai_summary or article.summary or "")
+            why = clean_summary(item.why_it_matters or "")
+            title = clean_summary(article.title)
+            source = article.source
+
+            entry = f"TITLE: {title}\nSOURCE: {source}\nSUMMARY: {summary}"
+            if why:
+                entry += f"\nSIGNIFICANCE: {why}"
+            section_stories.append(entry)
+
+        stories_text.append(f"=== {section_name} ===\n" + "\n---\n".join(section_stories))
+
+    all_stories = "\n\n".join(stories_text)
+
+    # Cross-reference map
+    cross_ref_section = ""
+    if cross_refs:
+        cross_ref_section = f"""
+
+STORY CONNECTIONS (use these to weave a narrative, don't just list stories in order):
+{cross_refs}
+"""
+
+    greeting = time_ctx.get("greeting", "Good morning sir.")
+    day_note = time_ctx.get("day_note", "")
+    greeting_section = greeting
+    if day_note:
+        greeting_section += f" {day_note}"
+
+    user_prompt = f"""Today is {time_ctx['date_str']}.
+
+GREETING TO START WITH: "{greeting_section}"
+
+Here are today's stories:
+
+{all_stories}
+{cross_ref_section}
+
+Now write a natural, flowing podcast script (about 15 minutes when read aloud). Start with the greeting above, then hook immediately with the most compelling story. Weave connections between stories where they exist. End with a brief, thoughtful wrap-up.
+
+Remember: pure spoken text only, no symbols, no structure, no formatting. Write it exactly as you'd speak it to a smart friend."""
+
+    return system_prompt, user_prompt
+
+
+def generate_jarvis_briefing(
+    sections: dict[str, list[CuratedArticle]],
+    persona_path: str = "config/persona.yaml",
+) -> str:
+    """
+    Generate a complete JARVIS-style news briefing using the multi-pass pipeline.
+
+    Pipeline:
+      1. Per-article summaries (Ollama - free)
+      2. Cross-referencing (Ollama - free)
+      3. Final script (Sonnet via OpenRouter - quality)
+      Fallback: Ollama for script, then template
+    """
+    persona = load_persona(persona_path)
+    time_ctx = get_time_context(persona)
+
+    # Limit articles per section for reasonable AI processing
+    limited_sections = {}
+    total_for_ai = 0
+    for section_name, articles in sections.items():
+        remaining = MAX_ARTICLES_FOR_AI - total_for_ai
+        if remaining <= 0:
+            break
+        take = min(len(articles), max(3, remaining // max(1, len(sections))))
+        limited_sections[section_name] = articles[:take]
+        total_for_ai += take
+
+    # === PASS 1: Per-article summaries (Ollama, free) ===
+    ollama_available = _check_ollama()
+    if ollama_available:
+        limited_sections = summarize_articles_ollama(limited_sections)
+    else:
+        print("  [WARN] Ollama unavailable, using RSS summaries")
+
+    # === PASS 2: Cross-reference stories (Ollama, free) ===
+    cross_refs = ""
+    if ollama_available:
+        cross_refs = cross_reference_stories(limited_sections)
+
+    # === PASS 3: Final script (Sonnet via OpenRouter for quality) ===
+    system_prompt, user_prompt = build_script_prompt(
+        limited_sections, cross_refs, persona, time_ctx
+    )
+
+    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
+
+    # Try Sonnet first for best quality
+    if api_key:
+        briefing = _try_openrouter(system_prompt, user_prompt, api_key, model=SCRIPT_MODEL)
+        if briefing:
+            print(f"  Generated briefing with Sonnet ({SCRIPT_MODEL})")
+            return prepare_for_tts(briefing)
+
+    # Fallback: Ollama for the script too (free but lower quality)
+    if ollama_available:
+        print("  Falling back to Ollama for script generation...")
+        old_system = _build_ollama_script_prompt(persona, time_ctx)
+        news_content = build_news_content(limited_sections)
+        old_user = f"""It's {time_ctx['time_of_day'].replace('_', ' ')}.
+
+Here's what happened today:
+
+{news_content}
+
+{"STORY CONNECTIONS: " + cross_refs if cross_refs else ""}
+
+Write a natural podcast briefing about 12-15 minutes long. Start with the greeting: "{time_ctx.get('greeting', 'Good morning sir.')}"
+Pure spoken text, no symbols, no formatting. Hook with the best story first. Connect related stories where natural."""
+
+        briefing = _call_ollama(old_user, system_prompt=old_system, max_tokens=8000, temperature=0.7)
+        if briefing:
+            print(f"  Generated briefing with Ollama ({LOCAL_MODEL})")
+            return prepare_for_tts(briefing)
+
+    # Final fallback to template
+    print("  [WARN] AI unavailable, using template style")
+    return generate_template_briefing(sections, persona, time_ctx)
+
+
+# ============================================================
+# AI API helpers
+# ============================================================
+
+def _check_ollama() -> bool:
+    """Check if Ollama is running and responsive."""
+    try:
+        resp = httpx.get("http://localhost:11434/api/tags", timeout=5)
+        return resp.status_code == 200
+    except Exception:
+        return False
+
+
+def _call_ollama(
+    prompt: str,
+    system_prompt: str = "",
+    max_tokens: int = 2000,
+    temperature: float = 0.5,
+) -> str | None:
+    """Call local Ollama API."""
+    try:
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        response = httpx.post(
+            OLLAMA_API_URL,
+            json={
+                "model": LOCAL_MODEL,
+                "messages": messages,
+                "stream": False,
+                "options": {
+                    "num_predict": max_tokens,
+                    "temperature": temperature,
+                },
+            },
+            timeout=600,
+        )
+        if response.status_code == 200:
+            return response.json()["message"]["content"]
+    except Exception as e:
+        print(f"    [WARN] Ollama error: {e}")
+    return None
+
+
+def _try_openrouter(
+    system_prompt: str,
+    user_prompt: str,
+    api_key: str,
+    model: str = SCRIPT_MODEL,
+) -> str | None:
+    """Call OpenRouter API with specified model."""
+    try:
+        response = httpx.post(
+            OPENROUTER_API_URL,
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": "https://news.bezman.ca",
+            },
+            json={
+                "model": model,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "max_tokens": 8000,
+                "temperature": 0.7,
+            },
+            timeout=180,
+        )
+        if response.status_code == 200:
+            return response.json()["choices"][0]["message"]["content"]
+        else:
+            body = response.text[:200]
+            print(f"  [WARN] OpenRouter error {response.status_code}: {body}")
+    except Exception as e:
+        print(f"  [WARN] OpenRouter error: {e}")
+    return None
+
+
+def _build_ollama_script_prompt(persona: dict, time_ctx: dict) -> str:
+    """Build a simpler script prompt for Ollama fallback."""
+    user_name = persona.get("user", {}).get("name", "sir")
+    expert_topics = persona.get("interests", {}).get("expert_level", [])
 
     return f"""You are writing a PODCAST SCRIPT for {user_name} - this will be read aloud by text-to-speech.
 
@@ -97,17 +463,19 @@ ABSOLUTE RULES (TTS will sound terrible otherwise):
 3. ZERO STRUCTURE - no headers, no sections, just flowing natural speech
 4. Write numbers as words: "fifty million dollars" not "$50M", "about thirty percent" not "30%"
 5. Use contractions: it's, they've, that's, won't, can't
-6. Smooth transitions only: "Meanwhile", "Speaking of which", "On a related note", "Interestingly"
+6. Smooth transitions only: "Meanwhile", "Speaking of which", "On a related note"
 
 WHAT MAKES IT GOOD:
 - Explain WHY things matter, not just what happened
 - Connect dots between related stories naturally
-- Skip boring details, focus on what's actually interesting
-- Sound like you're genuinely telling a friend, not reading a script
 - {user_name} knows about: {', '.join(expert_topics[:3]) if expert_topics else 'AI, tech'} - skip basic explanations
 
 OUTPUT: Pure spoken text. No formatting. No metadata. Just words that sound natural when read aloud."""
 
+
+# ============================================================
+# Content building helpers
+# ============================================================
 
 def build_news_content(sections: dict[str, list[CuratedArticle]]) -> str:
     """Build news content as plain text for AI - no markdown, no metadata."""
@@ -117,7 +485,6 @@ def build_news_content(sections: dict[str, list[CuratedArticle]]) -> str:
         if not articles:
             continue
 
-        # Simple section header, no formatting
         category = section_name.replace("&", "and")
 
         for item in articles:
@@ -126,140 +493,15 @@ def build_news_content(sections: dict[str, list[CuratedArticle]]) -> str:
             title = clean_summary(article.title)
             source = article.source
 
-            # Plain text story - just the facts, no symbols
             story = f"{category}: {title}. {summary} (from {source})"
             stories.append(story)
 
     return "\n\n".join(stories)
 
 
-def generate_jarvis_briefing(
-    sections: dict[str, list[CuratedArticle]],
-    persona_path: str = "config/persona.yaml",
-) -> str:
-    """
-    Generate a complete JARVIS-style news briefing.
-
-    Tries local Ollama first (free, powerful), then OpenRouter, then template.
-    """
-    persona = load_persona(persona_path)
-    time_ctx = get_time_context(persona)
-
-    # Build prompts - limit articles for reasonable AI processing time
-    system_prompt = build_system_prompt(persona)
-
-    # Limit to top articles per section for AI (keeps response time reasonable)
-    limited_sections = {}
-    total_for_ai = 0
-    for section_name, articles in sections.items():
-        remaining = MAX_ARTICLES_FOR_AI - total_for_ai
-        if remaining <= 0:
-            break
-        take = min(len(articles), max(3, remaining // len(sections)))  # At least 3 per section
-        limited_sections[section_name] = articles[:take]
-        total_for_ai += take
-
-    news_content = build_news_content(limited_sections)
-    total_articles = total_for_ai
-
-    user_prompt = f"""It's {time_ctx['time_of_day'].replace('_', ' ')}.
-
-I haven't checked the news today. Tell me what's going on like you're my smart friend who reads everything. Here's what happened:
-
-{news_content}
-
----
-
-Now write me a briefing I'll LISTEN to (text-to-speech). Write it like a PODCAST SCRIPT:
-
-CRITICAL RULES:
-- NO symbols whatsoever. No hashtags, asterisks, bullet points, dashes, percent signs, numbers with symbols
-- NO lists or structured formatting - pure flowing conversation
-- NO "here are the top stories" or "first, second, third" structure
-- Write exactly how you'd SPEAK to a friend - natural, flowing, human
-- Say "about eighty percent" not "80%", say "around fifty million" not "$50M"
-- Group related things naturally: "Speaking of AI..." or "On a related note..."
-- Tell me WHY things matter, not just what happened
-- Be genuinely interesting - if something is boring, make it interesting or skip it
-- Transitions should be smooth: "Meanwhile...", "Interestingly...", "Now here's something cool..."
-- About 12-15 minutes when read aloud
-
-Start directly with the news (no "good morning" - I'll add that). End with a natural wrap-up."""
-
-    # Try local Ollama first (free, uses local GPU)
-    briefing = _try_ollama(system_prompt, user_prompt)
-    if briefing:
-        print(f"  Generated briefing with local Ollama ({LOCAL_MODEL})")
-        return prepare_for_tts(briefing)
-
-    # Fall back to OpenRouter
-    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
-    if api_key:
-        briefing = _try_openrouter(system_prompt, user_prompt, api_key)
-        if briefing:
-            print("  Generated briefing with OpenRouter")
-            return prepare_for_tts(briefing)
-
-    # Final fallback to template
-    print("  [WARN] AI unavailable, using template style")
-    return generate_template_briefing(sections, persona, time_ctx)
-
-
-def _try_ollama(system_prompt: str, user_prompt: str) -> str | None:
-    """Try generating with local Ollama."""
-    try:
-        response = httpx.post(
-            OLLAMA_API_URL,
-            json={
-                "model": LOCAL_MODEL,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                "stream": False,
-                "options": {
-                    "num_predict": 8000,
-                    "temperature": 0.7,
-                },
-            },
-            timeout=600,  # 10 min for large model
-        )
-        if response.status_code == 200:
-            return response.json()["message"]["content"]
-    except Exception as e:
-        print(f"  [WARN] Ollama error: {e}")
-    return None
-
-
-def _try_openrouter(system_prompt: str, user_prompt: str, api_key: str) -> str | None:
-    """Try generating with OpenRouter API."""
-    try:
-        response = httpx.post(
-            OPENROUTER_API_URL,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "HTTP-Referer": "https://news.bezman.ca",
-            },
-            json={
-                "model": OPENROUTER_MODEL,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                "max_tokens": 8000,
-                "temperature": 0.7,
-            },
-            timeout=120,
-        )
-        if response.status_code == 200:
-            return response.json()["choices"][0]["message"]["content"]
-        else:
-            print(f"  [WARN] OpenRouter error {response.status_code}")
-    except Exception as e:
-        print(f"  [WARN] OpenRouter error: {e}")
-    return None
-
+# ============================================================
+# Template fallback (no AI needed)
+# ============================================================
 
 def generate_template_briefing(
     sections: dict[str, list[CuratedArticle]],
@@ -282,7 +524,6 @@ def generate_template_briefing(
     ]
 
     # === SECTION TRANSITIONS - smooth moves between themes ===
-    # First section (no previous context)
     first_section_intros = {
         "AI & Technology": ["Starting with tech.", "First up, AI and tech.", "On the tech front."],
         "Finance & Markets": ["Starting with markets.", "First, the financial picture.", "Let's start with finance."],
@@ -293,7 +534,6 @@ def generate_template_briefing(
         "Wildcards & Emerging": ["Starting with some interesting developments.", "First, a few things worth noting."],
     }
 
-    # Transitioning between sections (acknowledges shift)
     section_transitions = {
         "AI & Technology": ["Shifting to tech.", "Now for AI and tech.", "On the tech side.", "In the tech world."],
         "Finance & Markets": ["Turning to markets.", "Now for finance.", "On the money side.", "Financially speaking."],
@@ -304,24 +544,20 @@ def generate_template_briefing(
         "Wildcards & Emerging": ["A few other things.", "Some other developments.", "Also worth knowing."],
     }
 
-    # === ARTICLE INTROS - varied ways to introduce each story ===
-    # Sometimes lead with source, sometimes with the news
     article_patterns = [
-        "{title}. {summary} {source_attr}",  # Standard: title, summary, source
-        "{source} is reporting that {summary_lower} {title_context}",  # Lead with source
-        "{summary} {source_attr} {title_context}",  # Lead with summary
-        "{title}. {source_attr} {summary}",  # Title, source, then details
+        "{title}. {summary} {source_attr}",
+        "{source} is reporting that {summary_lower} {title_context}",
+        "{summary} {source_attr} {title_context}",
+        "{title}. {source_attr} {summary}",
     ]
 
-    # === WITHIN-SECTION TRANSITIONS - article to article ===
     article_transitions = [
         "Also,", "And", "Meanwhile,", "Separately,", "Additionally,",
         "Related to that,", "On a similar note,", "In other news,",
-        "", "", "",  # Empty = natural flow, no connector needed
+        "", "", "",
     ]
 
-    # === SOURCE ATTRIBUTIONS - conversational ===
-    source_before = [  # When source comes before the news
+    source_before = [
         "{source} is reporting that",
         "{source} says",
         "According to {source},",
@@ -329,7 +565,7 @@ def generate_template_briefing(
         "{source} has the story:",
     ]
 
-    source_after = [  # When source comes after
+    source_after = [
         "That's from {source}.",
         "Via {source}.",
         "That's according to {source}.",
@@ -338,7 +574,6 @@ def generate_template_briefing(
         "That's per {source}.",
     ]
 
-    # === CLOSING LINES ===
     closings = [
         "That's the rundown.",
         "That covers the main points.",
@@ -349,13 +584,10 @@ def generate_template_briefing(
     ]
 
     # === BUILD THE BRIEFING ===
-
-    # Track what we've used to avoid repetition
     used_article_trans = []
     used_source_after = []
     used_patterns = []
 
-    # Greeting based on time
     greetings = {
         "morning": "Good morning sir.",
         "morning_early": "Good morning sir.",
@@ -376,7 +608,6 @@ def generate_template_briefing(
         if not articles:
             continue
 
-        # Pick section intro based on whether it's first section or not
         if section_count == 0:
             intros = first_section_intros.get(section_name, [f"Starting with {section_name.lower()}."])
         else:
@@ -392,10 +623,8 @@ def generate_template_briefing(
             title = clean_summary(article.title).rstrip(".").strip()
             source = article.source
 
-            # Build the article text with smart variation
             text_parts = []
 
-            # Add transition if not first article in section
             if i > 0:
                 available = [t for t in article_transitions if t not in used_article_trans[-2:]]
                 trans = random.choice(available) if available else random.choice(article_transitions)
@@ -403,44 +632,36 @@ def generate_template_briefing(
                 if trans:
                     text_parts.append(trans)
 
-            # Choose a pattern for this article (rotate)
             available_patterns = [p for p in article_patterns if p not in used_patterns[-2:]]
             pattern = random.choice(available_patterns) if available_patterns else random.choice(article_patterns)
             used_patterns.append(pattern)
 
-            # Prepare components
             summary_clean = summary.strip().rstrip(".") if summary else ""
-            # Only lowercase first letter if it's not an acronym (followed by lowercase)
             if summary_clean and len(summary_clean) > 1:
                 if summary_clean[1].islower():
                     summary_lower = summary_clean[0].lower() + summary_clean[1:]
                 else:
-                    summary_lower = summary_clean  # Keep as-is for acronyms
+                    summary_lower = summary_clean
             else:
                 summary_lower = summary_clean
             title_context = f"The headline: {title}." if "title_context" in pattern and summary else ""
 
-            # Source attribution
             available_src = [s for s in source_after if s not in used_source_after[-2:]]
             source_attr = random.choice(available_src).format(source=source)
             used_source_after.append(source_attr)
 
-            # Build based on pattern
             if "{source} is reporting" in pattern or pattern.startswith("{source}"):
-                # Source-first pattern
                 src_before = random.choice(source_before).format(source=source)
                 if summary_lower:
                     text_parts.append(f"{src_before} {summary_lower}.")
                 else:
                     text_parts.append(f"{src_before} {title.lower()}.")
             elif pattern.startswith("{summary}"):
-                # Summary-first pattern
                 if summary_clean:
                     text_parts.append(f"{summary_clean}. {source_attr}")
                 else:
                     text_parts.append(f"{title}. {source_attr}")
             else:
-                # Standard: title then summary
                 text_parts.append(f"{title}.")
                 if summary_clean:
                     text_parts.append(f"{summary_clean}.")
@@ -449,15 +670,18 @@ def generate_template_briefing(
             parts.append(" ".join(text_parts))
             total_articles += 1
 
-        parts.append("")  # Blank line between sections
+        parts.append("")
         section_count += 1
 
-    # Closing
     closing = random.choice(closings)
     parts.append(closing)
 
     return prepare_for_tts("\n".join(parts))
 
+
+# ============================================================
+# Text cleaning and TTS preparation
+# ============================================================
 
 def clean_summary(text: str) -> str:
     """
@@ -465,8 +689,6 @@ def clean_summary(text: str) -> str:
 
     Strips academic jargon, arXiv IDs, metadata prefixes, etc.
     """
-    import re
-
     if not text:
         return ""
 
@@ -506,8 +728,6 @@ def prepare_for_tts(text: str) -> str:
 
     Strips ALL symbols and formatting that TTS would read literally.
     """
-    import re
-
     # Remove markdown formatting completely
     text = re.sub(r'#{1,6}\s*', '', text)  # Headers
     text = re.sub(r'\*{1,2}([^*]+)\*{1,2}', r'\1', text)  # Bold/italic
@@ -515,7 +735,7 @@ def prepare_for_tts(text: str) -> str:
     text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # Links
 
     # Remove bullet points and list markers
-    text = re.sub(r'^[\s]*[-•*]\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^[\s]*[-\u2022*]\s+', '', text, flags=re.MULTILINE)
     text = re.sub(r'^[\s]*\d+[.)]\s+', '', text, flags=re.MULTILINE)
 
     # Convert common symbols to words
@@ -531,11 +751,11 @@ def prepare_for_tts(text: str) -> str:
 
     # Remove ellipsis
     text = re.sub(r'\.{2,}', '.', text)
-    text = text.replace('…', '.')
+    text = text.replace('\u2026', '.')
 
     # Clean up quotes to simple ones
-    text = text.replace('"', '"').replace('"', '"')
-    text = text.replace(''', "'").replace(''', "'")
+    text = text.replace('\u201c', '"').replace('\u201d', '"')
+    text = text.replace('\u2018', "'").replace('\u2019', "'")
 
     # Remove commas before direct address
     text = re.sub(r',\s*(sir|ma\'am|my friend)\b', r' \1', text, flags=re.IGNORECASE)
@@ -569,7 +789,6 @@ def prepare_for_tts(text: str) -> str:
 
 def _money_to_words(money_str: str) -> str:
     """Convert $50M to 'fifty million dollars'."""
-    import re
     match = re.match(r'\$?([\d.]+)\s*([BMKbmk])?', money_str)
     if not match:
         return money_str
@@ -580,7 +799,6 @@ def _money_to_words(money_str: str) -> str:
     multipliers = {'B': 'billion', 'M': 'million', 'K': 'thousand'}
     mult_word = multipliers.get(suffix, '')
 
-    # Simple conversion for common values
     if num == int(num):
         num_word = str(int(num))
     else:
@@ -603,7 +821,6 @@ def _percent_to_words(num_str: str) -> str:
 
 
 if __name__ == "__main__":
-    # Test
     from .fetcher import Article
     from datetime import datetime, timezone
 

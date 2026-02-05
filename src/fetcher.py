@@ -1,7 +1,8 @@
-"""RSS feed fetcher with async support and health tracking."""
+"""RSS feed fetcher with async support, health tracking, and full article extraction."""
 
 import asyncio
 import hashlib
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
@@ -30,6 +31,7 @@ class Article:
     language: str
     reliability: float
     article_hash: str = field(default="")
+    full_text: str = field(default="")
 
     def __post_init__(self):
         if not self.article_hash:
@@ -173,7 +175,59 @@ async def fetch_all_feeds(config_path: str = "config/feeds.yaml") -> list[Articl
     all_articles.sort(key=lambda a: a.published, reverse=True)
 
     print(f"Total: {len(all_articles)} articles")
+
+    # Extract full article text for top articles
+    print("Extracting full article text...")
+    all_articles = await extract_full_texts(all_articles, max_articles=80)
+
     return all_articles
+
+
+async def extract_full_texts(
+    articles: list[Article],
+    max_articles: int = 80,
+) -> list[Article]:
+    """Extract full article text using trafilatura for top articles."""
+    try:
+        import trafilatura
+    except ImportError:
+        print("  [WARN] trafilatura not installed, using RSS summaries only")
+        return articles
+
+    # Only extract for top N articles (sorted by date already)
+    to_extract = articles[:max_articles]
+    skipped = articles[max_articles:]
+
+    loop = asyncio.get_event_loop()
+    executor = ThreadPoolExecutor(max_workers=10)
+
+    def _extract_one(article: Article) -> Article:
+        """Extract full text for a single article."""
+        if not article.link:
+            return article
+        try:
+            downloaded = trafilatura.fetch_url(article.link)
+            if downloaded:
+                text = trafilatura.extract(
+                    downloaded,
+                    include_comments=False,
+                    include_tables=False,
+                    no_fallback=True,
+                )
+                if text and len(text) > 100:
+                    article.full_text = text[:3000]  # Cap at 3000 chars
+        except Exception:
+            pass  # Silently fall back to RSS summary
+        return article
+
+    # Run extractions concurrently in thread pool
+    tasks = [loop.run_in_executor(executor, _extract_one, a) for a in to_extract]
+    extracted = await asyncio.gather(*tasks)
+
+    extracted_count = sum(1 for a in extracted if a.full_text)
+    print(f"  Extracted full text for {extracted_count}/{len(to_extract)} articles")
+
+    return list(extracted) + skipped
 
 
 def fetch_feeds_sync(config_path: str = "config/feeds.yaml") -> list[Article]:

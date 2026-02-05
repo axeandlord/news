@@ -122,7 +122,7 @@ sources:
       reliability: 0.95
 
   # ===========================================
-  # GEOPOLITICS (target: 8 articles)
+  # GEOPOLITICS (target: 10 articles)
   # ===========================================
   geopolitics:
     - name: Reuters World
@@ -164,6 +164,26 @@ sources:
       url: https://feeds.npr.org/1004/rss.xml
       language: en
       reliability: 0.90
+
+    - name: War on the Rocks
+      url: https://warontherocks.com/feed/
+      language: en
+      reliability: 0.90
+
+    - name: The Diplomat
+      url: https://thediplomat.com/feed/
+      language: en
+      reliability: 0.88
+
+    - name: Defense One
+      url: https://www.defenseone.com/rss/all/
+      language: en
+      reliability: 0.85
+
+    - name: The War Zone
+      url: https://www.twz.com/feed
+      language: en
+      reliability: 0.82
 
   # ===========================================
   # MONTREAL LOCAL (target: 6 articles)
@@ -304,7 +324,7 @@ fetch:
 targets:
   tech_ai: 12
   finance: 10
-  geopolitics: 8
+  geopolitics: 10
   montreal: 6
   quebec: 5
   canada: 5
