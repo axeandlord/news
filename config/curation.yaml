@@ -1,16 +1,18 @@
-# Curation Rules Configuration
+# BRIEF v2 - Curation Rules Configuration
 # Weights for relevance scoring and AI summarization
+# Learning-enhanced personalization
 
 user_interests:
   # Category weights (multiplier applied to base score)
+  # These are BASE weights - the learning engine adjusts dynamically
   categories:
     tech_ai: 1.5
+    finance: 1.3
+    geopolitics: 1.2
     montreal: 1.3
-    finance: 1.2
-    geopolitics: 1.1
     quebec: 1.1
     canada: 1.0
-    economics: 1.0
+    wildcards: 1.0
 
   # High-priority keywords (boost articles containing these)
   keywords:
@@ -28,6 +30,9 @@ user_interests:
       - robotics
       - autonomous
       - AGI
+      - Gemini
+      - Mistral
+      - DeepMind
 
     medium_priority:  # +0.2 to score
       - Montreal
@@ -40,26 +45,33 @@ user_interests:
       - cryptocurrency
       - Bitcoin
       - Ethereum
+      - Federal Reserve
+      - interest rate
+      - inflation
+      - tariff
+      - sanctions
 
     low_priority:  # +0.1 to score
       - automation
       - productivity
       - remote work
       - cloud computing
+      - cybersecurity
+      - data breach
 
 # Scoring thresholds
 scoring:
   # Minimum score to include in daily brief (0.0 - 1.0)
-  min_score: 0.3
-
-  # Top N articles for daily brief
-  daily_brief_count: 10
+  min_score: 0.25
 
   # Cross-reference bonus when multiple sources report same story
   cross_reference_bonus: 0.15
 
   # Penalty for lower reliability sources
   reliability_weight: 0.25
+
+  # Bonus for highly reliable sources (>= 0.9)
+  high_reliability_bonus: 0.1
 
 # Summary generation
 summaries:
@@ -84,23 +96,64 @@ dedup:
   # When duplicates found, prefer source with higher reliability
   prefer_reliable: true
 
-# Daily brief structure
+# BRIEF v2 - Target article distribution
+# Total: ~50 articles per day
+targets:
+  tech_ai: 12
+  finance: 10
+  geopolitics: 8
+  montreal: 6
+  quebec: 5
+  canada: 5
+  wildcards: 4
+
+# Daily brief structure - organized by category targets
 daily_brief:
   sections:
-    - name: Top Stories
-      count: 3
-
-    - name: AI & Tech
+    - name: AI & Technology
       category: tech_ai
-      count: 3
+      count: 12
 
-    - name: Local Montreal
+    - name: Finance & Markets
+      category: finance
+      count: 10
+
+    - name: World & Geopolitics
+      category: geopolitics
+      count: 8
+
+    - name: Montreal
       category: montreal
-      count: 2
+      count: 6
 
-    - name: What to Watch
-      description: Developing stories and upcoming events
-      count: 2
+    - name: Quebec
+      category: quebec
+      count: 5
+
+    - name: Canada
+      category: canada
+      count: 5
+
+    - name: Wildcards & Emerging
+      category: wildcards
+      count: 4
+
+# Learning engine settings
+learning:
+  # Weight boost for clicks
+  click_boost: 0.05
+
+  # Weight boost/penalty for explicit feedback
+  feedback_boost: 0.1
+  feedback_penalty: -0.1
+
+  # Decay old preferences after N days
+  decay_after_days: 30
+  decay_factor: 0.95
+
+  # Min/max weight bounds
+  min_weight: 0.1
+  max_weight: 3.0
 
 # TTS settings
 tts:
@@ -109,5 +162,5 @@ tts:
 
   # Voices
   voices:
-    en: en_US-amy-medium
+    en: en-GB-RyanNeural
     fr: fr_FR-siwis-medium

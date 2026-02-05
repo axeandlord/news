@@ -1,4 +1,4 @@
-"""AI-powered news curation and scoring."""
+"""AI-powered news curation and scoring with learning integration."""
 
 import os
 import re
@@ -11,6 +11,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from .fetcher import Article
+from .database import (
+    get_learned_weights,
+    record_article_shown,
+    cache_article,
+    decay_old_preferences,
+)
 
 
 @dataclass
@@ -35,25 +41,42 @@ def load_curation_config(config_path: str = "config/curation.yaml") -> dict:
         return yaml.safe_load(f)
 
 
-def calculate_base_score(article: Article, config: dict) -> float:
-    """Calculate base relevance score for an article."""
+def calculate_base_score(
+    article: Article,
+    config: dict,
+    learned_weights: dict | None = None
+) -> float:
+    """
+    Calculate base relevance score for an article.
+
+    Integrates learned weights from user behavior.
+    """
     score = 0.5  # Start at neutral
 
     interests = config.get("user_interests", {})
 
-    # Category weight
+    # Get base category weight from config
     category_weights = interests.get("categories", {})
     category_weight = category_weights.get(article.category, 1.0)
+
+    # Apply learned category adjustment
+    if learned_weights:
+        learned_cat = learned_weights.get("categories", {})
+        if article.category in learned_cat:
+            # Learned weight is a multiplier (0.1 to 3.0)
+            learned_mult = learned_cat[article.category]
+            category_weight *= learned_mult
+
     score *= category_weight
 
-    # Keyword matching
+    # Keyword matching (static from config)
     keywords = interests.get("keywords", {})
     text = f"{article.title} {article.summary}".lower()
 
     for kw in keywords.get("high_priority", []):
         if kw.lower() in text:
             score += 0.3
-            break  # Only count once per tier
+            break
 
     for kw in keywords.get("medium_priority", []):
         if kw.lower() in text:
@@ -65,10 +88,22 @@ def calculate_base_score(article: Article, config: dict) -> float:
             score += 0.1
             break
 
+    # Apply learned keyword boosts
+    if learned_weights:
+        learned_kw = learned_weights.get("keywords", {})
+        for kw, weight in learned_kw.items():
+            if kw.lower() in text:
+                # Learned keyword boost (scaled down)
+                score += (weight - 1.0) * 0.1
+
     # Reliability factor
     scoring = config.get("scoring", {})
     reliability_weight = scoring.get("reliability_weight", 0.25)
     score += article.reliability * reliability_weight
+
+    # High reliability bonus
+    if article.reliability >= 0.9:
+        score += scoring.get("high_reliability_bonus", 0.1)
 
     # Recency bonus (articles from last 6 hours get boost)
     now = datetime.now(timezone.utc)
@@ -78,7 +113,7 @@ def calculate_base_score(article: Article, config: dict) -> float:
     elif age < timedelta(hours=12):
         score += 0.05
 
-    return min(score, 1.5)  # Cap at 1.5
+    return min(score, 2.0)  # Cap at 2.0
 
 
 def deduplicate_articles(
@@ -131,8 +166,8 @@ def generate_ai_summary(
     summary_config = config.get("summaries", {})
     include_why = summary_config.get("include_why_it_matters", True)
 
-    # Only summarize top articles to save costs
-    top_articles = articles[:10]
+    # Summarize more articles for BRIEF v2 (top 20)
+    top_articles = articles[:20]
 
     print(f"Generating AI summaries for {len(top_articles)} articles...")
 
@@ -191,6 +226,8 @@ def curate_articles(
     """
     Score, deduplicate, and organize articles into sections.
 
+    BRIEF v2: Uses learned weights and targets ~50 articles.
+
     Returns dict with section names as keys.
     """
     config = load_curation_config(config_path)
@@ -198,18 +235,34 @@ def curate_articles(
     brief_config = config.get("daily_brief", {})
     dedup_config = config.get("dedup", {})
 
-    min_score = scoring_config.get("min_score", 0.3)
+    min_score = scoring_config.get("min_score", 0.25)
     similarity_threshold = dedup_config.get("similarity_threshold", 0.7)
+
+    # Get learned weights from database
+    print("Loading learned preferences...")
+    learned_weights = get_learned_weights()
+    cat_count = len(learned_weights.get("categories", {}))
+    kw_count = len(learned_weights.get("keywords", {}))
+    if cat_count or kw_count:
+        print(f"  Found {cat_count} category weights, {kw_count} keyword weights")
+    else:
+        print("  No learned weights yet (new user)")
+
+    # Decay old preferences periodically
+    learning_config = config.get("learning", {})
+    decay_days = learning_config.get("decay_after_days", 30)
+    decay_factor = learning_config.get("decay_factor", 0.95)
+    decay_old_preferences(days=decay_days, decay_factor=decay_factor)
 
     print("Deduplicating articles...")
     articles = deduplicate_articles(articles, similarity_threshold)
     print(f"  {len(articles)} unique articles")
 
-    # Score all articles
+    # Score all articles with learned weights
     print("Scoring articles...")
     scored = []
     for article in articles:
-        score = calculate_base_score(article, config)
+        score = calculate_base_score(article, config, learned_weights)
         if score >= min_score:
             scored.append(CuratedArticle(article=article, score=score))
 
@@ -219,22 +272,22 @@ def curate_articles(
     # Generate AI summaries for top articles
     scored = generate_ai_summary(scored, config)
 
-    # Organize into sections
+    # Organize into sections based on BRIEF v2 targets
     sections = {}
     used_links = set()  # Avoid same article in multiple sections
 
     for section in brief_config.get("sections", []):
         name = section["name"]
-        count = section.get("count", 3)
+        count = section.get("count", 5)
         category = section.get("category")
 
         section_articles = []
 
+        # First pass: exact category match
         for curated in scored:
             if curated.article.link in used_links:
                 continue
 
-            # Filter by category if specified
             if category and curated.article.category != category:
                 continue
 
@@ -246,6 +299,32 @@ def curate_articles(
 
         sections[name] = section_articles
 
+    # Track articles shown (for learning engine)
+    total_shown = 0
+    for section_name, items in sections.items():
+        for item in items:
+            record_article_shown(
+                article_hash=item.article.article_hash,
+                title=item.article.title,
+                source=item.article.source,
+                category=item.article.category,
+                url=item.article.link,
+            )
+            # Cache article for context
+            cache_article(
+                article_hash=item.article.article_hash,
+                title=item.article.title,
+                summary=item.article.summary,
+                ai_summary=item.ai_summary,
+                source=item.article.source,
+                category=item.article.category,
+                url=item.article.link,
+                published_at=item.article.published,
+            )
+            total_shown += 1
+
+    print(f"  Tracked {total_shown} articles for learning")
+
     return sections
 
 
@@ -256,6 +335,6 @@ if __name__ == "__main__":
     sections = curate_articles(articles)
 
     for name, items in sections.items():
-        print(f"\n=== {name} ===")
+        print(f"\n=== {name} ({len(items)}) ===")
         for c in items:
             print(f"  [{c.score:.2f}] {c.article.title}")

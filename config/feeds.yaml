@@ -1,88 +1,11 @@
-# News Sources Configuration
+# BRIEF v2 - News Sources Configuration
+# 30+ quality sources across all categories
 # Reliability scores: 0.0 (unreliable) to 1.0 (highly reliable)
 
 sources:
-  # Montreal Local
-  montreal:
-    - name: CTV Montreal
-      url: https://montreal.ctvnews.ca/rss/ctvnews-ca-montreal-public-rss-1.822423
-      language: en
-      reliability: 0.85
-
-    - name: Montreal Gazette
-      url: https://montrealgazette.com/feed
-      language: en
-      reliability: 0.85
-
-    - name: CBC Montreal
-      url: https://www.cbc.ca/webfeed/rss/rss-canada-montreal
-      language: en
-      reliability: 0.90
-
-    - name: TVA Nouvelles Montreal
-      url: https://www.tvanouvelles.ca/rss/montreal
-      language: fr
-      reliability: 0.80
-
-  # Quebec Provincial
-  quebec:
-    - name: Journal de Montreal
-      url: https://www.journaldemontreal.com/rss
-      language: fr
-      reliability: 0.75
-
-    - name: Le Devoir
-      url: https://www.ledevoir.com/rss/manchettes.xml
-      language: fr
-      reliability: 0.90
-
-    - name: Radio-Canada Quebec
-      url: https://ici.radio-canada.ca/rss/4159
-      language: fr
-      reliability: 0.90
-
-  # Canada National
-  canada:
-    - name: CBC News
-      url: https://www.cbc.ca/webfeed/rss/rss-topstories
-      language: en
-      reliability: 0.90
-
-    - name: Global News
-      url: https://globalnews.ca/feed/
-      language: en
-      reliability: 0.85
-
-    - name: CTV News
-      url: https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009
-      language: en
-      reliability: 0.85
-
-  # Geopolitics
-  geopolitics:
-    - name: Reuters World
-      url: https://www.reutersagency.com/feed/?best-topics=world
-      language: en
-      reliability: 0.95
-
-    - name: Al Jazeera
-      url: https://www.aljazeera.com/xml/rss/all.xml
-      language: en
-      reliability: 0.85
-
-  # Finance
-  finance:
-    - name: Bloomberg Markets
-      url: https://feeds.bloomberg.com/markets/news.rss
-      language: en
-      reliability: 0.90
-
-    - name: BNN Bloomberg
-      url: https://www.bnnbloomberg.ca/arc/outboundfeeds/rss/?outputType=xml
-      language: en
-      reliability: 0.85
-
-  # AI & Robotics
+  # ===========================================
+  # AI & TECH (target: 12 articles)
+  # ===========================================
   tech_ai:
     - name: TechCrunch AI
       url: https://techcrunch.com/category/artificial-intelligence/feed/
@@ -94,25 +17,295 @@ sources:
       language: en
       reliability: 0.80
 
+    - name: Ars Technica AI
+      url: https://feeds.arstechnica.com/arstechnica/technology-lab
+      language: en
+      reliability: 0.85
+
+    - name: Wired AI
+      url: https://www.wired.com/feed/tag/ai/latest/rss
+      language: en
+      reliability: 0.85
+
+    - name: MIT Technology Review
+      url: https://www.technologyreview.com/feed/
+      language: en
+      reliability: 0.90
+
     - name: ArXiv AI/ML
       url: https://rss.arxiv.org/rss/cs.AI
       language: en
       reliability: 1.0
+
+    - name: ArXiv Machine Learning
+      url: https://rss.arxiv.org/rss/cs.LG
+      language: en
+      reliability: 1.0
+
+    - name: OpenAI Blog
+      url: https://openai.com/blog/rss/
+      language: en
+      reliability: 0.95
+
+    - name: Google AI Blog
+      url: https://blog.google/technology/ai/rss/
+      language: en
+      reliability: 0.95
+
+    - name: VentureBeat AI
+      url: https://venturebeat.com/category/ai/feed/
+      language: en
+      reliability: 0.80
 
     - name: ScienceDaily Robotics
       url: https://www.sciencedaily.com/rss/computers_math/robotics.xml
       language: en
       reliability: 0.95
 
-  # Economics
-  economics:
-    - name: The Economist
+    - name: IEEE Spectrum AI
+      url: https://spectrum.ieee.org/feeds/topic/artificial-intelligence.rss
+      language: en
+      reliability: 0.90
+
+  # ===========================================
+  # FINANCE & MARKETS (target: 10 articles)
+  # ===========================================
+  finance:
+    - name: Bloomberg Markets
+      url: https://feeds.bloomberg.com/markets/news.rss
+      language: en
+      reliability: 0.90
+
+    - name: Bloomberg Technology
+      url: https://feeds.bloomberg.com/technology/news.rss
+      language: en
+      reliability: 0.90
+
+    - name: Reuters Business
+      url: https://www.reutersagency.com/feed/?best-topics=business-finance
+      language: en
+      reliability: 0.95
+
+    - name: Financial Times
+      url: https://www.ft.com/rss/home
+      language: en
+      reliability: 0.95
+
+    - name: Yahoo Finance
+      url: https://finance.yahoo.com/news/rssindex
+      language: en
+      reliability: 0.75
+
+    - name: CNBC Markets
+      url: https://www.cnbc.com/id/10000664/device/rss/rss.html
+      language: en
+      reliability: 0.80
+
+    - name: BNN Bloomberg Canada
+      url: https://www.bnnbloomberg.ca/arc/outboundfeeds/rss/?outputType=xml
+      language: en
+      reliability: 0.85
+
+    - name: MarketWatch
+      url: https://feeds.marketwatch.com/marketwatch/topstories/
+      language: en
+      reliability: 0.80
+
+    - name: Seeking Alpha
+      url: https://seekingalpha.com/feed.xml
+      language: en
+      reliability: 0.70
+
+    - name: The Economist Finance
       url: https://www.economist.com/finance-and-economics/rss.xml
       language: en
       reliability: 0.95
 
+  # ===========================================
+  # GEOPOLITICS (target: 8 articles)
+  # ===========================================
+  geopolitics:
+    - name: Reuters World
+      url: https://www.reutersagency.com/feed/?best-topics=world
+      language: en
+      reliability: 0.95
+
+    - name: AP News World
+      url: https://rsshub.app/apnews/topics/world-news
+      language: en
+      reliability: 0.95
+
+    - name: Al Jazeera
+      url: https://www.aljazeera.com/xml/rss/all.xml
+      language: en
+      reliability: 0.85
+
+    - name: BBC World
+      url: https://feeds.bbci.co.uk/news/world/rss.xml
+      language: en
+      reliability: 0.90
+
+    - name: The Economist World
+      url: https://www.economist.com/international/rss.xml
+      language: en
+      reliability: 0.95
+
+    - name: Foreign Policy
+      url: https://foreignpolicy.com/feed/
+      language: en
+      reliability: 0.90
+
+    - name: The Guardian World
+      url: https://www.theguardian.com/world/rss
+      language: en
+      reliability: 0.85
+
+    - name: NPR World
+      url: https://feeds.npr.org/1004/rss.xml
+      language: en
+      reliability: 0.90
+
+  # ===========================================
+  # MONTREAL LOCAL (target: 6 articles)
+  # ===========================================
+  montreal:
+    - name: Montreal Gazette
+      url: https://montrealgazette.com/feed
+      language: en
+      reliability: 0.85
+
+    - name: CTV Montreal
+      url: https://montreal.ctvnews.ca/rss/ctvnews-ca-montreal-public-rss-1.822423
+      language: en
+      reliability: 0.85
+
+    - name: CBC Montreal
+      url: https://www.cbc.ca/webfeed/rss/rss-canada-montreal
+      language: en
+      reliability: 0.90
+
+    - name: MTL Blog
+      url: https://www.mtlblog.com/feed
+      language: en
+      reliability: 0.65
+
+    - name: Cult MTL
+      url: https://cultmtl.com/feed/
+      language: en
+      reliability: 0.70
+
+    - name: Montreal City News
+      url: https://globalnews.ca/montreal/feed/
+      language: en
+      reliability: 0.80
+
+  # ===========================================
+  # QUEBEC PROVINCIAL (target: 5 articles)
+  # ===========================================
+  quebec:
+    - name: Radio-Canada Quebec
+      url: https://ici.radio-canada.ca/rss/4159
+      language: fr
+      reliability: 0.90
+
+    - name: Le Devoir
+      url: https://www.ledevoir.com/rss/manchettes.xml
+      language: fr
+      reliability: 0.90
+
+    - name: La Presse
+      url: https://www.lapresse.ca/actualites/rss
+      language: fr
+      reliability: 0.85
+
+    - name: TVA Nouvelles
+      url: https://www.tvanouvelles.ca/rss
+      language: fr
+      reliability: 0.80
+
+    - name: Journal de Quebec
+      url: https://www.journaldequebec.com/rss
+      language: fr
+      reliability: 0.75
+
+    - name: Quebec City News
+      url: https://globalnews.ca/quebec/feed/
+      language: en
+      reliability: 0.80
+
+  # ===========================================
+  # CANADA NATIONAL (target: 5 articles)
+  # ===========================================
+  canada:
+    - name: CBC News
+      url: https://www.cbc.ca/webfeed/rss/rss-topstories
+      language: en
+      reliability: 0.90
+
+    - name: Globe and Mail
+      url: https://www.theglobeandmail.com/arc/outboundfeeds/rss/category/canada/
+      language: en
+      reliability: 0.90
+
+    - name: National Post
+      url: https://nationalpost.com/feed
+      language: en
+      reliability: 0.80
+
+    - name: Global News Canada
+      url: https://globalnews.ca/feed/
+      language: en
+      reliability: 0.85
+
+    - name: CTV News Canada
+      url: https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009
+      language: en
+      reliability: 0.85
+
+    - name: Toronto Star
+      url: https://www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc
+      language: en
+      reliability: 0.85
+
+  # ===========================================
+  # WILDCARDS - Emerging/Community (target: 4 articles)
+  # ===========================================
+  wildcards:
+    - name: Hacker News
+      url: https://hnrss.org/frontpage
+      language: en
+      reliability: 0.75
+
+    - name: Product Hunt
+      url: https://www.producthunt.com/feed
+      language: en
+      reliability: 0.70
+
+    - name: Lobsters
+      url: https://lobste.rs/rss
+      language: en
+      reliability: 0.80
+
+    - name: Slashdot
+      url: https://rss.slashdot.org/Slashdot/slashdotMain
+      language: en
+      reliability: 0.75
+
 # Fetch settings
 fetch:
   timeout: 30
-  max_articles_per_feed: 20
-  user_agent: "NewsAggregator/1.0 (+https://news.bezman.ca)"
+  max_articles_per_feed: 25
+  user_agent: "BRIEF/2.0 (+https://news.bezman.ca)"
+  # Retry failed feeds with exponential backoff
+  max_retries: 2
+  retry_delay: 5
+
+# Category article targets
+targets:
+  tech_ai: 12
+  finance: 10
+  geopolitics: 8
+  montreal: 6
+  quebec: 5
+  canada: 5
+  wildcards: 4

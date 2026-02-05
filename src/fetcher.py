@@ -1,7 +1,8 @@
-"""RSS feed fetcher with async support."""
+"""RSS feed fetcher with async support and health tracking."""
 
 import asyncio
-from dataclasses import dataclass
+import hashlib
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Optional
 
@@ -9,6 +10,12 @@ import aiohttp
 import feedparser
 import yaml
 from dateutil import parser as date_parser
+
+
+def generate_article_hash(title: str, link: str) -> str:
+    """Generate a unique hash for an article."""
+    content = f"{title}:{link}".encode('utf-8')
+    return hashlib.md5(content).hexdigest()[:16]
 
 
 @dataclass
@@ -22,6 +29,11 @@ class Article:
     category: str
     language: str
     reliability: float
+    article_hash: str = field(default="")
+
+    def __post_init__(self):
+        if not self.article_hash:
+            self.article_hash = generate_article_hash(self.title, self.link)
 
     def to_dict(self) -> dict:
         return {
@@ -33,6 +45,7 @@ class Article:
             "category": self.category,
             "language": self.language,
             "reliability": self.reliability,
+            "article_hash": self.article_hash,
         }
 
 
