@@ -14,9 +14,14 @@ import yaml
 
 from .curator import CuratedArticle
 
-# OpenRouter API for AI rewriting
+# Local Ollama API (free, uses local GPU)
+OLLAMA_API_URL = "http://localhost:11434/api/chat"
+LOCAL_MODEL = "qwen2.5:14b"  # Fast and capable on RTX 4080
+MAX_ARTICLES_FOR_AI = 25  # Limit for reasonable response time
+
+# Fallback to OpenRouter if local unavailable
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "anthropic/claude-3-haiku"  # Fast, use for top stories only
+OPENROUTER_MODEL = "anthropic/claude-3-haiku"
 
 
 def load_persona(config_path: str = "config/persona.yaml") -> dict:
@@ -113,11 +118,11 @@ THEIR INTERESTS:
 OUTPUT FORMAT:
 - Output ONLY the briefing text, no headers or metadata
 - Natural spoken language optimized for text-to-speech
-- COVER EVERY ARTICLE - don't skip any, but vary depth based on importance
-- Top stories: 2-3 sentences each with context
-- Regular stories: 1-2 sentences summarizing the key point
-- Minor stories: can group similar ones together ("also in tech news...")
-- Aim for 10-15 minutes of content (2000-3000 words)
+- Synthesize and explain, don't just list headlines
+- Tell me WHY things matter, not just WHAT happened
+- Group related stories into themes
+- Be engaging - like a smart friend explaining the news
+- Aim for 15-20 minutes (3000-4000 words)
 - End with a simple closing, not a question"""
 
 
@@ -153,43 +158,94 @@ def generate_jarvis_briefing(
     """
     Generate a complete JARVIS-style news briefing.
 
-    Uses AI to create a conversational, personalized summary.
-    Falls back to template-based generation if API unavailable.
+    Tries local Ollama first (free, powerful), then OpenRouter, then template.
     """
-    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
     persona = load_persona(persona_path)
     time_ctx = get_time_context(persona)
 
-    if not api_key:
-        print("  [WARN] No OPENROUTER_API_KEY, using template-based JARVIS style")
-        return generate_template_briefing(sections, persona, time_ctx)
-
-    # Build the system prompt
+    # Build prompts - limit articles for reasonable AI processing time
     system_prompt = build_system_prompt(persona)
 
-    # Build the news content
-    news_content = build_news_content(sections)
+    # Limit to top articles per section for AI (keeps response time reasonable)
+    limited_sections = {}
+    total_for_ai = 0
+    for section_name, articles in sections.items():
+        remaining = MAX_ARTICLES_FOR_AI - total_for_ai
+        if remaining <= 0:
+            break
+        take = min(len(articles), max(3, remaining // len(sections)))  # At least 3 per section
+        limited_sections[section_name] = articles[:take]
+        total_for_ai += take
 
-    # Count articles
-    total_articles = sum(len(items) for items in sections.values())
+    news_content = build_news_content(limited_sections)
+    total_articles = total_for_ai
 
-    # User prompt
     user_prompt = f"""It's {time_ctx['time_of_day'].replace('_', ' ')} on {time_ctx['date_str']}.
 
-Brief me on ALL {total_articles} stories below. Here they are:
+Here are {total_articles} news stories. Your job is to brief me like a smart friend who read everything and is telling me what actually matters.
 
 {news_content}
 
-Create a comprehensive, conversational briefing that:
-1. COVERS EVERY SINGLE ARTICLE - don't skip any
-2. Opens naturally (don't repeat the date I just told you)
-3. Groups related stories together when they connect
-4. Top stories get 2-3 sentences, others get 1-2 sentences
-5. Similar minor stories can be grouped ("also making headlines in tech...")
-6. Closes with a natural sign-off
+IMPORTANT GUIDELINES:
+- DON'T just read headlines back to me - SYNTHESIZE and explain WHY things matter
+- Group related stories into coherent themes
+- For each story, give me the TLDR and the "so what?" - why should I care?
+- Be conversational like you're talking to me over coffee
+- Skip the fluff, get to the interesting parts
+- If multiple articles are about the same topic, combine them intelligently
+- Use natural transitions between topics
+- About 15-20 minutes of content (3000-4000 words)
+- End naturally, not with a question
 
-This should be a 10-15 minute briefing covering everything. Be thorough but not robotic."""
+Remember: You're a brilliant assistant catching me up, not a news anchor reading teleprompter."""
 
+    # Try local Ollama first (free, uses local GPU)
+    briefing = _try_ollama(system_prompt, user_prompt)
+    if briefing:
+        print(f"  Generated briefing with local Ollama ({LOCAL_MODEL})")
+        return prepare_for_tts(briefing)
+
+    # Fall back to OpenRouter
+    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
+    if api_key:
+        briefing = _try_openrouter(system_prompt, user_prompt, api_key)
+        if briefing:
+            print("  Generated briefing with OpenRouter")
+            return prepare_for_tts(briefing)
+
+    # Final fallback to template
+    print("  [WARN] AI unavailable, using template style")
+    return generate_template_briefing(sections, persona, time_ctx)
+
+
+def _try_ollama(system_prompt: str, user_prompt: str) -> str | None:
+    """Try generating with local Ollama."""
+    try:
+        response = httpx.post(
+            OLLAMA_API_URL,
+            json={
+                "model": LOCAL_MODEL,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "stream": False,
+                "options": {
+                    "num_predict": 8000,
+                    "temperature": 0.7,
+                },
+            },
+            timeout=600,  # 10 min for large model
+        )
+        if response.status_code == 200:
+            return response.json()["message"]["content"]
+    except Exception as e:
+        print(f"  [WARN] Ollama error: {e}")
+    return None
+
+
+def _try_openrouter(system_prompt: str, user_prompt: str, api_key: str) -> str | None:
+    """Try generating with OpenRouter API."""
     try:
         response = httpx.post(
             OPENROUTER_API_URL,
@@ -199,7 +255,7 @@ This should be a 10-15 minute briefing covering everything. Be thorough but not 
                 "HTTP-Referer": "https://news.bezman.ca",
             },
             json={
-                "model": MODEL,
+                "model": OPENROUTER_MODEL,
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
@@ -207,21 +263,15 @@ This should be a 10-15 minute briefing covering everything. Be thorough but not 
                 "max_tokens": 8000,
                 "temperature": 0.7,
             },
-            timeout=60,
+            timeout=120,
         )
-
         if response.status_code == 200:
-            result = response.json()
-            briefing = result["choices"][0]["message"]["content"]
-            print("  Generated JARVIS briefing with AI")
-            return prepare_for_tts(briefing)
+            return response.json()["choices"][0]["message"]["content"]
         else:
-            print(f"  [WARN] API error {response.status_code}, using template style")
-            return generate_template_briefing(sections, persona, time_ctx)
-
+            print(f"  [WARN] OpenRouter error {response.status_code}")
     except Exception as e:
-        print(f"  [WARN] AI briefing failed: {e}, using template style")
-        return generate_template_briefing(sections, persona, time_ctx)
+        print(f"  [WARN] OpenRouter error: {e}")
+    return None
 
 
 def generate_template_briefing(
