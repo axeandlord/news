@@ -28,40 +28,20 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install piper-tts and ffmpeg
+      - name: Install edge-tts for neural voices
         run: |
-          # Install ffmpeg
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          pip install edge-tts
 
-          # Download piper binary
-          wget -q https://github.com/rhasspy/piper/releases/download/v1.2.0/piper_amd64.tar.gz
-          tar -xzf piper_amd64.tar.gz
-          sudo mv piper/piper /usr/local/bin/
-          rm -rf piper piper_amd64.tar.gz
-
-          # Download voice models
-          mkdir -p ~/.local/share/piper/voices
-          cd ~/.local/share/piper/voices
-
-          # English voice
-          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx
-          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/amy/medium/en_US-amy-medium.onnx.json
-
-          # French voice
-          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx
-          wget -q https://huggingface.co/rhasspy/piper-voices/resolve/main/fr/fr_FR/siwis/medium/fr_FR-siwis-medium.onnx.json
-
-      - name: Generate news brief
+      - name: Generate news brief with audio
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
-          python src/main.py --no-tts
+          python src/main.py
 
       - name: Commit and push changes
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add index.html audio/ || true
-          git diff --staged --quiet || git commit -m "Daily news brief update"
+          git add index.html audio/ archive/ || true
+          git diff --staged --quiet || git commit -m "Update news brief"
           git push

@@ -12,15 +12,23 @@ from pathlib import Path
 MICROMAMBA = "/home/axe/.local/bin/micromamba"
 XTTS_ENV = "xtts"
 
-# British voice reference for JARVIS-style voice
-# Generated from VCTK VITS model (p243 speaker)
-VOICE_REFERENCE = Path(__file__).parent.parent / "audio" / "voice_reference.wav"
+# JARVIS voice reference - Paul Bettany style British butler
+# Primary: Real JARVIS sample, Fallback: VCTK VITS p243 speaker
+VOICE_REFERENCE_JARVIS = Path(__file__).parent.parent / "audio" / "voice_reference_jarvis.wav"
+VOICE_REFERENCE_FALLBACK = Path(__file__).parent.parent / "audio" / "voice_reference.wav"
+
+def get_voice_reference() -> Path:
+    """Get the best available voice reference."""
+    if VOICE_REFERENCE_JARVIS.exists():
+        return VOICE_REFERENCE_JARVIS
+    return VOICE_REFERENCE_FALLBACK
 
 
 def ensure_voice_reference() -> Path:
     """Ensure we have a voice reference file for XTTS."""
-    if VOICE_REFERENCE.exists():
-        return VOICE_REFERENCE
+    voice_ref = get_voice_reference()
+    if voice_ref.exists():
+        return voice_ref
 
     print("  Generating voice reference...")
     # Generate a British voice sample using VCTK VITS
@@ -29,10 +37,10 @@ import warnings
 warnings.filterwarnings('ignore')
 from TTS.api import TTS
 tts = TTS('tts_models/en/vctk/vits').to('cuda')
-sample_text = "Good morning, sir. I have compiled your daily briefing with today's most relevant news. Shall we begin with the top stories?"
+sample_text = "Good morning sir. I have compiled your daily briefing with today's most relevant news. Shall we begin with the top stories?"
 tts.tts_to_file(text=sample_text, file_path="{output}", speaker='p243')
 print("Generated voice reference")
-'''.format(output=str(VOICE_REFERENCE))
+'''.format(output=str(VOICE_REFERENCE_FALLBACK))
 
     result = subprocess.run(
         [MICROMAMBA, "run", "-n", XTTS_ENV, "python", "-c", script],

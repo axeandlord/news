@@ -23,8 +23,8 @@ Jinja2>=3.1.2
 # Configuration
 PyYAML>=6.0.1
 
-# TTS
-piper-tts>=1.2.0
+# TTS (neural voices)
+edge-tts>=6.1.0
 
 # TTS server
 flask>=3.0.0
@@ -40,3 +40,9 @@ pytest-asyncio>=0.23.0
 
 # Text similarity for dedup
 scikit-learn>=1.4.0
+
+# Local TTS reader (optional - not used in CI)
+# TTS>=0.22.0  # Coqui TTS with XTTS v2
+# sounddevice>=0.4.6
+# newspaper3k>=0.2.8
+# readability-lxml>=0.8.1

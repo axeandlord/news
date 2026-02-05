@@ -207,7 +207,7 @@ Remember: You're a brilliant assistant catching me up, not reading the news at m
             result = response.json()
             briefing = result["choices"][0]["message"]["content"]
             print("  Generated JARVIS briefing with AI")
-            return briefing
+            return prepare_for_tts(briefing)
         else:
             print(f"  [WARN] API error {response.status_code}, using template style")
             return generate_template_briefing(sections, persona, time_ctx)
@@ -301,7 +301,52 @@ def generate_template_briefing(
     # Outro
     parts.append(random.choice(outros))
 
-    return "\n".join(parts)
+    return prepare_for_tts("\n".join(parts))
+
+
+def prepare_for_tts(text: str) -> str:
+    """
+    Prepare text for natural-sounding TTS output.
+
+    Removes punctuation patterns that cause unnatural pauses.
+    """
+    import re
+
+    # Remove commas before direct address (sir, ma'am, etc.)
+    text = re.sub(r',\s*(sir|ma\'am|my friend)\b', r' \1', text, flags=re.IGNORECASE)
+
+    # Remove commas after short introductory words that sound better flowing
+    text = re.sub(r'\b(Now|Well|So|Right|Yes|No|Oh),\s+', r'\1 ', text)
+
+    # Remove ellipsis that creates awkward pauses (keep single periods)
+    text = re.sub(r'\.{2,}', '.', text)
+
+    # Remove comma before "and" or "but" in short phrases
+    text = re.sub(r',\s+(and|but|or)\s+', r' \1 ', text)
+
+    # Clean up double spaces
+    text = re.sub(r'  +', ' ', text)
+
+    # Remove comma after greeting phrases for flow
+    text = re.sub(r'(Good morning|Good afternoon|Good evening|Hello),', r'\1', text)
+
+    # Make contractions more natural
+    text = text.replace(" it is ", " it's ")
+    text = text.replace(" that is ", " that's ")
+    text = text.replace(" there is ", " there's ")
+    text = text.replace(" here is ", " here's ")
+    text = text.replace(" what is ", " what's ")
+    text = text.replace(" I have ", " I've ")
+    text = text.replace(" I will ", " I'll ")
+    text = text.replace(" do not ", " don't ")
+    text = text.replace(" does not ", " doesn't ")
+    text = text.replace(" cannot ", " can't ")
+    text = text.replace(" will not ", " won't ")
+    text = text.replace(" would not ", " wouldn't ")
+    text = text.replace(" could not ", " couldn't ")
+    text = text.replace(" should not ", " shouldn't ")
+
+    return text.strip()
 
 
 if __name__ == "__main__":
