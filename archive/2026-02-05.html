@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3600">
+    <title>BRIEF | Your AI News Assistant</title>
+    <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
+    <link rel="stylesheet" href="static/css/brief.css">
+</head>
+<body>
+    <!-- Sticky Player (hidden by default, shows on scroll) -->
+    <div class="sticky-player">
+        <span class="logo">BRIEF</span>
+        <div class="sticky-waveform"></div>
+        <button class="sticky-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="sticky-time">0:00 / 0:00</span>
+        <div class="sticky-progress">
+            <div class="sticky-progress-fill"></div>
+        </div>
+        <button class="sticky-speed">1x</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <span class="logo">BRIEF</span>
+        <nav class="header-nav">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="greeting">Good morning, sir.</h1>
+        <p class="greeting-sub">Your briefing is ready.</p>
+
+        <div class="waveform-container" aria-hidden="true"></div>
+
+        <button class="play-btn" id="playBtn">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="stop-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+            <span>Play Briefing</span>
+        </button>
+
+        <p class="brief-meta">
+            February 5, 2026<span>&middot;</span>10 stories<span>&middot;</span>6:14
+        </p>
+
+        <div class="playback-controls">
+            <button class="skip-btn skip-back" aria-label="Back 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <span class="time-display">0:00 / 0:00</span>
+            <button class="skip-btn skip-forward" aria-label="Forward 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <button class="speed-btn">1x</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <div class="progress-handle"></div>
+            </div>
+        </div>
+
+        <a href="#stories" class="scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            Explore today's stories
+        </a>
+    </section>
+
+    <!-- Audio Element -->
+    
+    <audio id="briefAudio" preload="metadata">
+        <source src="audio/brief-en.mp3" type="audio/mpeg">
+    </audio>
+    
+
+    <!-- Main Content -->
+    <main class="content" id="stories">
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Top Stories</h2>
+                <span class="section-count">3 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">12:45 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/2026/02/04/sam-altman-got-exceptionally-testy-over-claude-super-bowl-ads/" target="_blank" rel="noopener">
+                        Sam Altman got exceptionally testy over Claude Super Bowl ads
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">He posted a novella-sized rant that devolved into to calling his rival "dishonest" and "authoritarian."</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/2026/02/04/sam-altman-got-exceptionally-testy-over-claude-super-bowl-ads/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">10:53 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/2026/02/04/googles-gemini-app-has-surpassed-750m-monthly-active-users/" target="_blank" rel="noopener">
+                        Google’s Gemini app has surpassed 750M monthly active users
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Google revealed a significant milestone for its Gemini app, announcing over 750 million monthly active users as it competes with ChatGPT and Meta AI.</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/2026/02/04/googles-gemini-app-has-surpassed-750m-monthly-active-users/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="3">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">The Verge AI</span>
+                    </div>
+                    <span class="article-time">4:03 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theverge.com/news/874084/ai-chatgpt-claude-super-bowl-ads-openai-anthropic" target="_blank" rel="noopener">
+                        Sam Altman responds to Anthropic’s ‘funny’ Super Bowl ads
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Sam Altman responded to Anthropic's new Super Bowl ad in an X post on Wednesday, saying the OpenAI competitor's campaign is "clearly dishonest," and called it "on brand" for Anthropic to "doublespeak....</p>
+                
+
+                
+
+                <a href="https://www.theverge.com/news/874084/ai-chatgpt-claude-super-bowl-ads-openai-anthropic" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">AI & Tech</h2>
+                <span class="section-count">3 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">8:24 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/video/a16z-just-raised-1-7b-for-ai-infrastructure-heres-where-its-going/" target="_blank" rel="noopener">
+                        A16z just raised $1.7B for AI infrastructure. Here’s where it’s going.
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Andreessen Horowitz just raised a whopping ⁠new $15 billion in funding⁠. And a $1.7 billion chunk of that is going to its ⁠infrastructure team⁠, the one responsible for some of its biggest, most promi...</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/video/a16z-just-raised-1-7b-for-ai-infrastructure-heres-where-its-going/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">8:19 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/podcast/what-a16z-is-actually-funding-and-what-its-ignoring-when-it-comes-to-ai-infra/" target="_blank" rel="noopener">
+                        What a16z is actually funding (and what it’s ignoring) when it comes to AI infra
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Andreessen Horowitz just raised a whopping new $15 billion in funding. And a $1.7 billion chunk of that is going to its infrastructure team, the one responsible for some of its biggest, most prominent...</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/podcast/what-a16z-is-actually-funding-and-what-its-ignoring-when-it-comes-to-ai-infra/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="3">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">The Verge AI</span>
+                    </div>
+                    <span class="article-time">12:00 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener">
+                        GitHub adds Claude and Codex AI coding agents
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">GitHub is making Claude by Anthropic and OpenAI's Codex AI coding agents directly available inside GitHub today. A new public preview adds Claude and Codex to GitHub, GitHub Mobile, and Visual Studio ...</p>
+                
+
+                
+
+                <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Local Montreal</h2>
+                <span class="section-count">2 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">1:32 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/local-news/anglophone-caq-quebec-constitution-bill-1" target="_blank" rel="noopener">
+                        Anglos say CAQ’s constitution erases their history and 'suffocates part of my identity'
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">“Do I correspond to your definition of a Quebecer?” a witness asked Justice Minister Simon Jolin-Barrette on Wednesday at a National Assembly committee hearing studying the Quebec constitution that he...</p>
+                
+
+                
+
+                <a href="https://montrealgazette.com/news/local-news/anglophone-caq-quebec-constitution-bill-1" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">11:45 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/sports/hockey/montreal-canadiens/liveblog-montembeault-in-xhekaj-out-for-last-canadiens-game-before-olympic-break" target="_blank" rel="noopener">
+                        Liveblog: Canadiens score twice in 1:16, lead Jets 3-1
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The Montreal Canadiens (31-17-8) play their final game before the break for the Winter Olympics against the Winnipeg Jets (22-25-8) on Wednesday at Canada Life Centre. Read More</p>
+                
+
+                
+
+                <a href="https://montrealgazette.com/sports/hockey/montreal-canadiens/liveblog-montembeault-in-xhekaj-out-for-last-canadiens-game-before-olympic-break" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">What to Watch</h2>
+                <span class="section-count">2 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener">
+                        Scalable and Secure AI Inference in Healthcare: A Comparative Benchmarking of FastAPI and Triton Inference Server on Kubernetes
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">arXiv:2602.00053v1 Announce Type: new 
+Abstract: Efficient and scalable deployment of machine learning (ML) models is a prerequisite for modern production environments, particularly within regulated d...</p>
+                
+
+                
+
+                <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener">
+                        From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">arXiv:2602.00190v1 Announce Type: new 
+Abstract: Deep learning agents can achieve high performance in complex game domains without often understanding the underlying causal game mechanics. To address ...</p>
+                
+
+                
+
+                <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-meta">
+            Curated from 20+ sources &middot; Reliability-scored &middot; Ad-free
+        </p>
+        <nav class="footer-links">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+            <a href="https://github.com/axeandlord/news">Source</a>
+        </nav>
+    </footer>
+
+    <script src="static/js/player.js"></script>
+</body>
+</html>

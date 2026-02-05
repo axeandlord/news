@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3600">
+    <title>BRIEF | Your AI News Assistant</title>
+    <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
+    <link rel="stylesheet" href="static/css/brief.css">
+</head>
+<body>
+    <!-- Sticky Player (hidden by default, shows on scroll) -->
+    <div class="sticky-player">
+        <span class="logo">BRIEF</span>
+        <div class="sticky-waveform"></div>
+        <button class="sticky-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="sticky-time">0:00 / 0:00</span>
+        <div class="sticky-progress">
+            <div class="sticky-progress-fill"></div>
+        </div>
+        <button class="sticky-speed">1x</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <span class="logo">BRIEF</span>
+        <nav class="header-nav">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="greeting">Good morning, sir.</h1>
+        <p class="greeting-sub">Your briefing is ready.</p>
+
+        <div class="waveform-container" aria-hidden="true"></div>
+
+        <button class="play-btn" id="playBtn">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="stop-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+            <span>Play Briefing</span>
+        </button>
+
+        <p class="brief-meta">
+            {{ date_display }}<span>&middot;</span>{{ article_count }} stories<span>&middot;</span>{{ duration }}
+        </p>
+
+        <div class="playback-controls">
+            <button class="skip-btn skip-back" aria-label="Back 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <span class="time-display">0:00 / 0:00</span>
+            <button class="skip-btn skip-forward" aria-label="Forward 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <button class="speed-btn">1x</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <div class="progress-handle"></div>
+            </div>
+        </div>
+
+        <a href="#stories" class="scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            Explore today's stories
+        </a>
+    </section>
+
+    <!-- Audio Element -->
+    {% if audio_file %}
+    <audio id="briefAudio" preload="metadata">
+        <source src="{{ audio_file }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="content" id="stories">
+        {% for section_name, articles in sections.items() %}
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">{{ section_name }}</h2>
+                <span class="section-count">{{ articles|length }} stories</span>
+            </header>
+
+            {% for item in articles %}
+            <article class="article" data-index="{{ loop.index }}">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge {{ 'high' if item.article.reliability >= 0.9 else 'medium' if item.article.reliability >= 0.8 else 'low' }}">
+                            {{ '%.0f'|format(item.article.reliability * 100) }}%
+                        </div>
+                        <span class="source-name">{{ item.article.source }}</span>
+                    </div>
+                    <span class="article-time">{{ item.article.published.strftime('%-I:%M %p') if item.article.published else '' }}</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="{{ item.article.link }}" target="_blank" rel="noopener">
+                        {{ item.article.title }}
+                    </a>
+                </h3>
+
+                {% if item.ai_summary %}
+                <p class="article-summary">{{ item.ai_summary }}</p>
+                {% elif item.article.summary %}
+                <p class="article-summary">{{ item.article.summary[:200] }}{% if item.article.summary|length > 200 %}...{% endif %}</p>
+                {% endif %}
+
+                {% if item.why_it_matters %}
+                <div class="article-why">
+                    {{ item.why_it_matters }}
+                </div>
+                {% endif %}
+
+                <a href="{{ item.article.link }}" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            {% endfor %}
+        </section>
+        {% endfor %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-meta">
+            Curated from 20+ sources &middot; Reliability-scored &middot; Ad-free
+        </p>
+        <nav class="footer-links">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+            <a href="https://github.com/axeandlord/news">Source</a>
+        </nav>
+    </footer>
+
+    <script src="static/js/player.js"></script>
+</body>
+</html>

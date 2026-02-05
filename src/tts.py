@@ -1,156 +1,118 @@
-"""Text-to-Speech generation using piper-tts."""
+"""Text-to-Speech generation for news briefings.
 
-import subprocess
+Uses XTTS v2 for high-quality British voice synthesis.
+Falls back to edge-tts if XTTS unavailable.
+"""
+
+import asyncio
 from pathlib import Path
 
 from .curator import CuratedArticle
-from .utils.language import detect_language
-
-
-def generate_tts_script(sections: dict[str, list[CuratedArticle]]) -> tuple[str, str]:
-    """
-    Generate TTS script from curated articles.
-
-    Returns (english_script, french_script) tuple.
-    """
-    en_lines = ["Here's your daily news brief."]
-    fr_lines = ["Voici votre bulletin d'informations quotidien."]
-
-    for section_name, articles in sections.items():
-        if not articles:
-            continue
-
-        en_lines.append(f"{section_name}.")
-        fr_lines.append(f"{section_name}.")
-
-        for item in articles:
-            article = item.article
-            title = article.title
-            source = article.source
-
-            # Use AI summary if available, else truncated original
-            summary = item.ai_summary or article.summary[:150]
-
-            # Detect language and add to appropriate script
-            lang = detect_language(f"{title} {summary}")
-
-            line = f"{title}. From {source}. {summary}"
-
-            if lang == "fr":
-                fr_lines.append(line)
-            else:
-                en_lines.append(line)
-
-    en_lines.append("That's all for today's news brief.")
-    fr_lines.append("C'est tout pour le bulletin d'aujourd'hui.")
-
-    return "\n".join(en_lines), "\n".join(fr_lines)
-
-
-def text_to_speech(
-    text: str,
-    output_path: str,
-    voice: str = "en_US-amy-medium",
-    rate: int = 160
-) -> bool:
-    """
-    Convert text to speech using piper-tts.
-
-    Returns True if successful.
-    """
-    if not text.strip():
-        return False
-
-    output_path = Path(output_path)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    try:
-        # Piper expects text on stdin, outputs WAV
-        wav_path = output_path.with_suffix(".wav")
-
-        # Run piper
-        result = subprocess.run(
-            [
-                "piper",
-                "--model", voice,
-                "--output_file", str(wav_path),
-                "--length_scale", str(1.0 / (rate / 160)),  # Adjust speaking rate
-            ],
-            input=text,
-            capture_output=True,
-            text=True,
-            timeout=300,  # 5 min timeout
-        )
-
-        if result.returncode != 0:
-            print(f"  [WARN] Piper error: {result.stderr}")
-            return False
-
-        # Convert WAV to MP3 using ffmpeg
-        mp3_result = subprocess.run(
-            [
-                "ffmpeg", "-y",
-                "-i", str(wav_path),
-                "-codec:a", "libmp3lame",
-                "-b:a", "128k",
-                str(output_path),
-            ],
-            capture_output=True,
-            timeout=120,
-        )
-
-        # Clean up WAV
-        wav_path.unlink(missing_ok=True)
-
-        if mp3_result.returncode != 0:
-            print(f"  [WARN] FFmpeg error")
-            return False
-
-        print(f"  Generated {output_path}")
-        return True
-
-    except FileNotFoundError:
-        print("  [WARN] piper or ffmpeg not found, skipping TTS")
-        return False
-    except subprocess.TimeoutExpired:
-        print("  [WARN] TTS timeout")
-        return False
-    except Exception as e:
-        print(f"  [WARN] TTS error: {e}")
-        return False
+from .jarvis import generate_jarvis_briefing
 
 
 def generate_audio_brief(
     sections: dict[str, list[CuratedArticle]],
     output_dir: str = "audio",
-    en_voice: str = "en_US-amy-medium",
-    fr_voice: str = "fr_FR-siwis-medium"
+    use_xtts: bool = True,
 ) -> str | None:
     """
-    Generate audio briefing from curated articles.
+    Generate JARVIS-style audio briefing from curated articles.
 
-    Returns path to combined audio file, or None if failed.
+    Uses AI to create personalized, intelligent briefings with personality,
+    then converts to speech using XTTS v2.
+
+    Args:
+        sections: Dict of section name to curated articles
+        output_dir: Directory to save audio files
+        use_xtts: Whether to use XTTS (True) or edge-tts fallback (False)
+
+    Returns:
+        Path to audio file relative to project root, or None if failed.
     """
-    en_script, fr_script = generate_tts_script(sections)
-
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    print("Generating TTS audio...")
+    # Generate the JARVIS briefing text
+    print("Generating JARVIS-style briefing...")
+    briefing = generate_jarvis_briefing(sections)
 
-    # Generate English audio (primary)
-    en_path = output_path / "brief-en.mp3"
-    en_success = text_to_speech(en_script, str(en_path), voice=en_voice)
+    if not briefing.strip():
+        print("  [WARN] No briefing text generated")
+        return None
 
-    # Generate French audio if there's French content
-    if len(fr_script.split("\n")) > 3:  # More than just intro/outro
-        fr_path = output_path / "brief-fr.mp3"
-        text_to_speech(fr_script, str(fr_path), voice=fr_voice)
+    # Generate audio
+    wav_path = output_path / "brief-en.wav"
+    mp3_path = output_path / "brief-en.mp3"
 
-    if en_success:
-        return "audio/brief-en.mp3"
+    success = False
 
-    return None
+    if use_xtts:
+        print("Converting to speech with XTTS v2...")
+        success = _generate_xtts(briefing, str(wav_path))
+
+    if not success:
+        print("Converting to speech with edge-tts fallback...")
+        success = asyncio.run(_generate_edge_tts(briefing, str(wav_path)))
+
+    if not success:
+        print("  [WARN] Speech generation failed")
+        return None
+
+    # Post-process audio
+    print("Post-processing audio...")
+    from .audio_processor import process_audio, get_audio_info
+
+    if not process_audio(str(wav_path), str(mp3_path)):
+        # Try direct copy if processing fails
+        import shutil
+        shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
+        mp3_path = mp3_path.with_suffix('.wav')
+
+    # Clean up WAV if MP3 exists
+    if mp3_path.exists() and wav_path.exists():
+        wav_path.unlink()
+
+    # Log info
+    info = get_audio_info(str(mp3_path))
+    if info:
+        print(f"  Audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
+
+    return f"audio/{mp3_path.name}"
+
+
+def _generate_xtts(text: str, output_path: str) -> bool:
+    """Generate speech using XTTS v2."""
+    try:
+        from .tts_xtts import generate_xtts
+        return generate_xtts(text, output_path)
+    except ImportError as e:
+        print(f"  [WARN] XTTS not available: {e}")
+        return False
+    except Exception as e:
+        print(f"  [WARN] XTTS error: {e}")
+        return False
+
+
+async def _generate_edge_tts(text: str, output_path: str) -> bool:
+    """Fallback: Generate speech using edge-tts (Microsoft neural voices)."""
+    try:
+        import edge_tts
+    except ImportError:
+        print("  [WARN] edge-tts not installed")
+        return False
+
+    # British male voice - closest to JARVIS style available in edge-tts
+    voice = "en-GB-RyanNeural"
+
+    try:
+        communicate = edge_tts.Communicate(text, voice)
+        await communicate.save(output_path)
+        print(f"  Generated {output_path} (edge-tts)")
+        return True
+    except Exception as e:
+        print(f"  [WARN] edge-tts error: {e}")
+        return False
 
 
 if __name__ == "__main__":
@@ -172,8 +134,10 @@ if __name__ == "__main__":
     test_curated = CuratedArticle(
         article=test_article,
         score=0.9,
-        ai_summary="OpenAI unveiled a new AI model today.",
+        ai_summary="OpenAI unveiled a new AI model today with significantly improved reasoning.",
+        why_it_matters="This could change how developers build AI applications.",
     )
 
     sections = {"Top Stories": [test_curated]}
-    generate_audio_brief(sections)
+    result = generate_audio_brief(sections)
+    print(f"Result: {result}")

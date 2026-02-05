@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3600">
+    <title>News Brief | news.bezman.ca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a1f;
+            color: #e8e6e3;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #3a3a40;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #9a8a9f;
+            margin-bottom: 0.5rem;
+        }
+
+        .updated {
+            color: #707070;
+            font-size: 0.875rem;
+        }
+
+        .audio-player {
+            background: #242429;
+            border: 1px solid #3a3a40;
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .audio-player audio {
+            flex: 1;
+            height: 40px;
+        }
+
+        .audio-label {
+            color: #9a8a9f;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .section {
+            margin: 2rem 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: #c8c8c8;
+        }
+
+        .section-toggle {
+            color: #9a8a9f;
+            font-size: 0.75rem;
+            transition: transform 0.2s;
+        }
+
+        .section-header.collapsed .section-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            display: block;
+        }
+
+        .section-content.hidden {
+            display: none;
+        }
+
+        .article {
+            background: #242429;
+            border: 1px solid #3a3a40;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .article:hover {
+            border-color: #9a8a9f;
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e8e6e3;
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .article-title a:hover {
+            color: #9a8a9f;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            color: #808080;
+            flex-shrink: 0;
+        }
+
+        .article-source {
+            color: #9a8a9f;
+        }
+
+        .article-summary {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .article-why {
+            color: #a08a70;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        .reliability-badge {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .reliability-high {
+            background: #2d4a3e;
+            color: #7dba9f;
+        }
+
+        .reliability-medium {
+            background: #4a4a2d;
+            color: #baba7d;
+        }
+
+        .reliability-low {
+            background: #4a2d2d;
+            color: #ba7d7d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #505050;
+            font-size: 0.75rem;
+            border-top: 1px solid #3a3a40;
+            margin-top: 2rem;
+        }
+
+        footer a {
+            color: #9a8a9f;
+            text-decoration: none;
+        }
+
+        /* TTS Controls */
+        .tts-controls {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+
+        .tts-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: #242429;
+            border: 1px solid #3a3a40;
+            border-radius: 8px;
+            color: #e8e6e3;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tts-btn:hover {
+            border-color: #9a8a9f;
+            background: #2a2a30;
+        }
+
+        .tts-btn.playing {
+            border-color: #9a8a9f;
+            background: #9a8a9f20;
+        }
+
+        .tts-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .tts-status {
+            text-align: center;
+            color: #707070;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            min-height: 1.2em;
+        }
+
+        .article.speaking {
+            border-color: #9a8a9f;
+            background: #9a8a9f10;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .article-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .audio-player {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>News Brief</h1>
+            <p class="updated">Updated Feb 4, 2026 at 7:00 PM UTC</p>
+        </header>
+
+        
+        <div class="tts-controls">
+            <button class="tts-btn" id="ttsPlayBtn" onclick="toggleAudio()">
+                <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="stopIcon" style="display:none" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                <span id="ttsLabel">Listen to Brief</span>
+            </button>
+        </div>
+        <audio id="newsAudio" src="audio/brief-en.mp3" preload="none"></audio>
+        
+
+        
+        <div class="audio-player">
+            <span class="audio-label">Listen to brief</span>
+            <audio controls preload="none">
+                <source src="audio/brief-en.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+        
+
+        
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-toggle">&#9660;</span>
+                <h2>Top Stories</h2>
+            </div>
+            <div class="section-content">
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener">
+                                GitHub adds Claude and Codex AI coding agents
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">The Verge AI</span>
+                            <span class="reliability-badge reliability-medium">
+                                80%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">GitHub is making Claude by Anthropic and OpenAI's Codex AI coding agents directly available inside GitHub today. A new public preview adds Claude and Codex to GitHub, GitHub Mobile, and Visual Studio ...</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://www.theverge.com/ai-artificial-intelligence/873686/anthropic-claude-ai-ad-free-super-bowl-advert-chatgpt" target="_blank" rel="noopener">
+                                Anthropic says ‘Claude will remain ad-free,’ unlike ChatGPT
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">The Verge AI</span>
+                            <span class="reliability-badge reliability-medium">
+                                80%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">Anthropic has announced that it won't be bringing ads to its AI chatbot Claude, in sharp contrast to confirmed plans from OpenAI to allow advertising in ChatGPT. To hammer the point home further, the ...</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://techcrunch.com/2026/02/04/accel-doubles-down-on-fibr-ai-as-agents-turn-static-websites-into-one-to-one-experiences/" target="_blank" rel="noopener">
+                                Accel doubles down on Fibr AI as agents turn static websites into one-to-one experiences
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">TechCrunch AI</span>
+                            <span class="reliability-badge reliability-medium">
+                                80%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">Fibr AI replaces marketing agency- and engineering-heavy website personalization with autonomous systems designed for enterprise scale.</p>
+                    
+                    
+                </article>
+                
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-toggle">&#9660;</span>
+                <h2>AI & Tech</h2>
+            </div>
+            <div class="section-content">
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://techcrunch.com/2026/02/04/exclusive-positron-raises-230m-series-b-to-take-on-nvidias-ai-chips/" target="_blank" rel="noopener">
+                                Exclusive: Positron raises $230M Series B to take on Nvidia’s AI chips
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">TechCrunch AI</span>
+                            <span class="reliability-badge reliability-medium">
+                                80%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">The investment comes from backers including the Qatar Investment Authority as demand for chips beyond Nvidia soars and as Qatar aims to build out its AI infrastructure.</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener">
+                                Scalable and Secure AI Inference in Healthcare: A Comparative Benchmarking of FastAPI and Triton Inference Server on Kubernetes
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">ArXiv AI/ML</span>
+                            <span class="reliability-badge reliability-high">
+                                100%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">arXiv:2602.00053v1 Announce Type: new 
+Abstract: Efficient and scalable deployment of machine learning (ML) models is a prerequisite for modern production environments, particularly within regulated d...</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener">
+                                From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">ArXiv AI/ML</span>
+                            <span class="reliability-badge reliability-high">
+                                100%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">arXiv:2602.00190v1 Announce Type: new 
+Abstract: Deep learning agents can achieve high performance in complex game domains without often understanding the underlying causal game mechanics. To address ...</p>
+                    
+                    
+                </article>
+                
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-toggle">&#9660;</span>
+                <h2>Local Montreal</h2>
+            </div>
+            <div class="section-content">
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://montrealgazette.com/news/local-news/montreal-blue-collar-workers-strike-pressure-tactics" target="_blank" rel="noopener">
+                                Montreal's striking blue-collar workers ready to ramp up pressure tactics
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">Montreal Gazette</span>
+                            <span class="reliability-badge reliability-medium">
+                                85%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">Montreal’s blue-collar workers say they’re ready to intensify pressure tactics if Wednesday’s 24-hour strike doesn’t get negotiations with the city heading in the right direction. Read More</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://montrealgazette.com/news/provincial_politics/jolin-barrette-caq-constitution-abortion" target="_blank" rel="noopener">
+                                Jolin-Barrette denies being ‘paternalistic’ over proposed Quebec constitution
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">Montreal Gazette</span>
+                            <span class="reliability-badge reliability-medium">
+                                85%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">Justice Minister Simon Jolin-Barrette denies that he’s being paternalistic in his handling of a controversial bill that would create a written constitution for Quebec. Read More</p>
+                    
+                    
+                </article>
+                
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-header" onclick="toggleSection(this)">
+                <span class="section-toggle">&#9660;</span>
+                <h2>What to Watch</h2>
+            </div>
+            <div class="section-content">
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://arxiv.org/abs/2602.00266" target="_blank" rel="noopener">
+                                Complete Identification of Deep ReLU Neural Networks by Many-Valued Logic
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">ArXiv AI/ML</span>
+                            <span class="reliability-badge reliability-high">
+                                100%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">arXiv:2602.00266v1 Announce Type: new 
+Abstract: Deep ReLU neural networks admit nontrivial functional symmetries: vastly different architectures and parameters (weights and biases) can realize the sa...</p>
+                    
+                    
+                </article>
+                
+                <article class="article">
+                    <div class="article-header">
+                        <h3 class="article-title">
+                            <a href="https://arxiv.org/abs/2602.00276" target="_blank" rel="noopener">
+                                Localizing and Correcting Errors for LLM-based Planners
+                            </a>
+                        </h3>
+                        <div class="article-meta">
+                            <span class="article-source">ArXiv AI/ML</span>
+                            <span class="reliability-badge reliability-high">
+                                100%
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <p class="article-summary">arXiv:2602.00276v1 Announce Type: new 
+Abstract: Large language models (LLMs) have demonstrated strong reasoning capabilities on math and coding, but frequently fail on symbolic classical planning tas...</p>
+                    
+                    
+                </article>
+                
+            </div>
+        </div>
+        
+
+        <footer>
+            AI-curated news brief &middot; Auto-refreshes hourly &middot;
+            <a href="https://github.com/axeandlord/news">Source</a>
+        </footer>
+    </div>
+
+    <script>
+        function toggleSection(header) {
+            header.classList.toggle('collapsed');
+            const content = header.nextElementSibling;
+            content.classList.toggle('hidden');
+        }
+
+        // TTS State
+        let ttsPlaying = false;
+        let ttsQueue = [];
+        let currentUtterance = null;
+        let currentArticleEl = null;
+
+        // Natural transitions
+        const transitions = [
+            "Moving on,",
+            "In other news,",
+            "Also making headlines,",
+            "Next up,",
+            "Meanwhile,",
+        ];
+
+        const sectionIntros = {
+            "Top Stories": "Let's start with today's top stories.",
+            "Tech & AI": "Now for the latest in technology and AI.",
+            "Montreal & Quebec": "Here's what's happening in Montreal and Quebec.",
+            "Business & Markets": "Turning to business and markets,",
+            "Science & Health": "In science and health news,",
+            "World News": "From around the world,",
+        };
+
+        function getTimeOfDay() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "morning";
+            if (hour < 17) return "afternoon";
+            return "evening";
+        }
+
+        function getDateStr() {
+            return new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+        }
+
+        function buildTTSQueue() {
+            const queue = [];
+
+            // Intro
+            queue.push({
+                text: `Good ${getTimeOfDay()}. Here's your news brief for ${getDateStr()}.`,
+                type: 'intro'
+            });
+
+            // Process each section
+            const sections = document.querySelectorAll('.section');
+            let isFirst = true;
+
+            sections.forEach(section => {
+                const sectionName = section.querySelector('h2')?.textContent || '';
+                const intro = sectionIntros[sectionName] || `Now, ${sectionName.toLowerCase()}.`;
+
+                queue.push({ text: intro, type: 'section', sectionName });
+
+                const articles = section.querySelectorAll('.article');
+                articles.forEach((article, i) => {
+                    const title = article.querySelector('.article-title')?.textContent?.trim() || '';
+                    const summary = article.querySelector('.article-summary')?.textContent?.trim() || '';
+                    const why = article.querySelector('.article-why')?.textContent?.trim() || '';
+                    const source = article.querySelector('.article-source')?.textContent?.trim() || '';
+
+                    let text = '';
+
+                    // Add transition for non-first articles
+                    if (!isFirst) {
+                        text += transitions[Math.floor(Math.random() * transitions.length)] + ' ';
+                    }
+                    isFirst = false;
+
+                    // Title
+                    text += title + '. ';
+
+                    // Summary
+                    if (summary) text += summary + ' ';
+
+                    // Why it matters
+                    if (why) text += why + ' ';
+
+                    // Source
+                    if (source) text += `That's according to ${source}.`;
+
+                    queue.push({ text, type: 'article', element: article });
+                });
+            });
+
+            // Outro
+            queue.push({
+                text: "And that's your news brief. Thanks for listening.",
+                type: 'outro'
+            });
+
+            return queue;
+        }
+
+        function updateUI(playing) {
+            const btn = document.getElementById('ttsPlayBtn');
+            const playIcon = document.getElementById('playIcon');
+            const stopIcon = document.getElementById('stopIcon');
+            const label = document.getElementById('ttsLabel');
+
+            if (playing) {
+                btn.classList.add('playing');
+                playIcon.style.display = 'none';
+                stopIcon.style.display = 'block';
+                label.textContent = 'Stop';
+            } else {
+                btn.classList.remove('playing');
+                playIcon.style.display = 'block';
+                stopIcon.style.display = 'none';
+                label.textContent = 'Listen';
+            }
+        }
+
+        function setStatus(text) {
+            document.getElementById('ttsStatus').textContent = text;
+        }
+
+        function highlightArticle(el) {
+            if (currentArticleEl) currentArticleEl.classList.remove('speaking');
+            currentArticleEl = el;
+            if (el) {
+                el.classList.add('speaking');
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function speakNext() {
+            if (!ttsPlaying || ttsQueue.length === 0) {
+                stopTTS();
+                return;
+            }
+
+            const item = ttsQueue.shift();
+            const utterance = new SpeechSynthesisUtterance(item.text);
+
+            // Use a natural voice if available
+            const voices = speechSynthesis.getVoices();
+            const preferred = voices.find(v =>
+                v.name.includes('Samantha') ||
+                v.name.includes('Google') ||
+                v.name.includes('Microsoft') ||
+                v.lang.startsWith('en')
+            );
+            if (preferred) utterance.voice = preferred;
+
+            utterance.rate = 0.95;
+            utterance.pitch = 1.0;
+
+            // Update status
+            if (item.type === 'intro') setStatus('Starting...');
+            else if (item.type === 'section') setStatus(item.sectionName);
+            else if (item.type === 'article') highlightArticle(item.element);
+            else if (item.type === 'outro') setStatus('Wrapping up...');
+
+            utterance.onend = () => {
+                if (ttsPlaying) speakNext();
+            };
+
+            utterance.onerror = (e) => {
+                if (e.error !== 'canceled') {
+                    console.error('TTS error:', e);
+                    if (ttsPlaying) speakNext();
+                }
+            };
+
+            currentUtterance = utterance;
+            speechSynthesis.speak(utterance);
+        }
+
+        function startTTS() {
+            if (!('speechSynthesis' in window)) {
+                alert('Text-to-speech is not supported in your browser.');
+                return;
+            }
+
+            ttsPlaying = true;
+            ttsQueue = buildTTSQueue();
+            updateUI(true);
+
+            // Wait for voices to load
+            if (speechSynthesis.getVoices().length === 0) {
+                speechSynthesis.onvoiceschanged = () => speakNext();
+            } else {
+                speakNext();
+            }
+        }
+
+        function stopTTS() {
+            ttsPlaying = false;
+            ttsQueue = [];
+            speechSynthesis.cancel();
+            highlightArticle(null);
+            updateUI(false);
+            setStatus('');
+        }
+
+        function toggleTTS() {
+            if (ttsPlaying) {
+                stopTTS();
+            } else {
+                startTTS();
+            }
+        }
+
+        // Load voices early
+        if ('speechSynthesis' in window) {
+            speechSynthesis.getVoices();
+        }
+
+        // Audio player controls (for pre-generated audio)
+        let audioPlaying = false;
+
+        function toggleAudio() {
+            const audio = document.getElementById('newsAudio');
+            if (!audio) return;
+
+            if (audioPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                audioPlaying = false;
+                updateUI(false);
+            } else {
+                audio.play();
+                audioPlaying = true;
+                updateUI(true);
+            }
+        }
+
+        // Handle audio end
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('newsAudio');
+            if (audio) {
+                audio.addEventListener('ended', () => {
+                    audioPlaying = false;
+                    updateUI(false);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

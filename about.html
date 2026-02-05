@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How BRIEF Works | AI News Assistant</title>
+    <meta name="description" content="Learn how BRIEF curates and delivers personalized news briefings.">
+    <link rel="stylesheet" href="static/css/brief.css">
+    <style>
+        .about-hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .about-hero h1 {
+            font-size: 2rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .about-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .about-section {
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            padding: 0 1rem;
+        }
+
+        .about-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h2 {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .about-card h2 span {
+            font-size: 1.5rem;
+        }
+
+        .about-card p {
+            color: var(--text-body);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .about-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-card ul {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .about-card li {
+            color: var(--text-body);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .about-card li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 1rem;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .source-item {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .source-item .score {
+            font-size: 0.7rem;
+            color: var(--trust-high);
+            font-weight: 600;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-badge {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">BRIEF</a>
+        <nav class="header-nav">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+        </nav>
+    </header>
+
+    <main class="about-section">
+        <a href="index.html" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to today's brief
+        </a>
+
+        <div class="about-hero">
+            <h1>How BRIEF Works</h1>
+            <p>
+                BRIEF is your personal AI news assistant. Every day, it reads through hundreds of articles,
+                separates signal from noise, and delivers a conversational audio briefing tailored to your interests.
+            </p>
+        </div>
+
+        <div class="about-card">
+            <h2><span>1</span> Source Collection</h2>
+            <p>
+                We pull from 20+ vetted news sources across categories: technology, local Montreal news,
+                finance, geopolitics, and science. Each source is manually selected for editorial quality
+                and assigned a reliability score based on their track record.
+            </p>
+            <div class="source-grid">
+                <div class="source-item">Reuters <span class="score">95%</span></div>
+                <div class="source-item">CBC News <span class="score">90%</span></div>
+                <div class="source-item">ArXiv <span class="score">100%</span></div>
+                <div class="source-item">Bloomberg <span class="score">90%</span></div>
+                <div class="source-item">TechCrunch <span class="score">80%</span></div>
+                <div class="source-item">The Verge <span class="score">80%</span></div>
+                <div class="source-item">Montreal Gazette <span class="score">85%</span></div>
+                <div class="source-item">Le Devoir <span class="score">90%</span></div>
+            </div>
+        </div>
+
+        <div class="about-card">
+            <h2><span>2</span> Intelligent Curation</h2>
+            <p>
+                Our AI scores each article based on relevance to your interests, source reliability,
+                and recency. It then removes duplicates, keeping only the most reliable version of
+                each story. The result: 10-15 essential stories instead of hundreds of repetitive headlines.
+            </p>
+            <ul>
+                <li>Cross-reference bonus when multiple sources report the same story</li>
+                <li>High-priority keywords boost relevant articles</li>
+                <li>Recency weighting favors breaking news</li>
+                <li>Deduplication keeps the most reliable source</li>
+            </ul>
+        </div>
+
+        <div class="about-card">
+            <h2><span>3</span> Personalized Briefing</h2>
+            <p>
+                JARVIS (your AI assistant) synthesizes the day's news into a conversational briefing.
+                This isn't a newsreader &mdash; it's a brilliant friend who read everything and is
+                catching you up over coffee. Expect insights, opinions, and dry British wit.
+            </p>
+            <ul>
+                <li>Conversational TL;DR, not headline recitation</li>
+                <li>Connects related stories and adds context</li>
+                <li>Skips obvious explanations for topics you know</li>
+                <li>Time-aware greetings and sign-offs</li>
+            </ul>
+        </div>
+
+        <div class="about-card">
+            <h2><span>4</span> Neural Voice Synthesis</h2>
+            <p>
+                The briefing is converted to speech using XTTS v2, a state-of-the-art neural TTS model
+                running locally on GPU. The result is natural, expressive speech with a warm British accent &mdash;
+                fitting for your AI assistant.
+            </p>
+            <div class="tech-stack">
+                <span class="tech-badge">XTTS v2</span>
+                <span class="tech-badge">RTX 4080</span>
+                <span class="tech-badge">Local Processing</span>
+                <span class="tech-badge">192kbps Audio</span>
+            </div>
+        </div>
+
+        <div class="about-card">
+            <h2><span>5</span> Trust & Transparency</h2>
+            <p>
+                Every article shows its source and reliability score. You can always click through
+                to read the original. We don't inject ads, sponsored content, or affiliate links.
+                BRIEF exists to serve you, not advertisers.
+            </p>
+            <ul>
+                <li>90%+ reliability: Primary sources, wire services, peer-reviewed</li>
+                <li>80-89% reliability: Established outlets with editorial standards</li>
+                <li>Below 80%: Included for coverage, but flagged for caution</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-meta">
+            Built with care in Montreal
+        </p>
+        <nav class="footer-links">
+            <a href="index.html">Today's Brief</a>
+            <a href="archive/">Archive</a>
+            <a href="https://github.com/axeandlord/news">Source</a>
+        </nav>
+    </footer>
+</body>
+</html>

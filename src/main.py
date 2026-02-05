@@ -12,6 +12,7 @@ from src.fetcher import fetch_feeds_sync
 from src.curator import curate_articles
 from src.generator import generate_html
 from src.tts import generate_audio_brief
+from src.archive import archive_brief
 
 
 def main():
@@ -49,7 +50,7 @@ def main():
     print("=" * 50)
 
     # Step 1: Fetch all RSS feeds
-    print("\n[1/4] Fetching RSS feeds...")
+    print("\n[1/5] Fetching RSS feeds...")
     articles = fetch_feeds_sync(args.feeds_config)
 
     if not articles:
@@ -57,7 +58,7 @@ def main():
         sys.exit(1)
 
     # Step 2: Curate and score articles
-    print("\n[2/4] Curating articles...")
+    print("\n[2/5] Curating articles...")
     if args.no_ai:
         import os
         os.environ.pop("OPENROUTER_API_KEY", None)
@@ -70,18 +71,26 @@ def main():
     # Step 3: Generate TTS audio (optional)
     audio_file = None
     if not args.no_tts:
-        print("\n[3/4] Generating audio brief...")
+        print("\n[3/5] Generating audio brief...")
         audio_file = generate_audio_brief(sections)
         if audio_file:
             print(f"  Audio: {audio_file}")
         else:
             print("  Audio generation skipped or failed")
     else:
-        print("\n[3/4] Skipping TTS (--no-tts)")
+        print("\n[3/5] Skipping TTS (--no-tts)")
 
     # Step 4: Generate HTML
-    print("\n[4/4] Generating HTML...")
+    print("\n[4/5] Generating HTML...")
     generate_html(sections, audio_file=audio_file, output_path=args.output)
+
+    # Step 5: Archive today's brief
+    print("\n[5/5] Archiving brief...")
+    archive_brief(
+        html_path=args.output,
+        article_count=total_curated,
+        has_audio=audio_file is not None,
+    )
 
     print("\n" + "=" * 50)
     print("DONE!")
