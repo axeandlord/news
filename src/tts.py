@@ -14,7 +14,7 @@ from .jarvis import generate_jarvis_briefing
 def generate_audio_brief(
     sections: dict[str, list[CuratedArticle]],
     output_dir: str = "audio",
-    use_xtts: bool = True,
+    use_xtts: bool = False,  # Disabled - edge-tts sounds more natural
 ) -> str | None:
     """
     Generate JARVIS-style audio briefing from curated articles.
@@ -95,20 +95,27 @@ def _generate_xtts(text: str, output_path: str) -> bool:
 
 
 async def _generate_edge_tts(text: str, output_path: str) -> bool:
-    """Fallback: Generate speech using edge-tts (Microsoft neural voices)."""
+    """Generate speech using edge-tts (Microsoft Azure neural voices).
+
+    These are high-quality neural voices that sound very natural.
+    """
     try:
         import edge_tts
     except ImportError:
         print("  [WARN] edge-tts not installed")
         return False
 
-    # British male voice - closest to JARVIS style available in edge-tts
+    # British male voice - natural, warm, professional
+    # RyanNeural = friendly/casual, ThomasNeural = slightly more formal
     voice = "en-GB-RyanNeural"
 
+    # Slight rate reduction for more gravitas (-5% to -10%)
+    rate = "-5%"
+
     try:
-        communicate = edge_tts.Communicate(text, voice)
+        communicate = edge_tts.Communicate(text, voice, rate=rate)
         await communicate.save(output_path)
-        print(f"  Generated {output_path} (edge-tts)")
+        print(f"  Generated {output_path} (edge-tts: {voice})")
         return True
     except Exception as e:
         print(f"  [WARN] edge-tts error: {e}")
