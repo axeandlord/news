@@ -115,9 +115,10 @@
                 </h3>
 
                 {% if item.ai_summary %}
-                <p class="article-summary">{{ item.ai_summary }}</p>
+                <p class="article-summary">{{ item.ai_summary|clean_summary }}</p>
                 {% elif item.article.summary %}
-                <p class="article-summary">{{ item.article.summary[:200] }}{% if item.article.summary|length > 200 %}...{% endif %}</p>
+                {% set cleaned = item.article.summary|clean_summary %}
+                <p class="article-summary">{{ cleaned[:200] }}{% if cleaned|length > 200 %}...{% endif %}</p>
                 {% endif %}
 
                 {% if item.why_it_matters %}

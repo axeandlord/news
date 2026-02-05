@@ -152,7 +152,7 @@ def generate_jarvis_briefing(
     Uses AI to create a conversational, personalized summary.
     Falls back to template-based generation if API unavailable.
     """
-    api_key = os.environ.get("OPENROUTER_API_KEY")
+    api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
     persona = load_persona(persona_path)
     time_ctx = get_time_context(persona)
 
@@ -345,8 +345,9 @@ def generate_template_briefing(
 
         for i, item in enumerate(articles):
             article = item.article
-            summary = item.ai_summary or article.summary or ""
-            title = article.title.rstrip(".").strip()
+            raw_summary = item.ai_summary or article.summary or ""
+            summary = clean_summary(raw_summary)
+            title = clean_summary(article.title).rstrip(".").strip()
             source = article.source
 
             # Build the article text with smart variation
@@ -414,6 +415,47 @@ def generate_template_briefing(
     parts.append(closing)
 
     return prepare_for_tts("\n".join(parts))
+
+
+def clean_summary(text: str) -> str:
+    """
+    Clean raw RSS/article summaries for human-friendly TTS.
+
+    Strips academic jargon, arXiv IDs, metadata prefixes, etc.
+    """
+    import re
+
+    if not text:
+        return ""
+
+    # Remove arXiv IDs and metadata
+    text = re.sub(r'arXiv:\d+\.\d+v?\d*\s*', '', text)
+    text = re.sub(r'Announce Type:\s*\w+\s*', '', text)
+    text = re.sub(r'^Abstract:\s*', '', text)
+
+    # Remove paper/study prefixes that sound robotic
+    text = re.sub(r'^(This paper|This study|We present|We propose|We introduce|In this paper,?)\s+', '', text, flags=re.IGNORECASE)
+
+    # Remove "Read more" and similar
+    text = re.sub(r'\s*(Read more|Continue reading|Click here|Learn more)\.?\.?\.?\s*$', '', text, flags=re.IGNORECASE)
+
+    # Remove trailing ellipsis from truncated text
+    text = re.sub(r'\.\.\.+\s*$', '.', text)
+    text = re.sub(r'…\s*$', '.', text)
+
+    # Clean up HTML entities that sometimes slip through
+    text = text.replace('&amp;', 'and')
+    text = text.replace('&nbsp;', ' ')
+    text = text.replace('&#39;', "'")
+    text = text.replace('&quot;', '"')
+
+    # Remove [PDF] [HTML] etc
+    text = re.sub(r'\[(PDF|HTML|DOI|Link)\]', '', text, flags=re.IGNORECASE)
+
+    # Clean multiple spaces
+    text = re.sub(r'\s+', ' ', text)
+
+    return text.strip()
 
 
 def prepare_for_tts(text: str) -> str:

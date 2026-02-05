@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from .curator import CuratedArticle
 from .audio_processor import get_audio_info
+from .jarvis import clean_summary
 
 
 def generate_html(
@@ -29,6 +30,9 @@ def generate_html(
     # Set up Jinja2 environment
     template_dir = Path(__file__).parent.parent / "templates"
     env = Environment(loader=FileSystemLoader(str(template_dir)))
+
+    # Add filter to clean summaries for display
+    env.filters['clean_summary'] = clean_summary
 
     # Load template
     template = env.get_template("index.html")
