@@ -87,68 +87,50 @@ def build_system_prompt(persona: dict) -> str:
     if humor_examples:
         examples_str = "\n".join(f"  - {ex}" for ex in random.sample(humor_examples, min(2, len(humor_examples))))
 
-    return f"""You are a professional news briefing assistant delivering a personalized summary to {user_name}.
+    return f"""You are writing a PODCAST SCRIPT for {user_name} - this will be read aloud by text-to-speech.
 
-STYLE:
-- Professional, clear, informative
-- British accent friendly tone
-- Address as "{user_name}" occasionally but not every sentence
-- Conversational but not trying to be funny
+YOUR VOICE: Smart, warm, British-friendly tone. Like a well-informed friend catching them up over coffee.
 
-CRITICAL RULES FOR TTS OUTPUT:
-1. NEVER attempt jokes, punchlines, or comedic timing - TTS cannot deliver humor
-2. NEVER use phrases like "make of that what you will" or sarcastic asides - they sound flat
-3. SYNTHESIZE don't recite - tell what MATTERS, not headlines
-4. Connect related stories when relevant
-5. Be direct and informative - wit comes from smart word choice, not delivery
-6. Use contractions naturally (it's, they've, that's)
-7. Skip context for topics they know: {', '.join(expert_topics[:3]) if expert_topics else 'AI, tech'}
-8. Keep transitions smooth and natural
+ABSOLUTE RULES (TTS will sound terrible otherwise):
+1. ZERO SYMBOLS - no #, *, -, %, $, or any special characters
+2. ZERO LISTS - no bullet points, no numbered items, no "firstly/secondly"
+3. ZERO STRUCTURE - no headers, no sections, just flowing natural speech
+4. Write numbers as words: "fifty million dollars" not "$50M", "about thirty percent" not "30%"
+5. Use contractions: it's, they've, that's, won't, can't
+6. Smooth transitions only: "Meanwhile", "Speaking of which", "On a related note", "Interestingly"
 
-AVOID THESE (sound bad with TTS):
-- "About time if you ask me"
-- "Make of that what you will"
-- "On the lighter side..."
-- Any setup-punchline structure
-- Dramatic pauses or ellipsis for effect
+WHAT MAKES IT GOOD:
+- Explain WHY things matter, not just what happened
+- Connect dots between related stories naturally
+- Skip boring details, focus on what's actually interesting
+- Sound like you're genuinely telling a friend, not reading a script
+- {user_name} knows about: {', '.join(expert_topics[:3]) if expert_topics else 'AI, tech'} - skip basic explanations
 
-THEIR INTERESTS:
-{chr(10).join(f'- {i}' for i in primary_interests) if primary_interests else '- AI and technology'}
-
-OUTPUT FORMAT:
-- Output ONLY the briefing text, no headers or metadata
-- Natural spoken language optimized for text-to-speech
-- Synthesize and explain, don't just list headlines
-- Tell me WHY things matter, not just WHAT happened
-- Group related stories into themes
-- Be engaging - like a smart friend explaining the news
-- Aim for 15-20 minutes (3000-4000 words)
-- End with a simple closing, not a question"""
+OUTPUT: Pure spoken text. No formatting. No metadata. Just words that sound natural when read aloud."""
 
 
 def build_news_content(sections: dict[str, list[CuratedArticle]]) -> str:
-    """Build news content string for AI processing."""
-    parts = []
+    """Build news content as plain text for AI - no markdown, no metadata."""
+    stories = []
 
     for section_name, articles in sections.items():
         if not articles:
             continue
 
-        parts.append(f"## {section_name}")
+        # Simple section header, no formatting
+        category = section_name.replace("&", "and")
 
         for item in articles:
             article = item.article
-            summary = item.ai_summary or article.summary
-            why = item.why_it_matters or ""
+            summary = clean_summary(item.ai_summary or article.summary or "")
+            title = clean_summary(article.title)
+            source = article.source
 
-            parts.append(f"""
-**{article.title}**
-Source: {article.source} (reliability: {article.reliability:.0%})
-Summary: {summary}
-{f"Context: {why}" if why else ""}
-""")
+            # Plain text story - just the facts, no symbols
+            story = f"{category}: {title}. {summary} (from {source})"
+            stories.append(story)
 
-    return "\n".join(parts)
+    return "\n\n".join(stories)
 
 
 def generate_jarvis_briefing(
@@ -180,24 +162,29 @@ def generate_jarvis_briefing(
     news_content = build_news_content(limited_sections)
     total_articles = total_for_ai
 
-    user_prompt = f"""It's {time_ctx['time_of_day'].replace('_', ' ')} on {time_ctx['date_str']}.
+    user_prompt = f"""It's {time_ctx['time_of_day'].replace('_', ' ')}.
 
-Here are {total_articles} news stories. Your job is to brief me like a smart friend who read everything and is telling me what actually matters.
+I haven't checked the news today. Tell me what's going on like you're my smart friend who reads everything. Here's what happened:
 
 {news_content}
 
-IMPORTANT GUIDELINES:
-- DON'T just read headlines back to me - SYNTHESIZE and explain WHY things matter
-- Group related stories into coherent themes
-- For each story, give me the TLDR and the "so what?" - why should I care?
-- Be conversational like you're talking to me over coffee
-- Skip the fluff, get to the interesting parts
-- If multiple articles are about the same topic, combine them intelligently
-- Use natural transitions between topics
-- About 15-20 minutes of content (3000-4000 words)
-- End naturally, not with a question
+---
 
-Remember: You're a brilliant assistant catching me up, not a news anchor reading teleprompter."""
+Now write me a briefing I'll LISTEN to (text-to-speech). Write it like a PODCAST SCRIPT:
+
+CRITICAL RULES:
+- NO symbols whatsoever. No hashtags, asterisks, bullet points, dashes, percent signs, numbers with symbols
+- NO lists or structured formatting - pure flowing conversation
+- NO "here are the top stories" or "first, second, third" structure
+- Write exactly how you'd SPEAK to a friend - natural, flowing, human
+- Say "about eighty percent" not "80%", say "around fifty million" not "$50M"
+- Group related things naturally: "Speaking of AI..." or "On a related note..."
+- Tell me WHY things matter, not just what happened
+- Be genuinely interesting - if something is boring, make it interesting or skip it
+- Transitions should be smooth: "Meanwhile...", "Interestingly...", "Now here's something cool..."
+- About 12-15 minutes when read aloud
+
+Start directly with the news (no "good morning" - I'll add that). End with a natural wrap-up."""
 
     # Try local Ollama first (free, uses local GPU)
     briefing = _try_ollama(system_prompt, user_prompt)
@@ -517,45 +504,102 @@ def prepare_for_tts(text: str) -> str:
     """
     Prepare text for natural-sounding TTS output.
 
-    Removes punctuation patterns that cause unnatural pauses.
+    Strips ALL symbols and formatting that TTS would read literally.
     """
     import re
 
-    # Remove commas before direct address (sir, ma'am, etc.)
+    # Remove markdown formatting completely
+    text = re.sub(r'#{1,6}\s*', '', text)  # Headers
+    text = re.sub(r'\*{1,2}([^*]+)\*{1,2}', r'\1', text)  # Bold/italic
+    text = re.sub(r'`[^`]+`', '', text)  # Code
+    text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)  # Links
+
+    # Remove bullet points and list markers
+    text = re.sub(r'^[\s]*[-•*]\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^[\s]*\d+[.)]\s+', '', text, flags=re.MULTILINE)
+
+    # Convert common symbols to words
+    text = re.sub(r'\$(\d+(?:\.\d+)?)\s*([BMKbmk](?:illion|illion)?)?', lambda m: _money_to_words(m.group(0)), text)
+    text = re.sub(r'(\d+(?:\.\d+)?)\s*%', lambda m: _percent_to_words(m.group(1)), text)
+    text = text.replace('&', ' and ')
+    text = text.replace('@', ' at ')
+    text = text.replace('+', ' plus ')
+    text = text.replace('=', ' equals ')
+
+    # Remove remaining special characters that TTS reads oddly
+    text = re.sub(r'[#*_~`|<>{}[\]\\^]', '', text)
+
+    # Remove ellipsis
+    text = re.sub(r'\.{2,}', '.', text)
+    text = text.replace('…', '.')
+
+    # Clean up quotes to simple ones
+    text = text.replace('"', '"').replace('"', '"')
+    text = text.replace(''', "'").replace(''', "'")
+
+    # Remove commas before direct address
     text = re.sub(r',\s*(sir|ma\'am|my friend)\b', r' \1', text, flags=re.IGNORECASE)
 
-    # Remove commas after short introductory words that sound better flowing
+    # Remove commas after short introductory words
     text = re.sub(r'\b(Now|Well|So|Right|Yes|No|Oh),\s+', r'\1 ', text)
 
-    # Remove ellipsis that creates awkward pauses (keep single periods)
-    text = re.sub(r'\.{2,}', '.', text)
-
-    # Remove comma before "and" or "but" in short phrases
+    # Remove comma before conjunctions for flow
     text = re.sub(r',\s+(and|but|or)\s+', r' \1 ', text)
 
-    # Clean up double spaces
-    text = re.sub(r'  +', ' ', text)
-
-    # Remove comma after greeting phrases for flow
+    # Remove comma after greetings
     text = re.sub(r'(Good morning|Good afternoon|Good evening|Hello),', r'\1', text)
 
     # Make contractions more natural
-    text = text.replace(" it is ", " it's ")
-    text = text.replace(" that is ", " that's ")
-    text = text.replace(" there is ", " there's ")
-    text = text.replace(" here is ", " here's ")
-    text = text.replace(" what is ", " what's ")
-    text = text.replace(" I have ", " I've ")
-    text = text.replace(" I will ", " I'll ")
-    text = text.replace(" do not ", " don't ")
-    text = text.replace(" does not ", " doesn't ")
-    text = text.replace(" cannot ", " can't ")
-    text = text.replace(" will not ", " won't ")
-    text = text.replace(" would not ", " wouldn't ")
-    text = text.replace(" could not ", " couldn't ")
-    text = text.replace(" should not ", " shouldn't ")
+    contractions = [
+        (" it is ", " it's "), (" that is ", " that's "), (" there is ", " there's "),
+        (" here is ", " here's "), (" what is ", " what's "), (" I have ", " I've "),
+        (" I will ", " I'll "), (" do not ", " don't "), (" does not ", " doesn't "),
+        (" cannot ", " can't "), (" will not ", " won't "), (" would not ", " wouldn't "),
+        (" could not ", " couldn't "), (" should not ", " shouldn't "),
+    ]
+    for old, new in contractions:
+        text = text.replace(old, new)
+
+    # Clean up whitespace
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    text = re.sub(r'  +', ' ', text)
 
     return text.strip()
+
+
+def _money_to_words(money_str: str) -> str:
+    """Convert $50M to 'fifty million dollars'."""
+    import re
+    match = re.match(r'\$?([\d.]+)\s*([BMKbmk])?', money_str)
+    if not match:
+        return money_str
+
+    num = float(match.group(1))
+    suffix = (match.group(2) or '').upper()
+
+    multipliers = {'B': 'billion', 'M': 'million', 'K': 'thousand'}
+    mult_word = multipliers.get(suffix, '')
+
+    # Simple conversion for common values
+    if num == int(num):
+        num_word = str(int(num))
+    else:
+        num_word = str(num)
+
+    if mult_word:
+        return f"{num_word} {mult_word} dollars"
+    return f"{num_word} dollars"
+
+
+def _percent_to_words(num_str: str) -> str:
+    """Convert 85% to 'eighty-five percent'."""
+    try:
+        num = float(num_str)
+        if num == int(num):
+            return f"{int(num)} percent"
+        return f"{num} percent"
+    except ValueError:
+        return f"{num_str} percent"
 
 
 if __name__ == "__main__":
