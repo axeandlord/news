@@ -3,6 +3,7 @@
 import json
 import shutil
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from jinja2 import Template
@@ -192,7 +193,7 @@ def archive_today(html_path: str = "index.html") -> str | None:
     ARCHIVE_DIR.mkdir(exist_ok=True)
 
     # Generate dated filename
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(ZoneInfo("America/Montreal")).strftime("%Y-%m-%d")
     archive_filename = f"{today}.html"
     archive_path = ARCHIVE_DIR / archive_filename
 
@@ -308,7 +309,7 @@ def archive_brief(
         return
 
     # Get today's date
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(ZoneInfo("America/Montreal")).strftime("%Y-%m-%d")
 
     # Update manifest
     update_manifest(today, article_count, has_audio)

@@ -33,8 +33,9 @@ def generate_html(
     # Load template
     template = env.get_template("index.html")
 
-    # Calculate metadata
-    now = datetime.now(timezone.utc)
+    # Calculate metadata - use local time for display
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("America/Montreal"))
     date_display = now.strftime("%B %-d, %Y")
 
     article_count = sum(len(items) for items in sections.values())
