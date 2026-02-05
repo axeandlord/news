@@ -82,37 +82,39 @@ def build_system_prompt(persona: dict) -> str:
     if humor_examples:
         examples_str = "\n".join(f"  - {ex}" for ex in random.sample(humor_examples, min(2, len(humor_examples))))
 
-    return f"""You are JARVIS - not a newsreader, but a brilliant friend who read everything this morning and is catching {user_name} up over coffee.
+    return f"""You are a professional news briefing assistant delivering a personalized summary to {user_name}.
 
-PERSONALITY:
-- {humor_style}
-- Warm, intelligent, subtly witty British manner
-- Address as "{user_name}" naturally (not every sentence)
-- Example of your style:
-{examples_str}
+STYLE:
+- Professional, clear, informative
+- British accent friendly tone
+- Address as "{user_name}" occasionally but not every sentence
+- Conversational but not trying to be funny
 
-CRITICAL RULES - READ CAREFULLY:
-1. NEVER read headlines or article summaries verbatim
-2. SYNTHESIZE, don't recite - tell what MATTERS, not what HAPPENED
-3. Connect dots the listener might miss
-4. Have opinions: "this is interesting because...", "I'm skeptical of this..."
-5. Skip context for topics they already know: {', '.join(expert_topics[:3])}
-6. Be conversational: contractions, asides, natural flow
-7. If something is boring but necessary: "Quick housekeeping item..."
-8. If something is exciting: "Now THIS is worth your attention..."
+CRITICAL RULES FOR TTS OUTPUT:
+1. NEVER attempt jokes, punchlines, or comedic timing - TTS cannot deliver humor
+2. NEVER use phrases like "make of that what you will" or sarcastic asides - they sound flat
+3. SYNTHESIZE don't recite - tell what MATTERS, not headlines
+4. Connect related stories when relevant
+5. Be direct and informative - wit comes from smart word choice, not delivery
+6. Use contractions naturally (it's, they've, that's)
+7. Skip context for topics they know: {', '.join(expert_topics[:3]) if expert_topics else 'AI, tech'}
+8. Keep transitions smooth and natural
 
-THEIR INTERESTS (prioritize and connect):
-{chr(10).join(f'- {i}' for i in primary_interests)}
+AVOID THESE (sound bad with TTS):
+- "About time if you ask me"
+- "Make of that what you will"
+- "On the lighter side..."
+- Any setup-punchline structure
+- Dramatic pauses or ellipsis for effect
 
-CONTEXT:
-{chr(10).join(f'- {c}' for c in context_notes)}
+THEIR INTERESTS:
+{chr(10).join(f'- {i}' for i in primary_interests) if primary_interests else '- AI and technology'}
 
 OUTPUT FORMAT:
-- Output ONLY the briefing text
-- No headers, no metadata, no "Here's the briefing" intro
-- Natural spoken language (this will be converted to speech)
-- Use "..." for natural pauses
-- Keep it under 800 words total"""
+- Output ONLY the briefing text, no headers or metadata
+- Natural spoken language optimized for text-to-speech
+- Keep it under 800 words total
+- End with a simple closing, not a question"""
 
 
 def build_news_content(sections: dict[str, list[CuratedArticle]]) -> str:
@@ -223,83 +225,193 @@ def generate_template_briefing(
     time_ctx: dict,
 ) -> str:
     """
-    Generate JARVIS-style briefing without AI (fallback).
+    Generate natural conversational briefing optimized for TTS.
 
-    Uses templates and patterns to add personality.
+    Smart rotation across all elements to sound human and avoid repetition.
     """
-    voice = persona.get("voice", {})
-    fillers = voice.get("filler_phrases", ["Here's something interesting..."])
-    transitions = voice.get("transitions", ["Moving on..."])
-    outros = persona.get("outros", ["That's your briefing for now."])
 
-    # Section intros
-    section_intros = {
-        "Top Stories": "Let's start with what matters most.",
-        "AI & Tech": "On the technology front... and this is where it gets interesting...",
-        "Local Montreal": "Now, closer to home...",
-        "Business & Markets": "Turning to financial matters...",
-        "Science & Health": "From the world of science...",
-        "World News": "Looking at the broader picture...",
-        "What to Watch": "A few things worth keeping an eye on...",
+    # === OPENINGS - varied ways to start the briefing ===
+    openings = [
+        "Here's what's going on.",
+        "Let me catch you up.",
+        "Here's what you need to know.",
+        "Got a few things for you.",
+        "Here's the rundown.",
+    ]
+
+    # === SECTION TRANSITIONS - smooth moves between themes ===
+    # First section (no previous context)
+    first_section_intros = {
+        "AI & Technology": ["Starting with tech.", "First up, AI and tech.", "On the tech front."],
+        "Finance & Markets": ["Starting with markets.", "First, the financial picture.", "Let's start with finance."],
+        "World & Geopolitics": ["Starting internationally.", "First, world news.", "On the global front."],
+        "Montreal": ["Starting locally.", "First, here in Montreal.", "Closer to home first."],
+        "Quebec": ["Starting with Quebec.", "First, provincial news."],
+        "Canada": ["Starting nationally.", "First, across Canada."],
+        "Wildcards & Emerging": ["Starting with some interesting developments.", "First, a few things worth noting."],
     }
 
-    # Build briefing
-    parts = [time_ctx["greeting"]]
+    # Transitioning between sections (acknowledges shift)
+    section_transitions = {
+        "AI & Technology": ["Shifting to tech.", "Now for AI and tech.", "On the tech side.", "In the tech world."],
+        "Finance & Markets": ["Turning to markets.", "Now for finance.", "On the money side.", "Financially speaking."],
+        "World & Geopolitics": ["Looking internationally.", "On the world stage.", "Globally.", "Further afield."],
+        "Montreal": ["Closer to home now.", "Here in Montreal.", "Locally.", "Back home."],
+        "Quebec": ["In Quebec.", "Provincially.", "Around Quebec."],
+        "Canada": ["Nationally.", "Across Canada.", "On the national scene."],
+        "Wildcards & Emerging": ["A few other things.", "Some other developments.", "Also worth knowing."],
+    }
 
-    if time_ctx["day_note"]:
-        parts.append(time_ctx["day_note"])
+    # === ARTICLE INTROS - varied ways to introduce each story ===
+    # Sometimes lead with source, sometimes with the news
+    article_patterns = [
+        "{title}. {summary} {source_attr}",  # Standard: title, summary, source
+        "{source} is reporting that {summary_lower} {title_context}",  # Lead with source
+        "{summary} {source_attr} {title_context}",  # Lead with summary
+        "{title}. {source_attr} {summary}",  # Title, source, then details
+    ]
 
-    parts.append("")
+    # === WITHIN-SECTION TRANSITIONS - article to article ===
+    article_transitions = [
+        "Also,", "And", "Meanwhile,", "Separately,", "Additionally,",
+        "Related to that,", "On a similar note,", "In other news,",
+        "", "", "",  # Empty = natural flow, no connector needed
+    ]
 
-    article_count = 0
+    # === SOURCE ATTRIBUTIONS - conversational ===
+    source_before = [  # When source comes before the news
+        "{source} is reporting that",
+        "{source} says",
+        "According to {source},",
+        "Per {source},",
+        "{source} has the story:",
+    ]
+
+    source_after = [  # When source comes after
+        "That's from {source}.",
+        "Via {source}.",
+        "That's according to {source}.",
+        "This comes from {source}.",
+        "{source} has the details.",
+        "That's per {source}.",
+    ]
+
+    # === CLOSING LINES ===
+    closings = [
+        "That's the rundown.",
+        "That covers the main points.",
+        "That's what you need to know.",
+        "And that's where things stand.",
+        "That's your update.",
+        "That's the latest.",
+    ]
+
+    # === BUILD THE BRIEFING ===
+
+    # Track what we've used to avoid repetition
+    used_article_trans = []
+    used_source_after = []
+    used_patterns = []
+
+    # Greeting based on time
+    greetings = {
+        "morning": "Good morning sir.",
+        "morning_early": "Good morning sir.",
+        "afternoon": "Good afternoon sir.",
+        "evening": "Good evening sir.",
+        "late_night": "Evening sir.",
+    }
+
+    greeting = greetings.get(time_ctx.get("time_of_day", "evening"), "Hello sir.")
+    opening = random.choice(openings)
+
+    parts = [f"{greeting} {opening}", ""]
+
+    section_count = 0
+    total_articles = 0
+
     for section_name, articles in sections.items():
         if not articles:
             continue
 
-        # Section intro
-        intro = section_intros.get(section_name, f"Moving to {section_name.lower()}...")
-        parts.append(intro)
-        parts.append("")
+        # Pick section intro based on whether it's first section or not
+        if section_count == 0:
+            intros = first_section_intros.get(section_name, [f"Starting with {section_name.lower()}."])
+        else:
+            intros = section_transitions.get(section_name, [f"Now for {section_name.lower()}."])
+
+        section_intro = random.choice(intros)
+        parts.append(section_intro)
 
         for i, item in enumerate(articles):
             article = item.article
-            summary = item.ai_summary or article.summary
-            why = item.why_it_matters
+            summary = item.ai_summary or article.summary or ""
+            title = article.title.rstrip(".").strip()
+            source = article.source
 
-            # Build article text
-            if article_count == 0:
-                lead = random.choice(fillers)
-            elif i == 0:
-                lead = ""  # Section intro is enough
-            else:
-                lead = random.choice(transitions)
-
+            # Build the article text with smart variation
             text_parts = []
-            if lead:
-                text_parts.append(lead)
 
-            # Synthesize the story (not just headline)
-            text_parts.append(f"{article.title}.")
+            # Add transition if not first article in section
+            if i > 0:
+                available = [t for t in article_transitions if t not in used_article_trans[-2:]]
+                trans = random.choice(available) if available else random.choice(article_transitions)
+                used_article_trans.append(trans)
+                if trans:
+                    text_parts.append(trans)
 
-            if summary:
-                summary = summary.strip()
-                if not summary.endswith((".", "!", "?")):
-                    summary += "."
-                text_parts.append(summary)
+            # Choose a pattern for this article (rotate)
+            available_patterns = [p for p in article_patterns if p not in used_patterns[-2:]]
+            pattern = random.choice(available_patterns) if available_patterns else random.choice(article_patterns)
+            used_patterns.append(pattern)
 
-            # Add context/why it matters
-            if why:
-                why = why.strip()
-                text_parts.append(f"The key point here... {why}")
+            # Prepare components
+            summary_clean = summary.strip().rstrip(".") if summary else ""
+            # Only lowercase first letter if it's not an acronym (followed by lowercase)
+            if summary_clean and len(summary_clean) > 1:
+                if summary_clean[1].islower():
+                    summary_lower = summary_clean[0].lower() + summary_clean[1:]
+                else:
+                    summary_lower = summary_clean  # Keep as-is for acronyms
+            else:
+                summary_lower = summary_clean
+            title_context = f"The headline: {title}." if "title_context" in pattern and summary else ""
 
-            text_parts.append(f"That's from {article.source}.")
+            # Source attribution
+            available_src = [s for s in source_after if s not in used_source_after[-2:]]
+            source_attr = random.choice(available_src).format(source=source)
+            used_source_after.append(source_attr)
+
+            # Build based on pattern
+            if "{source} is reporting" in pattern or pattern.startswith("{source}"):
+                # Source-first pattern
+                src_before = random.choice(source_before).format(source=source)
+                if summary_lower:
+                    text_parts.append(f"{src_before} {summary_lower}.")
+                else:
+                    text_parts.append(f"{src_before} {title.lower()}.")
+            elif pattern.startswith("{summary}"):
+                # Summary-first pattern
+                if summary_clean:
+                    text_parts.append(f"{summary_clean}. {source_attr}")
+                else:
+                    text_parts.append(f"{title}. {source_attr}")
+            else:
+                # Standard: title then summary
+                text_parts.append(f"{title}.")
+                if summary_clean:
+                    text_parts.append(f"{summary_clean}.")
+                text_parts.append(source_attr)
 
             parts.append(" ".join(text_parts))
-            parts.append("")
-            article_count += 1
+            total_articles += 1
 
-    # Outro
-    parts.append(random.choice(outros))
+        parts.append("")  # Blank line between sections
+        section_count += 1
+
+    # Closing
+    closing = random.choice(closings)
+    parts.append(closing)
 
     return prepare_for_tts("\n".join(parts))
 
