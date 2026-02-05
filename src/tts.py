@@ -109,11 +109,12 @@ async def _generate_edge_tts(text: str, output_path: str) -> bool:
     # RyanNeural = friendly/casual, ThomasNeural = slightly more formal
     voice = "en-GB-RyanNeural"
 
-    # Slight rate reduction for more gravitas (-5% to -10%)
-    rate = "-5%"
+    # Natural rate, slight pitch adjustment for warmth without heaviness
+    rate = "+0%"  # Normal speed
+    pitch = "+0Hz"  # Natural pitch
 
     try:
-        communicate = edge_tts.Communicate(text, voice, rate=rate)
+        communicate = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
         await communicate.save(output_path)
         print(f"  Generated {output_path} (edge-tts: {voice})")
         return True

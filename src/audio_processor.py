@@ -11,7 +11,7 @@ from pathlib import Path
 def process_audio(
     input_path: str,
     output_path: str,
-    target_loudness: float = -16,  # LUFS
+    target_loudness: float = -18,  # LUFS - softer, less fatiguing
     bitrate: str = "192k",
 ) -> bool:
     """
@@ -42,17 +42,13 @@ def process_audio(
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Build FFmpeg filter chain
-    # 1. highpass=f=80 - remove low rumble
-    # 2. compand - gentle compression
-    # 3. loudnorm - EBU R128 loudness normalization
-    # 4. equalizer - slight warmth boost at 200Hz
+    # Build FFmpeg filter chain - LIGHT processing for natural sound
+    # Keep it simple - just normalize and gentle highpass
     filters = [
-        "highpass=f=80",
-        "compand=attacks=0:points=-80/-80|-45/-15|-27/-9|0/-7|20/-7:gain=2",
-        f"loudnorm=I={target_loudness}:TP=-1.5:LRA=11",
-        "equalizer=f=200:t=q:w=1:g=2",  # +2dB at 200Hz for warmth
+        "highpass=f=60",  # Very gentle, just remove rumble
+        f"loudnorm=I={target_loudness}:TP=-2:LRA=14",  # More dynamic range (LRA=14)
     ]
+    # NO compression, NO EQ boost - keep the natural voice
 
     filter_chain = ",".join(filters)
 
