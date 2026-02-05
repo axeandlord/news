@@ -4,503 +4,413 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="refresh" content="3600">
-    <title>News Brief | news.bezman.ca</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #1a1a1f;
-            color: #e8e6e3;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid #3a3a40;
-        }
-
-        h1 {
-            font-size: 2rem;
-            color: #9a8a9f;
-            margin-bottom: 0.5rem;
-        }
-
-        .updated {
-            color: #707070;
-            font-size: 0.875rem;
-        }
-
-        .audio-player {
-            background: #242429;
-            border: 1px solid #3a3a40;
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .audio-player audio {
-            flex: 1;
-            height: 40px;
-        }
-
-        .audio-label {
-            color: #9a8a9f;
-            font-size: 0.875rem;
-            white-space: nowrap;
-        }
-
-        .section {
-            margin: 2rem 0;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .section-header h2 {
-            font-size: 1.25rem;
-            color: #c8c8c8;
-        }
-
-        .section-toggle {
-            color: #9a8a9f;
-            font-size: 0.75rem;
-            transition: transform 0.2s;
-        }
-
-        .section-header.collapsed .section-toggle {
-            transform: rotate(-90deg);
-        }
-
-        .section-content {
-            display: block;
-        }
-
-        .section-content.hidden {
-            display: none;
-        }
-
-        .article {
-            background: #242429;
-            border: 1px solid #3a3a40;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .article:hover {
-            border-color: #9a8a9f;
-        }
-
-        .article-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .article-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #e8e6e3;
-        }
-
-        .article-title a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .article-title a:hover {
-            color: #9a8a9f;
-        }
-
-        .article-meta {
-            display: flex;
-            gap: 0.75rem;
-            font-size: 0.75rem;
-            color: #808080;
-            flex-shrink: 0;
-        }
-
-        .article-source {
-            color: #9a8a9f;
-        }
-
-        .article-summary {
-            color: #b0b0b0;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        .article-why {
-            color: #a08a70;
-            font-size: 0.85rem;
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-
-        .reliability-badge {
-            display: inline-block;
-            padding: 0.1rem 0.4rem;
-            border-radius: 4px;
-            font-size: 0.65rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .reliability-high {
-            background: #2d4a3e;
-            color: #7dba9f;
-        }
-
-        .reliability-medium {
-            background: #4a4a2d;
-            color: #baba7d;
-        }
-
-        .reliability-low {
-            background: #4a2d2d;
-            color: #ba7d7d;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: #505050;
-            font-size: 0.75rem;
-            border-top: 1px solid #3a3a40;
-            margin-top: 2rem;
-        }
-
-        footer a {
-            color: #9a8a9f;
-            text-decoration: none;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 1rem;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .article-header {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .audio-player {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
+    <title>BRIEF | Your AI News Assistant</title>
+    <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
+    <link rel="stylesheet" href="static/css/brief.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>News Brief</h1>
-            <p class="updated">Updated Feb 4, 2026 at 6:08 PM UTC</p>
-        </header>
-
-        
-
-        
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <span class="section-toggle">&#9660;</span>
-                <h2>Top Stories</h2>
-            </div>
-            <div class="section-content">
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener">
-                                GitHub adds Claude and Codex AI coding agents
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">The Verge AI</span>
-                            <span class="reliability-badge reliability-medium">
-                                80%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">GitHub is making the AI coding agents Claude and Codex directly available to users with a Copilot Pro Plus or Copilot Enterprise subscription, as part of its Agent HQ initiative to integrate AI agents into the GitHub ecosystem.</p>
-                    
-                    
-                    <p class="article-why">This move by GitHub to make AI coding assistants like Claude and Codex more accessible to developers reflects the growing importance of AI-powered tools in the software development process.</p>
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://www.theverge.com/ai-artificial-intelligence/873686/anthropic-claude-ai-ad-free-super-bowl-advert-chatgpt" target="_blank" rel="noopener">
-                                Anthropic says ‘Claude will remain ad-free,’ unlike ChatGPT
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">The Verge AI</span>
-                            <span class="reliability-badge reliability-medium">
-                                80%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">Anthropic has announced that its AI chatbot Claude will remain ad-free, in contrast to OpenAI's plan to allow advertising in ChatGPT. Anthropic is also releasing a Super Bowl commercial mocking unnamed rivals for adding ads to their AI.</p>
-                    
-                    
-                    <p class="article-why">This decision by Anthropic to keep Claude ad-free highlights the growing debate around the role of advertising in AI assistants and the potential impact on user trust and experience.</p>
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://techcrunch.com/2026/02/04/accel-doubles-down-on-fibr-ai-as-agents-turn-static-websites-into-one-to-one-experiences/" target="_blank" rel="noopener">
-                                Accel doubles down on Fibr AI as agents turn static websites into one-to-one experiences
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">TechCrunch AI</span>
-                            <span class="reliability-badge reliability-medium">
-                                80%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">Fibr AI, a company backed by Accel, has developed autonomous systems that can transform static websites into personalized, one-to-one experiences, replacing the traditional labor-intensive process of website personalization.</p>
-                    
-                    
-                    <p class="article-why">Fibr AI's technology has the potential to revolutionize website personalization, making it more scalable and accessible for enterprises, which could have significant implications for the way businesses engage with their customers online.</p>
-                    
-                </article>
-                
-            </div>
+    <!-- Sticky Player (hidden by default, shows on scroll) -->
+    <div class="sticky-player">
+        <span class="logo">BRIEF</span>
+        <div class="sticky-waveform"></div>
+        <button class="sticky-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="sticky-time">0:00 / 0:00</span>
+        <div class="sticky-progress">
+            <div class="sticky-progress-fill"></div>
         </div>
-        
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <span class="section-toggle">&#9660;</span>
-                <h2>AI & Tech</h2>
-            </div>
-            <div class="section-content">
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://techcrunch.com/2026/02/04/exclusive-positron-raises-230m-series-b-to-take-on-nvidias-ai-chips/" target="_blank" rel="noopener">
-                                Exclusive: Positron raises $230M Series B to take on Nvidia’s AI chips
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">TechCrunch AI</span>
-                            <span class="reliability-badge reliability-medium">
-                                80%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">Positron, a startup focused on developing AI chips, has raised $230 million in a Series B funding round led by the Qatar Investment Authority. The investment is driven by the growing demand for AI-powered chips beyond Nvidia's offerings and Qatar's goal to build out its AI infrastructure.</p>
-                    
-                    
-                    <p class="article-why">The funding highlights the increasing competition in the AI chip market as companies seek to develop alternatives to Nvidia's dominant position, potentially driving innovation and greater choice for customers.</p>
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener">
-                                Scalable and Secure AI Inference in Healthcare: A Comparative Benchmarking of FastAPI and Triton Inference Server on Kubernetes
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">ArXiv AI/ML</span>
-                            <span class="reliability-badge reliability-high">
-                                100%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">The article compares the performance and scalability of two inference serving systems, FastAPI and Triton Inference Server, for deploying machine learning models in the healthcare domain, where low latency, high throughput, and data privacy are critical requirements.</p>
-                    
-                    
-                    <p class="article-why">Efficient and scalable deployment of machine learning models is crucial for real-time clinical decision support and batch processing of medical records in the healthcare sector, where compliance with data privacy regulations is paramount.</p>
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener">
-                                From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">ArXiv AI/ML</span>
-                            <span class="reliability-badge reliability-high">
-                                100%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">The researchers investigate the ability of large language models to infer the underlying game mechanics from observational gameplay data, using the Video Game Description Language (VGDL) as a testbed.</p>
-                    
-                    
-                    <p class="article-why">This work explores the potential of large language models to uncover causal relationships from data, which could have broader applications in understanding complex systems and processes.</p>
-                    
-                </article>
-                
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <span class="section-toggle">&#9660;</span>
-                <h2>Local Montreal</h2>
-            </div>
-            <div class="section-content">
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://montrealgazette.com/news/local-news/montreal-blue-collar-workers-strike-pressure-tactics" target="_blank" rel="noopener">
-                                Montreal's striking blue-collar workers ready to ramp up pressure tactics
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">Montreal Gazette</span>
-                            <span class="reliability-badge reliability-medium">
-                                85%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">Montreal’s blue-collar workers say they’re ready to intensify pressure tactics if Wednesday’s 24-hour strike doesn’t get negotiations with the city heading in the right direction. Read More</p>
-                    
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://montrealgazette.com/news/provincial_politics/jolin-barrette-caq-constitution-abortion" target="_blank" rel="noopener">
-                                Jolin-Barrette denies being ‘paternalistic’ over proposed Quebec constitution
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">Montreal Gazette</span>
-                            <span class="reliability-badge reliability-medium">
-                                85%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">Justice Minister Simon Jolin-Barrette denies that he’s being paternalistic in his handling of a controversial bill that would create a written constitution for Quebec. Read More</p>
-                    
-                    
-                </article>
-                
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="section-header" onclick="toggleSection(this)">
-                <span class="section-toggle">&#9660;</span>
-                <h2>What to Watch</h2>
-            </div>
-            <div class="section-content">
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://arxiv.org/abs/2602.00266" target="_blank" rel="noopener">
-                                Complete Identification of Deep ReLU Neural Networks by Many-Valued Logic
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">ArXiv AI/ML</span>
-                            <span class="reliability-badge reliability-high">
-                                100%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">The article presents a method to completely identify the architecture and parameters of deep ReLU neural networks that realize a given function, by translating the networks into Lukasiewicz logic formulae and performing functional equivalent transformations.</p>
-                    
-                    
-                    <p class="article-why">This work provides a new approach to understanding the functional symmetries and equivalences in deep neural networks, which can have implications for network interpretation, optimization, and generalization.</p>
-                    
-                </article>
-                
-                <article class="article">
-                    <div class="article-header">
-                        <h3 class="article-title">
-                            <a href="https://arxiv.org/abs/2602.00276" target="_blank" rel="noopener">
-                                Localizing and Correcting Errors for LLM-based Planners
-                            </a>
-                        </h3>
-                        <div class="article-meta">
-                            <span class="article-source">ArXiv AI/ML</span>
-                            <span class="reliability-badge reliability-high">
-                                100%
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <p class="article-summary">The article presents a method called Localized In-Context Learning (L-ICL) that aims to improve the performance of large language models (LLMs) on classical planning tasks. The method involves iteratively augmenting instructions with demonstrations to help the LLM learn and correct violations of domain constraints.</p>
-                    
-                    
-                    <p class="article-why">The ability to localize and correct errors in LLM-based planners is crucial for their practical application in real-world scenarios where adhering to domain constraints is essential.</p>
-                    
-                </article>
-                
-            </div>
-        </div>
-        
-
-        <footer>
-            AI-curated news brief &middot; Auto-refreshes hourly &middot;
-            <a href="https://github.com/axeandlord/news">Source</a>
-        </footer>
+        <button class="sticky-speed">1x</button>
     </div>
 
-    <script>
-        function toggleSection(header) {
-            header.classList.toggle('collapsed');
-            const content = header.nextElementSibling;
-            content.classList.toggle('hidden');
-        }
-    </script>
+    <!-- Header -->
+    <header class="header">
+        <span class="logo">BRIEF</span>
+        <nav class="header-nav">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="greeting">Good morning, sir.</h1>
+        <p class="greeting-sub">Your briefing is ready.</p>
+
+        <div class="waveform-container" aria-hidden="true"></div>
+
+        <button class="play-btn" id="playBtn">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="stop-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+            <span>Play Briefing</span>
+        </button>
+
+        <p class="brief-meta">
+            February 5, 2026<span>&middot;</span>10 stories<span>&middot;</span>~4 min
+        </p>
+
+        <div class="playback-controls">
+            <button class="skip-btn skip-back" aria-label="Back 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <span class="time-display">0:00 / 0:00</span>
+            <button class="skip-btn skip-forward" aria-label="Forward 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <button class="speed-btn">1x</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <div class="progress-handle"></div>
+            </div>
+        </div>
+
+        <a href="#stories" class="scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            Explore today's stories
+        </a>
+    </section>
+
+    <!-- Audio Element -->
+    
+
+    <!-- Main Content -->
+    <main class="content" id="stories">
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Top Stories</h2>
+                <span class="section-count">3 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">12:45 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/2026/02/04/sam-altman-got-exceptionally-testy-over-claude-super-bowl-ads/" target="_blank" rel="noopener">
+                        Sam Altman got exceptionally testy over Claude Super Bowl ads
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">He posted a novella-sized rant that devolved into to calling his rival "dishonest" and "authoritarian."</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/2026/02/04/sam-altman-got-exceptionally-testy-over-claude-super-bowl-ads/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">10:53 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/2026/02/04/googles-gemini-app-has-surpassed-750m-monthly-active-users/" target="_blank" rel="noopener">
+                        Google’s Gemini app has surpassed 750M monthly active users
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Google revealed a significant milestone for its Gemini app, announcing over 750 million monthly active users as it competes with ChatGPT and Meta AI.</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/2026/02/04/googles-gemini-app-has-surpassed-750m-monthly-active-users/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="3">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">The Verge AI</span>
+                    </div>
+                    <span class="article-time">4:03 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theverge.com/news/874084/ai-chatgpt-claude-super-bowl-ads-openai-anthropic" target="_blank" rel="noopener">
+                        Sam Altman responds to Anthropic’s ‘funny’ Super Bowl ads
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Sam Altman responded to Anthropic's new Super Bowl ad in an X post on Wednesday, saying the OpenAI competitor's campaign is "clearly dishonest," and called it "on brand" for Anthropic to "doublespeak....</p>
+                
+
+                
+
+                <a href="https://www.theverge.com/news/874084/ai-chatgpt-claude-super-bowl-ads-openai-anthropic" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">AI & Tech</h2>
+                <span class="section-count">3 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">8:24 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/video/a16z-just-raised-1-7b-for-ai-infrastructure-heres-where-its-going/" target="_blank" rel="noopener">
+                        A16z just raised $1.7B for AI infrastructure. Here’s where it’s going.
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Andreessen Horowitz just raised a whopping ⁠new $15 billion in funding⁠. And a $1.7 billion chunk of that is going to its ⁠infrastructure team⁠, the one responsible for some of its biggest, most promi...</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/video/a16z-just-raised-1-7b-for-ai-infrastructure-heres-where-its-going/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">TechCrunch AI</span>
+                    </div>
+                    <span class="article-time">8:19 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://techcrunch.com/podcast/what-a16z-is-actually-funding-and-what-its-ignoring-when-it-comes-to-ai-infra/" target="_blank" rel="noopener">
+                        What a16z is actually funding (and what it’s ignoring) when it comes to AI infra
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Andreessen Horowitz just raised a whopping new $15 billion in funding. And a $1.7 billion chunk of that is going to its infrastructure team, the one responsible for some of its biggest, most prominent...</p>
+                
+
+                
+
+                <a href="https://techcrunch.com/podcast/what-a16z-is-actually-funding-and-what-its-ignoring-when-it-comes-to-ai-infra/" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="3">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">The Verge AI</span>
+                    </div>
+                    <span class="article-time">12:00 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener">
+                        GitHub adds Claude and Codex AI coding agents
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">GitHub is making Claude by Anthropic and OpenAI's Codex AI coding agents directly available inside GitHub today. A new public preview adds Claude and Codex to GitHub, GitHub Mobile, and Visual Studio ...</p>
+                
+
+                
+
+                <a href="https://www.theverge.com/news/873665/github-claude-codex-ai-agents" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Local Montreal</h2>
+                <span class="section-count">2 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">1:32 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/local-news/anglophone-caq-quebec-constitution-bill-1" target="_blank" rel="noopener">
+                        Anglos say CAQ’s constitution erases their history and 'suffocates part of my identity'
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">“Do I correspond to your definition of a Quebecer?” a witness asked Justice Minister Simon Jolin-Barrette on Wednesday at a National Assembly committee hearing studying the Quebec constitution that he...</p>
+                
+
+                
+
+                <a href="https://montrealgazette.com/news/local-news/anglophone-caq-quebec-constitution-bill-1" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">11:45 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/sports/hockey/montreal-canadiens/liveblog-montembeault-in-xhekaj-out-for-last-canadiens-game-before-olympic-break" target="_blank" rel="noopener">
+                        Liveblog: Canadiens score twice in 1:16, lead Jets 3-1
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The Montreal Canadiens (31-17-8) play their final game before the break for the Winter Olympics against the Winnipeg Jets (22-25-8) on Wednesday at Canada Life Centre. Read More</p>
+                
+
+                
+
+                <a href="https://montrealgazette.com/sports/hockey/montreal-canadiens/liveblog-montembeault-in-xhekaj-out-for-last-canadiens-game-before-olympic-break" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">What to Watch</h2>
+                <span class="section-count">2 stories</span>
+            </header>
+
+            
+            <article class="article" data-index="1">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener">
+                        Scalable and Secure AI Inference in Healthcare: A Comparative Benchmarking of FastAPI and Triton Inference Server on Kubernetes
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">arXiv:2602.00053v1 Announce Type: new 
+Abstract: Efficient and scalable deployment of machine learning (ML) models is a prerequisite for modern production environments, particularly within regulated d...</p>
+                
+
+                
+
+                <a href="https://arxiv.org/abs/2602.00053" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+            <article class="article" data-index="2">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener">
+                        From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">arXiv:2602.00190v1 Announce Type: new 
+Abstract: Deep learning agents can achieve high performance in complex game domains without often understanding the underlying causal game mechanics. To address ...</p>
+                
+
+                
+
+                <a href="https://arxiv.org/abs/2602.00190" target="_blank" rel="noopener" class="article-link">
+                    Read full article &rarr;
+                </a>
+            </article>
+            
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-meta">
+            Curated from 20+ sources &middot; Reliability-scored &middot; Ad-free
+        </p>
+        <nav class="footer-links">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+            <a href="https://github.com/axeandlord/news">Source</a>
+        </nav>
+    </footer>
+
+    <script src="static/js/player.js"></script>
 </body>
 </html>
