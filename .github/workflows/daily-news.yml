@@ -35,6 +35,7 @@ jobs:
       - name: Generate news brief with audio
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          TZ: America/Montreal
         run: |
           python src/main.py
 
