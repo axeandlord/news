@@ -16,7 +16,7 @@ from .curator import CuratedArticle
 
 # OpenRouter API for AI rewriting
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "anthropic/claude-3-haiku"  # Fast and cheap for summaries
+MODEL = "anthropic/claude-3-haiku"  # Fast, use for top stories only
 
 
 def load_persona(config_path: str = "config/persona.yaml") -> dict:
@@ -113,7 +113,11 @@ THEIR INTERESTS:
 OUTPUT FORMAT:
 - Output ONLY the briefing text, no headers or metadata
 - Natural spoken language optimized for text-to-speech
-- Keep it under 800 words total
+- COVER EVERY ARTICLE - don't skip any, but vary depth based on importance
+- Top stories: 2-3 sentences each with context
+- Regular stories: 1-2 sentences summarizing the key point
+- Minor stories: can group similar ones together ("also in tech news...")
+- Aim for 10-15 minutes of content (2000-3000 words)
 - End with a simple closing, not a question"""
 
 
@@ -172,18 +176,19 @@ def generate_jarvis_briefing(
     # User prompt
     user_prompt = f"""It's {time_ctx['time_of_day'].replace('_', ' ')} on {time_ctx['date_str']}.
 
-Brief me on today's {total_articles} stories. Here they are:
+Brief me on ALL {total_articles} stories below. Here they are:
 
 {news_content}
 
-Create a flowing, conversational briefing that:
-1. Opens naturally (don't repeat the date I just told you)
-2. Groups related stories when they connect
-3. Adds insight and opinion, not just facts
-4. Includes your trademark dry wit where appropriate
-5. Closes with a natural sign-off
+Create a comprehensive, conversational briefing that:
+1. COVERS EVERY SINGLE ARTICLE - don't skip any
+2. Opens naturally (don't repeat the date I just told you)
+3. Groups related stories together when they connect
+4. Top stories get 2-3 sentences, others get 1-2 sentences
+5. Similar minor stories can be grouped ("also making headlines in tech...")
+6. Closes with a natural sign-off
 
-Remember: You're a brilliant assistant catching me up, not reading the news at me."""
+This should be a 10-15 minute briefing covering everything. Be thorough but not robotic."""
 
     try:
         response = httpx.post(
@@ -199,7 +204,7 @@ Remember: You're a brilliant assistant catching me up, not reading the news at m
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt},
                 ],
-                "max_tokens": 2000,
+                "max_tokens": 8000,
                 "temperature": 0.7,
             },
             timeout=60,
