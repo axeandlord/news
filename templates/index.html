@@ -80,7 +80,7 @@
 
     <!-- Audio Element -->
     {% if audio_file %}
-    <audio id="briefAudio" preload="metadata">
+    <audio id="briefAudio" preload="metadata" crossorigin="anonymous">
         <source src="{{ audio_file }}" type="audio/mpeg">
     </audio>
     {% endif %}

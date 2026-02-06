@@ -1,14 +1,14 @@
 /**
  * BRIEF Audio Player with real-time waveform visualization.
  *
- * Uses Web Audio API AnalyserNode for actual frequency data.
+ * Uses Web Audio API AnalyserNode for actual audio data.
+ * Falls back to amplitude simulation if CORS blocks analyser.
  */
 class BriefPlayer {
     constructor() {
         this.audio = document.getElementById('briefAudio');
         if (!this.audio) return;
 
-        // Hero elements
         this.playBtn = document.getElementById('playBtn');
         this.waveformContainer = document.querySelector('.waveform-container');
         this.playbackControls = document.querySelector('.playback-controls');
@@ -22,7 +22,6 @@ class BriefPlayer {
         this.skipForward = document.querySelector('.skip-forward');
         this.heroSection = document.querySelector('.hero');
 
-        // Sticky elements
         this.stickyPlayer = document.querySelector('.sticky-player');
         this.stickyPlayBtn = document.querySelector('.sticky-play-btn');
         this.stickyTime = document.querySelector('.sticky-time');
@@ -35,15 +34,21 @@ class BriefPlayer {
         this.currentSpeedIndex = 0;
         this.isPlaying = false;
 
-        // Web Audio API
+        // Web Audio
         this.audioCtx = null;
         this.analyser = null;
-        this.dataArray = null;
+        this.timeData = null;
+        this.freqData = null;
         this.audioSource = null;
+        this.analyserWorking = false;
+        this.checkedAnalyser = false;
 
-        // Bar references
+        // Bars
         this.heroBars = [];
         this.stickyBars = [];
+
+        // Smoothed values for fallback animation
+        this.smoothed = [];
 
         this.init();
     }
@@ -57,31 +62,33 @@ class BriefPlayer {
 
     initAudioContext() {
         if (this.audioCtx) return;
+        try {
+            this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            this.analyser = this.audioCtx.createAnalyser();
+            this.analyser.fftSize = 256;
+            this.analyser.smoothingTimeConstant = 0.75;
 
-        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        this.analyser = this.audioCtx.createAnalyser();
-        this.analyser.fftSize = 256;
-        this.analyser.smoothingTimeConstant = 0.8;
+            this.audioSource = this.audioCtx.createMediaElementSource(this.audio);
+            this.audioSource.connect(this.analyser);
+            this.analyser.connect(this.audioCtx.destination);
 
-        this.audioSource = this.audioCtx.createMediaElementSource(this.audio);
-        this.audioSource.connect(this.analyser);
-        this.analyser.connect(this.audioCtx.destination);
-
-        this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+            var bufLen = this.analyser.frequencyBinCount;
+            this.timeData = new Uint8Array(bufLen);
+            this.freqData = new Uint8Array(bufLen);
+        } catch (e) {
+            this.audioCtx = null;
+        }
     }
 
     createWaveform() {
-        var heroCount = 80;
-        var stickyCount = 50;
-
-        for (var i = 0; i < heroCount; i++) {
+        for (var i = 0; i < 80; i++) {
             var bar = document.createElement('div');
             bar.className = 'waveform-bar';
             this.waveformContainer.appendChild(bar);
             this.heroBars.push(bar);
+            this.smoothed.push(0);
         }
-
-        for (var i = 0; i < stickyCount; i++) {
+        for (var i = 0; i < 50; i++) {
             var bar = document.createElement('div');
             bar.className = 'waveform-bar';
             bar.style.width = '2px';
@@ -91,19 +98,16 @@ class BriefPlayer {
     }
 
     drawIdleWaveform() {
-        // Static waveform that looks like a real audio file preview
         for (var i = 0; i < this.heroBars.length; i++) {
             var t = i / this.heroBars.length;
-            // Envelope: louder in middle, quieter at edges
             var envelope = Math.sin(t * Math.PI) * 0.7 + 0.3;
-            // Pseudo-random but deterministic per bar position
             var seed = Math.sin(i * 127.1 + 311.7) * 43758.5453;
             var noise = seed - Math.floor(seed);
             var h = (noise * 35 + 10) * envelope;
             this.heroBars[i].style.height = h + 'px';
             this.heroBars[i].style.opacity = '0.35';
+            this.smoothed[i] = 0;
         }
-
         for (var i = 0; i < this.stickyBars.length; i++) {
             var seed = Math.sin(i * 127.1 + 311.7) * 43758.5453;
             var noise = seed - Math.floor(seed);
@@ -112,61 +116,125 @@ class BriefPlayer {
         }
     }
 
+    checkAnalyserData() {
+        if (!this.analyser || this.checkedAnalyser) return;
+        this.analyser.getByteFrequencyData(this.freqData);
+        var sum = 0;
+        for (var i = 0; i < this.freqData.length; i++) sum += this.freqData[i];
+        this.analyserWorking = sum > 0;
+        if (this.analyserWorking) this.checkedAnalyser = true;
+    }
+
     drawLiveWaveform() {
-        if (!this.isPlaying || !this.analyser) return;
+        if (!this.isPlaying) return;
 
-        this.analyser.getByteFrequencyData(this.dataArray);
-
-        var binCount = this.dataArray.length; // 128
-
-        // Hero bars: map frequency bins to bar heights
-        for (var i = 0; i < this.heroBars.length; i++) {
-            // Map bar index to frequency bin (focus on lower frequencies for voice)
-            var binIndex = Math.floor((i / this.heroBars.length) * binCount * 0.7);
-            var value = this.dataArray[binIndex] || 0;
-            // Scale 0-255 to reasonable pixel height
-            var h = (value / 255) * 60 + 4;
-            this.heroBars[i].style.height = h + 'px';
-            this.heroBars[i].style.opacity = Math.min(0.4 + (value / 255) * 0.6, 1);
+        // Check if analyser returns real data (CORS can block it)
+        if (this.analyser && !this.checkedAnalyser) {
+            this.checkAnalyserData();
         }
 
-        // Sticky bars
-        for (var i = 0; i < this.stickyBars.length; i++) {
-            var binIndex = Math.floor((i / this.stickyBars.length) * binCount * 0.7);
-            var value = this.dataArray[binIndex] || 0;
-            var h = (value / 255) * 24 + 3;
-            this.stickyBars[i].style.height = h + 'px';
-            this.stickyBars[i].style.opacity = Math.min(0.4 + (value / 255) * 0.6, 1);
+        if (this.analyser && this.analyserWorking) {
+            this.drawFromAnalyser();
+        } else {
+            this.drawFallback();
         }
 
         requestAnimationFrame(() => this.drawLiveWaveform());
     }
 
+    drawFromAnalyser() {
+        this.analyser.getByteTimeDomainData(this.timeData);
+        this.analyser.getByteFrequencyData(this.freqData);
+        var binCount = this.timeData.length;
+
+        for (var i = 0; i < this.heroBars.length; i++) {
+            var binIdx = Math.floor((i / this.heroBars.length) * binCount);
+
+            // Mix time-domain (waveform shape) and frequency (energy)
+            var timeSample = Math.abs(this.timeData[binIdx] - 128) / 128;
+            var freqBin = Math.floor((i / this.heroBars.length) * binCount * 0.6);
+            var freqSample = this.freqData[freqBin] / 255;
+
+            var value = timeSample * 0.5 + freqSample * 0.5;
+
+            // Smooth
+            this.smoothed[i] += (value - this.smoothed[i]) * 0.3;
+            var v = this.smoothed[i];
+
+            var h = v * 60 + 4;
+            this.heroBars[i].style.height = h + 'px';
+            this.heroBars[i].style.opacity = (0.4 + v * 0.6).toFixed(2);
+        }
+
+        for (var i = 0; i < this.stickyBars.length; i++) {
+            var binIdx = Math.floor((i / this.stickyBars.length) * binCount);
+            var timeSample = Math.abs(this.timeData[binIdx] - 128) / 128;
+            var freqBin = Math.floor((i / this.stickyBars.length) * binCount * 0.6);
+            var freqSample = this.freqData[freqBin] / 255;
+            var v = timeSample * 0.5 + freqSample * 0.5;
+            this.stickyBars[i].style.height = (v * 24 + 3) + 'px';
+            this.stickyBars[i].style.opacity = (0.4 + v * 0.6).toFixed(2);
+        }
+    }
+
+    drawFallback() {
+        // Fallback: simulate voice-like waveform from audio currentTime
+        // Creates a convincing voice visualization without analyser data
+        var t = this.audio.currentTime * 8;
+
+        for (var i = 0; i < this.heroBars.length; i++) {
+            var pos = i / this.heroBars.length;
+
+            // Layer multiple sine waves for organic speech-like pattern
+            var wave1 = Math.sin(t + i * 0.4) * 0.3;
+            var wave2 = Math.sin(t * 1.7 + i * 0.7) * 0.2;
+            var wave3 = Math.sin(t * 0.5 + i * 0.15) * 0.25;
+            var burst = Math.max(0, Math.sin(t * 0.3 + i * 0.05)) * 0.25;
+
+            // Center emphasis (speech is centered in spectrum)
+            var center = 1 - Math.abs(pos - 0.5) * 1.2;
+            center = Math.max(center, 0.2);
+
+            var value = (0.3 + wave1 + wave2 + wave3 + burst) * center;
+            value = Math.max(0.05, Math.min(1, value));
+
+            this.smoothed[i] += (value - this.smoothed[i]) * 0.15;
+            var v = this.smoothed[i];
+
+            this.heroBars[i].style.height = (v * 55 + 6) + 'px';
+            this.heroBars[i].style.opacity = (0.4 + v * 0.55).toFixed(2);
+        }
+
+        for (var i = 0; i < this.stickyBars.length; i++) {
+            var pos = i / this.stickyBars.length;
+            var wave = Math.sin(t + i * 0.5) * 0.3 + Math.sin(t * 1.5 + i * 0.8) * 0.2;
+            var center = 1 - Math.abs(pos - 0.5) * 1.2;
+            var v = (0.3 + wave) * Math.max(center, 0.2);
+            this.stickyBars[i].style.height = (v * 22 + 3) + 'px';
+            this.stickyBars[i].style.opacity = (0.4 + v * 0.5).toFixed(2);
+        }
+    }
+
     bindEvents() {
         this.playBtn.addEventListener('click', () => this.togglePlay());
         this.stickyPlayBtn.addEventListener('click', () => this.togglePlay());
-
         this.audio.addEventListener('timeupdate', () => this.onTimeUpdate());
         this.audio.addEventListener('loadedmetadata', () => this.updateTimeDisplay());
         this.audio.addEventListener('ended', () => this.onEnded());
         this.audio.addEventListener('play', () => this.onPlay());
         this.audio.addEventListener('pause', () => this.onPause());
-
         this.progressBar.addEventListener('click', e => this.seek(e));
         this.stickyProgress.addEventListener('click', e => this.seekSticky(e));
-
         this.speedBtn.addEventListener('click', () => this.cycleSpeed());
         this.stickySpeed.addEventListener('click', () => this.cycleSpeed());
-
         this.skipBack.addEventListener('click', () => this.skip(-15));
         this.skipForward.addEventListener('click', () => this.skip(15));
-
         window.addEventListener('scroll', () => this.handleScroll());
     }
 
     togglePlay() {
         this.initAudioContext();
-        if (this.audioCtx.state === 'suspended') {
+        if (this.audioCtx && this.audioCtx.state === 'suspended') {
             this.audioCtx.resume();
         }
         this.audio.paused ? this.audio.play() : this.audio.pause();
@@ -174,6 +242,8 @@ class BriefPlayer {
 
     onPlay() {
         this.isPlaying = true;
+        this.checkedAnalyser = false;
+        this.analyserWorking = false;
         this.playBtn.classList.add('playing');
         this.playbackControls.classList.add('visible');
         this.progressContainer.classList.add('visible');
@@ -183,10 +253,7 @@ class BriefPlayer {
     onPause() {
         this.isPlaying = false;
         this.playBtn.classList.remove('playing');
-        // Fade back to idle waveform
-        setTimeout(() => {
-            if (!this.isPlaying) this.drawIdleWaveform();
-        }, 300);
+        setTimeout(() => { if (!this.isPlaying) this.drawIdleWaveform(); }, 300);
     }
 
     onEnded() {
