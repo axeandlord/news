@@ -100,15 +100,10 @@
         </a>
     </section>
 
-    <!-- Audio Elements -->
+    <!-- Audio Element -->
     {% if audio_file %}
     <audio id="briefAudio" preload="metadata" crossorigin="anonymous">
         <source src="{{ audio_file }}" type="audio/mpeg">
-    </audio>
-    {% endif %}
-    {% if audio_file_fr %}
-    <audio id="briefAudioFr" preload="metadata" crossorigin="anonymous">
-        <source src="{{ audio_file_fr }}" type="audio/mpeg">
     </audio>
     {% endif %}
 
@@ -217,10 +212,11 @@
     (function() {
         var toggle = document.querySelector('.lang-toggle');
         if (!toggle) return;
-        var audioEn = document.getElementById('briefAudio');
-        var audioFr = document.getElementById('briefAudioFr');
-        if (!audioEn || !audioFr) return;
+        var audio = document.getElementById('briefAudio');
+        if (!audio) return;
 
+        var srcEn = '{{ audio_file }}';
+        var srcFr = '{{ audio_file_fr }}';
         var durEn = (document.querySelector('meta[name="duration-en"]') || {}).content || '';
         var durFr = (document.querySelector('meta[name="duration-fr"]') || {}).content || '';
         var durSpan = document.getElementById('audioDuration');
@@ -234,11 +230,26 @@
 
             var lang = btn.dataset.lang;
             var player = window.briefPlayer;
-            var newAudio = lang === 'fr' ? audioFr : audioEn;
 
-            if (player) player.switchAudio(newAudio);
+            // Stop current playback
+            audio.pause();
+            audio.currentTime = 0;
+            if (player) {
+                player.isPlaying = false;
+                player.playBtn.classList.remove('playing');
+                player.checkedAnalyser = false;
+                player.analyserWorking = false;
+            }
+
+            // Swap source on same element (preserves Web Audio connection)
+            audio.src = lang === 'fr' ? srcFr : srcEn;
+            audio.load();
 
             if (durSpan) durSpan.textContent = lang === 'fr' ? durFr : durEn;
+            if (player) {
+                player.updateTimeDisplay();
+                player.drawIdleWaveform();
+            }
         });
     })();
     </script>
