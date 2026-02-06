@@ -39,15 +39,14 @@
         setProgress(2);
     }
 
-    function stopUI() {
+    function resetBtn() {
         btn.classList.remove('disabled', 'refreshing');
         setProgress(0);
-        setStatus('');
     }
 
     btn.addEventListener('click', async function(e) {
         e.preventDefault();
-        if (polling) return;
+        if (polling || btn.classList.contains('disabled')) return;
 
         startUI();
         setStatus('Triggering...');
@@ -60,14 +59,14 @@
 
             if (resp.status === 429) {
                 const data = await resp.json();
+                resetBtn();
                 setStatus(data.detail || 'Rate limited');
-                stopUI();
                 return;
             }
 
             if (!resp.ok) {
+                resetBtn();
                 setStatus('Error: ' + resp.status);
-                stopUI();
                 return;
             }
 
@@ -75,8 +74,8 @@
             pollStatus();
 
         } catch (err) {
+            resetBtn();
             setStatus('Connection failed');
-            stopUI();
         }
     });
 
@@ -93,8 +92,8 @@
                 } else {
                     polling = false;
                     if (data.last_error) {
+                        resetBtn();
                         setStatus('Error - check logs');
-                        stopUI();
                     } else {
                         setProgress(100);
                         setStatus('Done! Reloading...');
