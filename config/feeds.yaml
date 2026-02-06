@@ -67,6 +67,31 @@ sources:
       language: en
       reliability: 0.90
 
+    - name: Reddit r/MachineLearning
+      url: https://www.reddit.com/r/MachineLearning/.rss
+      language: en
+      reliability: 0.75
+
+    - name: Reddit r/LocalLLaMA
+      url: https://www.reddit.com/r/LocalLLaMA/.rss
+      language: en
+      reliability: 0.75
+
+    - name: Reddit r/artificial
+      url: https://www.reddit.com/r/artificial/.rss
+      language: en
+      reliability: 0.70
+
+    - name: Reddit r/singularity
+      url: https://www.reddit.com/r/singularity/.rss
+      language: en
+      reliability: 0.65
+
+    - name: Reddit r/ChatGPT
+      url: https://www.reddit.com/r/ChatGPT/.rss
+      language: en
+      reliability: 0.65
+
   # ===========================================
   # FINANCE & MARKETS (target: 10 articles)
   # ===========================================
@@ -286,6 +311,11 @@ sources:
       url: https://www.thestar.com/search/?f=rss&t=article&c=news/canada*&l=50&s=start_time&sd=desc
       language: en
       reliability: 0.85
+
+    - name: Mark Carney News
+      url: https://news.google.com/rss/search?q=%22Mark+Carney%22+Canada+when:24h&hl=en-CA&gl=CA&ceid=CA:en
+      language: en
+      reliability: 0.80
 
   # ===========================================
   # WILDCARDS - Emerging/Community (target: 4 articles)

@@ -216,6 +216,13 @@ async def extract_full_texts(
         """Extract full text for a single article."""
         if not article.link:
             return article
+
+        # Reddit posts: use RSS summary as full_text (trafilatura can't extract reddit)
+        if 'reddit.com' in article.link:
+            if article.summary and len(article.summary) > 100:
+                article.full_text = article.summary[:3000]
+            return article
+
         try:
             downloaded = trafilatura.fetch_url(article.link)
             if downloaded:
@@ -229,6 +236,19 @@ async def extract_full_texts(
                     article.full_text = text[:3000]  # Cap at 3000 chars
         except Exception:
             pass  # Silently fall back to RSS summary
+
+        # Fallback: newspaper4k if trafilatura didn't get text
+        if not article.full_text:
+            try:
+                from newspaper import Article as NewsArticle
+                news_article = NewsArticle(article.link)
+                news_article.download()
+                news_article.parse()
+                if news_article.text and len(news_article.text) > 100:
+                    article.full_text = news_article.text[:3000]
+            except Exception:
+                pass
+
         return article
 
     # Run extractions concurrently in thread pool

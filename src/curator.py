@@ -131,7 +131,7 @@ def calculate_base_score(
             score += 0.05
     else:
         # Extraction failed - possibly paywalled or low quality
-        if article.link and 'arxiv' not in article.link:
+        if article.link and 'arxiv' not in article.link and 'reddit.com' not in article.link:
             score -= 0.1
 
     # Clickbait penalty

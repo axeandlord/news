@@ -47,5 +47,5 @@ trafilatura>=1.8.0
 # Local TTS reader (optional - not used in CI)
 # TTS>=0.22.0  # Coqui TTS with XTTS v2
 # sounddevice>=0.4.6
-# newspaper3k>=0.2.8
+newspaper4k>=0.9.0
 # readability-lxml>=0.8.1

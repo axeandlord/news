@@ -33,6 +33,8 @@ user_interests:
       - Gemini
       - Mistral
       - DeepMind
+      - Mark Carney
+      - Carney
 
     medium_priority:  # +0.2 to score
       - Montreal
