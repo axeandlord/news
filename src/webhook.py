@@ -99,7 +99,7 @@ async def _run_pipeline():
 
     try:
         proc = await asyncio.create_subprocess_exec(
-            str(PROJECT_ROOT / "venv" / "bin" / "python"),
+            str(PROJECT_ROOT / "venv" / "bin" / "python"), "-u",
             "-m", "src.main",
             cwd=str(PROJECT_ROOT),
             stdout=asyncio.subprocess.PIPE,
