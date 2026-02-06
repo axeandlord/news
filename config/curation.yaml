@@ -7,7 +7,7 @@ user_interests:
   # These are BASE weights - the learning engine adjusts dynamically
   categories:
     tech_ai: 1.5
-    finance: 1.3
+    finance: 1.5
     geopolitics: 1.4
     montreal: 1.3
     quebec: 1.1
@@ -35,6 +35,29 @@ user_interests:
       - DeepMind
       - Mark Carney
       - Carney
+      - NVDA
+      - TSLA
+      - AAPL
+      - MSFT
+      - GOOG
+      - GOOGL
+      - META
+      - AMZN
+      - TSX
+      - S&P 500
+      - Nasdaq
+      - earnings
+      - stock price
+      - market cap
+      - Tesla
+      - Apple
+      - Microsoft
+      - Amazon
+      - Google
+      - Meta
+      - Shopify
+      - AMD
+      - Intel
 
     medium_priority:  # +0.2 to score
       - Montreal
@@ -52,6 +75,15 @@ user_interests:
       - inflation
       - tariff
       - sanctions
+      - TSE
+      - Bank of Canada
+      - Canadian dollar
+      - oil price
+      - Dow Jones
+      - IPO
+      - quarterly results
+      - revenue
+      - profit
 
     low_priority:  # +0.1 to score
       - automation
