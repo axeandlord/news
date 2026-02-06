@@ -9,6 +9,17 @@
     'use strict';
 
     const STORAGE_KEY = 'brief_feedback';
+    const WEBHOOK_URL = 'https://refresh.bezman.ca';
+
+    function sendToWebhook(hash, category, action) {
+        try {
+            fetch(WEBHOOK_URL + '/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hash, category, action })
+            }).catch(() => {}); // fire-and-forget
+        } catch { /* ignore */ }
+    }
 
     function getStoredFeedback() {
         try {
@@ -45,6 +56,7 @@
         data.clicks[hash].lastClick = now;
 
         saveFeedback(data);
+        sendToWebhook(hash, category, 'click');
     }
 
     function trackFeedback(hash, category, action) {
@@ -58,6 +70,7 @@
         };
 
         saveFeedback(data);
+        sendToWebhook(hash, category, action);
     }
 
     function exportFeedback() {

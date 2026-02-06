@@ -13,6 +13,7 @@ Pipeline:
 import os
 import random
 import re
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -28,8 +29,7 @@ MAX_ARTICLES_FOR_AI = 30  # Limit for reasonable response time
 
 # OpenRouter API for final script (Sonnet for quality)
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-SCRIPT_MODEL = "anthropic/claude-sonnet-4-20250514"  # Sonnet for final script quality
-SUMMARY_MODEL = "anthropic/claude-3-haiku"  # Haiku fallback for summaries
+SCRIPT_MODEL = "anthropic/claude-sonnet-4.5"  # Latest Sonnet for final script quality
 
 
 def load_persona(config_path: str = "config/persona.yaml") -> dict:
@@ -332,13 +332,25 @@ def generate_jarvis_briefing(
     )
 
     api_key = os.environ.get("OPENROUTER_API_KEY") or os.environ.get("OPENROUTER_MAIN")
+    if not api_key:
+        # Load from vault if not in env (e.g., webhook started without vault-export)
+        try:
+            api_key = subprocess.check_output(
+                ["vault-export", "--get", "openrouter_main"], text=True, timeout=5
+            ).strip() or None
+        except Exception:
+            api_key = None
 
     # Try Sonnet first for best quality
     if api_key:
+        print(f"  Calling OpenRouter ({SCRIPT_MODEL})...")
         briefing = _try_openrouter(system_prompt, user_prompt, api_key, model=SCRIPT_MODEL)
         if briefing:
-            print(f"  Generated briefing with Sonnet ({SCRIPT_MODEL})")
+            print(f"  Script generated with {SCRIPT_MODEL} ({len(briefing)} chars)")
             return prepare_for_tts(briefing)
+        print("  [WARN] OpenRouter failed, trying Ollama fallback")
+    else:
+        print("  [WARN] No OpenRouter API key found, using Ollama")
 
     # Fallback: Ollama for the script too (free but lower quality)
     if ollama_available:

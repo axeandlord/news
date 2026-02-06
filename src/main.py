@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from src.fetcher import fetch_feeds_sync
 from src.curator import curate_articles
 from src.generator import generate_html
-from src.tts import generate_audio_brief
+from src.tts import generate_audio_brief, generate_audio_brief_fr
 from src.archive import archive_brief
 
 
@@ -70,19 +70,28 @@ def main():
 
     # Step 3: Generate TTS audio (optional)
     audio_file = None
+    audio_file_fr = None
     if not args.no_tts:
         print("\n[3/5] Generating audio brief...")
-        audio_file = generate_audio_brief(sections)
+        audio_file, en_briefing = generate_audio_brief(sections)
         if audio_file:
-            print(f"  Audio: {audio_file}")
+            print(f"  English audio: {audio_file}")
         else:
-            print("  Audio generation skipped or failed")
+            print("  English audio generation skipped or failed")
+
+        # Generate French audio (translate English briefing)
+        print("  Generating French audio brief...")
+        audio_file_fr = generate_audio_brief_fr(sections, en_briefing=en_briefing)
+        if audio_file_fr:
+            print(f"  French audio: {audio_file_fr}")
+        else:
+            print("  French audio generation skipped or failed")
     else:
         print("\n[3/5] Skipping TTS (--no-tts)")
 
     # Step 4: Generate HTML
     print("\n[4/5] Generating HTML...")
-    generate_html(sections, audio_file=audio_file, output_path=args.output)
+    generate_html(sections, audio_file=audio_file, audio_file_fr=audio_file_fr, output_path=args.output)
 
     # Step 5: Archive today's brief
     print("\n[5/5] Archiving brief...")

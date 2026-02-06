@@ -317,4 +317,4 @@ class BriefPlayer {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => new BriefPlayer());
+document.addEventListener('DOMContentLoaded', () => window.briefPlayer = new BriefPlayer());

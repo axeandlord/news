@@ -43,7 +43,7 @@ sources:
       reliability: 1.0
 
     - name: OpenAI Blog
-      url: https://openai.com/blog/rss/
+      url: https://openai.com/news/rss.xml
       language: en
       reliability: 0.95
 
@@ -82,7 +82,7 @@ sources:
       reliability: 0.90
 
     - name: Reuters Business
-      url: https://www.reutersagency.com/feed/?best-topics=business-finance
+      url: https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com+business&ceid=US:en&hl=en-US&gl=US
       language: en
       reliability: 0.95
 
@@ -126,12 +126,12 @@ sources:
   # ===========================================
   geopolitics:
     - name: Reuters World
-      url: https://www.reutersagency.com/feed/?best-topics=world
+      url: https://news.google.com/rss/search?q=when:24h+allinurl:reuters.com+world&ceid=US:en&hl=en-US&gl=US
       language: en
       reliability: 0.95
 
-    - name: AP News World
-      url: https://rsshub.app/apnews/topics/world-news
+    - name: AP News
+      url: https://feedx.net/rss/ap.xml
       language: en
       reliability: 0.95
 
@@ -195,7 +195,7 @@ sources:
       reliability: 0.85
 
     - name: CTV Montreal
-      url: https://montreal.ctvnews.ca/rss/ctvnews-ca-montreal-public-rss-1.822423
+      url: https://www.ctvnews.ca/arc/outboundfeeds/rss/category/montreal/
       language: en
       reliability: 0.85
 
@@ -205,7 +205,7 @@ sources:
       reliability: 0.90
 
     - name: MTL Blog
-      url: https://www.mtlblog.com/feed
+      url: https://www.mtlblog.com/feeds/news.rss
       language: en
       reliability: 0.65
 
@@ -244,12 +244,12 @@ sources:
       reliability: 0.80
 
     - name: Journal de Quebec
-      url: https://www.journaldequebec.com/rss
+      url: https://www.journaldequebec.com/rss.xml
       language: fr
       reliability: 0.75
 
     - name: Quebec City News
-      url: https://globalnews.ca/quebec/feed/
+      url: https://globalnews.ca/tag/quebec/feed/
       language: en
       reliability: 0.80
 
@@ -278,7 +278,7 @@ sources:
       reliability: 0.85
 
     - name: CTV News Canada
-      url: https://www.ctvnews.ca/rss/ctvnews-ca-top-stories-public-rss-1.822009
+      url: https://www.ctvnews.ca/arc/outboundfeeds/rss/category/canada/
       language: en
       reliability: 0.85
 
@@ -315,7 +315,7 @@ sources:
 fetch:
   timeout: 30
   max_articles_per_feed: 25
-  user_agent: "BRIEF/2.0 (+https://news.bezman.ca)"
+  user_agent: "Mozilla/5.0 (X11; Linux x86_64; rv:131.0) Gecko/20100101 Firefox/131.0"
   # Retry failed feeds with exponential backoff
   max_retries: 2
   retry_delay: 5

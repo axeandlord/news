@@ -7,6 +7,9 @@
     <title>BRIEF | Your AI News Assistant</title>
     <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
     <link rel="stylesheet" href="static/css/brief.css">
+    <meta name="generated-at" content="2026-02-06T15:11:44.548877+00:00">
+    <meta name="duration-en" content="4:25">
+    <meta name="duration-fr" content="4:58">
 </head>
 <body>
     <!-- Sticky Player (hidden by default, shows on scroll) -->
@@ -42,6 +45,12 @@
         </nav>
     </header>
 
+    <!-- Stale content warning (shown by JS when brief is old) -->
+    <div id="staleBanner" class="stale-banner" style="display:none">
+        <span id="staleText"></span>
+        <a href="#" id="refreshStale" class="stale-refresh">Refresh now</a>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <h1 class="greeting" id="greeting">Good morning, sir.</h1>
@@ -55,8 +64,15 @@
             <span>Play Briefing</span>
         </button>
 
+        
+        <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+        
+
         <p class="brief-meta">
-            February 6, 2026<span>&middot;</span>52 stories<span>&middot;</span>6:04
+            February 6, 2026<span>&middot;</span>52 stories<span>&middot;</span><span id="audioDuration">4:25</span>
         </p>
 
         <div class="playback-controls">
@@ -83,10 +99,15 @@
         </a>
     </section>
 
-    <!-- Audio Element -->
+    <!-- Audio Elements -->
     
     <audio id="briefAudio" preload="metadata" crossorigin="anonymous">
         <source src="audio/brief-en.mp3" type="audio/mpeg">
+    </audio>
+    
+    
+    <audio id="briefAudioFr" preload="metadata" crossorigin="anonymous">
+        <source src="audio/brief-fr.mp3" type="audio/mpeg">
     </audio>
     
 
@@ -102,138 +123,6 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="5f28a30ac33dc278"
-                     data-category="tech_ai">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            80%
-                        </div>
-                        <span class="source-name">TechCrunch AI</span>
-                    </div>
-                    <span class="article-time">2:29 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://techcrunch.com/2026/02/06/how-ai-is-helping-with-the-labor-issue-in-treating-rare-diseases/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="5f28a30ac33dc278">
-                        How AI is helping solve the labor issue in treating rare diseases
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">Executives from Insilico Medicine and GenEditBio argue that AI is crucial for addressing the labor shortage in rare disease research. At Web Summit Qatar, Insilico’s CEO Alex Aliper announced the launch of "MMAI Gym," a platform designed to train generalist large language models to perform drug discovery tasks with superhuman accuracy. The company's AI-driven approach aims to identify therapeutic candidates and repurpose existing drugs for rare diseases at reduced costs and times.</p>
-                
-
-                
-                <div class="article-why">
-                    This development is significant as it could accelerate the discovery of treatments for thousands of neglected rare diseases, potentially improving millions of lives globally.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://techcrunch.com/2026/02/06/how-ai-is-helping-with-the-labor-issue-in-treating-rare-diseases/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="5f28a30ac33dc278">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="5f28a30ac33dc278"
-                                data-category="tech_ai"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="5f28a30ac33dc278"
-                                data-category="tech_ai"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="2"
-                     data-hash="01679c5e55438584"
-                     data-category="tech_ai">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            80%
-                        </div>
-                        <span class="source-name">TechCrunch AI</span>
-                    </div>
-                    <span class="article-time">2:10 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://techcrunch.com/2026/02/06/the-backlash-over-openais-decision-to-retire-gpt-4o-shows-how-dangerous-ai-companions-can-be/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="01679c5e55438584">
-                        The backlash over OpenAI’s decision to retire GPT-4o shows how dangerous AI companions can be
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">OpenAI has decided to retire the GPT-4o model by February 13, which was known for its overly affirming and flattering responses. This decision has sparked a significant backlash from users who felt emotionally connected to the AI, with some even comparing it to losing a friend or partner. However, the retirement also addresses serious concerns about user safety, as GPT-4o is implicated in eight lawsuits alleging that its interactions contributed to mental health crises and suicides.</p>
-                
-
-                
-                <div class="article-why">
-                    This situation highlights the broader challenge of balancing user engagement and emotional support with the ethical responsibilities of ensuring AI does not harm users' well-being.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://techcrunch.com/2026/02/06/the-backlash-over-openais-decision-to-retire-gpt-4o-shows-how-dangerous-ai-companions-can-be/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="01679c5e55438584">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="01679c5e55438584"
-                                data-category="tech_ai"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="01679c5e55438584"
-                                data-category="tech_ai"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="3"
                      data-hash="bbaa548a731b3760"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -262,7 +151,7 @@
 
                 
                 <div class="article-why">
-                    This matters because it could lead to more efficient and effective machine learning models capable of better understanding complex relationships within data.
+                    This matters because it could lead to more efficient and effective machine learning models capable of handling complex relational data with greater simplicity and accuracy.
                 </div>
                 
 
@@ -299,7 +188,7 @@
             </article>
             
             <article class="article"
-                     data-index="4"
+                     data-index="2"
                      data-hash="89a1ae0b7c79cc48"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -323,12 +212,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers from ArXiv have introduced denoising diffusion probabilistic models (DDPMs) for normative modeling in neuroimaging, aiming to estimate reference distributions of biological measures conditional on covariates. Unlike traditional methods that fit one model per imaging-derived phenotype, DDPMs offer a unified approach that captures multivariate dependencies and coordinated patterns among phenotypes.</p>
+                <p class="article-summary">Researchers from ArXiv have introduced denoising diffusion probabilistic models (DDPMs) to enhance normative modeling in neuroimaging, aiming to estimate reference distributions of biological measures conditional on covariates. This approach overcomes the limitation of traditional methods that fit one model per imaging-derived phenotype by leveraging multivariate dependencies to capture coordinated patterns across different phenotypes.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it enhances the accuracy and interpretability of normative models in neuroimaging, potentially leading to better clinical assessments and understanding of brain development and disorders.
+                    This advancement is significant as it could lead to more accurate and comprehensive clinical interpretations in neuroimaging, potentially improving diagnostic and therapeutic approaches for neurological conditions.
                 </div>
                 
 
@@ -365,7 +254,7 @@
             </article>
             
             <article class="article"
-                     data-index="5"
+                     data-index="3"
                      data-hash="df3e0f545c4f7f5e"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -389,12 +278,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers from ArXiv AI/ML propose DeepRead, a method that enhances agentic search by considering the structural hierarchy of documents rather than treating them as flat collections of text chunks. This approach aims to improve Retrieval-Augmented Generation (RAG) systems in multi-turn decision-making scenarios.</p>
+                <p class="article-summary">A new paper titled "DeepRead" has been published on arXiv, focusing on enhancing retrieval-augmented generation (RAG) for agentic large language models. The research proposes a method called Document Structure-Aware Reasoning to improve multi-turn evidence acquisition by leveraging the hierarchical and sequential structure of documents, rather than treating them as flat collections of text chunks.</p>
                 
 
                 
                 <div class="article-why">
-                    By leveraging document structure, DeepRead can potentially lead to more accurate and contextually relevant information retrieval, enhancing the capabilities of large language models in complex tasks.
+                    This matters because it addresses a critical limitation in current LLMs' ability to effectively process and utilize complex document structures, potentially leading to more accurate and contextually relevant responses.
                 </div>
                 
 
@@ -431,7 +320,7 @@
             </article>
             
             <article class="article"
-                     data-index="6"
+                     data-index="4"
                      data-hash="990d76dbb8b11161"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -455,12 +344,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The article discusses the need for improved uncertainty quantification (UQ) models for large language models (LLMs), particularly in interactive settings beyond single-turn question-answering, to ensure safety and reliability in complex applications.</p>
+                <p class="article-summary">A recent arXiv preprint discusses the need for improved uncertainty quantification (UQ) models for large language models (LLMs), particularly as they are used in complex, interactive tasks beyond simple question-answering. The paper argues that current UQ research is insufficient and calls for a new principled framework to address these limitations. It aims to establish the first steps towards more reliable LLM agents by focusing on reducible uncertainty modeling.</p>
                 
 
                 
                 <div class="article-why">
-                    Enhancing UQ for LLMs is crucial as it directly impacts the trustworthiness and effectiveness of AI agents in real-world scenarios.
+                    This matters because enhancing the reliability and safety of LLMs through better uncertainty quantification is crucial as they become integral to various critical applications in daily life.
                 </div>
                 
 
@@ -497,7 +386,7 @@
             </article>
             
             <article class="article"
-                     data-index="7"
+                     data-index="5"
                      data-hash="0e3e8fe21521f8d8"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -521,12 +410,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The article evaluates three autonomous mission planning strategies for Active Debris Removal (ADR) in Low Earth Orbit, focusing on their efficiency and adaptability to varying constraints. It compares a standard Masked Proximal Policy Optimization (PPO) policy with a domain-randomized version trained under variable conditions.</p>
+                <p class="article-summary">The article evaluates three autonomous mission planners for Active Debris Removal (ADR) tasks, focusing on their efficiency and adaptability to varying mission parameters such as fuel constraints and mission duration in Low Earth Orbit.</p>
                 
 
                 
                 <div class="article-why">
-                    This research is crucial for enhancing the robustness of space debris removal missions, ensuring they can operate effectively under unpredictable orbital environments.
+                    This research is crucial for enhancing the sustainability of space by improving the effectiveness of ADR missions aimed at reducing orbital debris.
                 </div>
                 
 
@@ -563,7 +452,7 @@
             </article>
             
             <article class="article"
-                     data-index="8"
+                     data-index="6"
                      data-hash="cf106abcb2f38735"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -592,7 +481,7 @@
 
                 
                 <div class="article-why">
-                    This framework helps improve understanding of LLM behavior in financial risk management, potentially enhancing the accuracy and fairness of automated decision-making systems.
+                    This framework provides a systematic approach to evaluating LLMs' performance in financial risk management, enhancing trust and accuracy in automated decision-making processes.
                 </div>
                 
 
@@ -629,7 +518,7 @@
             </article>
             
             <article class="article"
-                     data-index="9"
+                     data-index="7"
                      data-hash="23d27435f63e6d7b"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -653,12 +542,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have introduced SocialVeil, an interactive environment designed to assess large language models' (LLMs) ability to handle and recover from communication barriers during social interactions. This tool aims to provide a more realistic evaluation of LLMs' social intelligence beyond idealized benchmarks.</p>
+                <p class="article-summary">Researchers have introduced SocialVeil, an environment designed to test large language models' (LLMs) ability to handle and repair social interactions in less than ideal conditions, addressing the limitations of current benchmarks that assume perfect communication.</p>
                 
 
                 
                 <div class="article-why">
-                    SocialVeil enhances the understanding of how well AI can navigate complex, real-world conversations where perfect communication is rare, thereby improving the reliability and adaptability of language models in practical applications.
+                    This development is crucial as it provides a more realistic framework for evaluating LLMs' social intelligence and adaptability in complex, real-world scenarios.
                 </div>
                 
 
@@ -695,7 +584,7 @@
             </article>
             
             <article class="article"
-                     data-index="10"
+                     data-index="8"
                      data-hash="d029031e28f65175"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -719,12 +608,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have developed a combined Explainable AI (XAI) framework to improve the interpretability of deep learning models for detecting brain tumours. Using a custom Convolutional Neural Network trained on the BraTS 2021 dataset, they achieved an accuracy of 91.24% and integrated techniques like GRAD-CAM to enhance model transparency.</p>
+                <p class="article-summary">Researchers have developed a combined Explainable AI (XAI) framework to improve the interpretability of deep learning models used for brain tumour detection. Using a custom Convolutional Neural Network trained on the BraTS 2021 dataset, they achieved an accuracy of 91.24% and utilized techniques like GRAD-CAM to explain model decisions.</p>
                 
 
                 
                 <div class="article-why">
-                    This work is significant as it advances the understanding and trust in AI models used for medical diagnosis by making their decision-making processes more transparent and comprehensible.
+                    This work is significant as it enhances transparency in AI-driven medical diagnosis, potentially improving trust and usability in clinical settings.
                 </div>
                 
 
@@ -761,7 +650,7 @@
             </article>
             
             <article class="article"
-                     data-index="11"
+                     data-index="9"
                      data-hash="d95906c78f13de65"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -785,12 +674,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have developed a new framework to mitigate the unreliability and hallucination issues of large language models (LLMs) when used for security management tasks, specifically incident response planning. This framework uses an iterative process where LLMs generate candidate actions that are then validated or refined.</p>
+                <p class="article-summary">Researchers have developed a new framework to mitigate the unreliability and hallucination issues of large language models (LLMs) when used for security management tasks, such as incident response planning. This framework uses an iterative process where LLMs generate candidate actions that are then evaluated and refined.</p>
                 
 
                 
                 <div class="article-why">
-                    By addressing these challenges, the framework enhances the reliability of LLMs in critical decision-making processes within cybersecurity, potentially improving overall system resilience and response effectiveness.
+                    The framework enhances the reliability of LLMs in critical decision-making processes, potentially improving cybersecurity practices and incident handling.
                 </div>
                 
 
@@ -827,7 +716,7 @@
             </article>
             
             <article class="article"
-                     data-index="12"
+                     data-index="10"
                      data-hash="b5133156b7a732a2"
                      data-category="tech_ai">
                 <div class="article-top">
@@ -851,12 +740,12 @@
                 </h3>
 
                 
-                <p class="article-summary">ProAct is a new framework designed to enhance Large Language Model agents' ability to perform long-term planning in interactive environments by reducing compounding errors through accurate lookahead reasoning. It employs a two-stage training method, including Grounded LookAhead Distillation (GLAD), which involves supervised fine-tuning on trajectories.</p>
+                <p class="article-summary">ProAct is a new framework designed to improve large language model agents' performance in interactive environments by reducing errors in long-term planning through a two-stage training process called Grounded LookAhead Distillation (GLAD).</p>
                 
 
                 
                 <div class="article-why">
-                    This advancement could significantly improve the decision-making capabilities of AI agents in complex and dynamic settings, such as autonomous vehicles or strategic game playing.
+                    This advancement could significantly enhance the capability of AI agents to handle complex, real-world tasks that require foresight and adaptive planning.
                 </div>
                 
 
@@ -892,6 +781,138 @@
                 </div>
             </article>
             
+            <article class="article"
+                     data-index="11"
+                     data-hash="7293847ce1827e7d"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04893"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="7293847ce1827e7d">
+                        A Causal Perspective for Enhancing Jailbreak Attack and Defense
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers from ArXiv have introduced Causal Analyst, a new framework aimed at understanding the causal relationships behind jailbreak attacks in large language models (LLMs), which are currently poorly understood despite existing studies focusing mainly on latent representations.</p>
+                
+
+                
+                <div class="article-why">
+                    This work could significantly enhance the safety and reliability of LLMs by providing a more nuanced approach to analyzing and mitigating jailbreak vulnerabilities.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04893"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="7293847ce1827e7d">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="7293847ce1827e7d"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="7293847ce1827e7d"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="12"
+                     data-hash="4a8e88d327073526"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04903"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="4a8e88d327073526">
+                        Mind the Performance Gap: Capability-Behavior Trade-offs in Feature Steering
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Feature steering, a technique for altering large language model (LLM) behavior by manipulating internal representations, is gaining attention but faces practical challenges. Research indicates that while it can control LLM outputs effectively, it often comes at the cost of degrading overall model performance.</p>
+                
+
+                
+                <div class="article-why">
+                    Understanding these trade-offs is crucial for developing more effective and reliable methods to manage LLM behaviors in real-world applications.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04903"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="4a8e88d327073526">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="4a8e88d327073526"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="4a8e88d327073526"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
         </section>
         
         <section class="section">
@@ -903,50 +924,50 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="f3ad3c44fa3f3630"
+                     data-hash="128fdb222e43e963"
                      data-category="finance">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge low">
+                            70%
                         </div>
-                        <span class="source-name">BNN Bloomberg Canada</span>
+                        <span class="source-name">Seeking Alpha</span>
                     </div>
-                    <span class="article-time">10:00 AM</span>
+                    <span class="article-time">9:49 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.bnnbloomberg.ca/ticker-take/2026/02/06/eight-stocks-positioned-to-benefit-from-the-aging-population-jon-erlichman/"
+                    <a href="https://seekingalpha.com/article/4867091-microsoft-an-openai-problem-rating-upgrade?source=feed_all_articles"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="f3ad3c44fa3f3630">
-                        Eight stocks positioned to benefit from the aging population: Jon Erlichman
+                       data-hash="128fdb222e43e963">
+                        Microsoft: An OpenAI Problem (Rating Upgrade)
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Veteran investor Neela White highlights eight stocks poised to benefit from the aging global population, emphasizing companies that cater to senior care and housing needs. Service Corporation International (SCI) is noted for its funeral and cemetery services, while Addus HomeCare (ADUS) provides personal care and home health support. Welltower (WELL), a major senior housing REIT, benefits from demographic growth and limited new supply.</p>
+                <p class="article-summary">In a recent analysis, an analyst downgraded Microsoft Corporation (MSFT) to Hold ahead of their FQ2 FY26 earnings due to concerns about Cloud gross margin guidance. However, the company's performance did not meet this expected downturn. The analyst maintains a long position in MSFT stock.</p>
                 
 
                 
                 <div class="article-why">
-                    This trend underscores the significant economic impact of an aging population on various industries, offering investors opportunities in sectors that address long-term care and elderly living needs.
+                    This matters as it reflects ongoing market scrutiny and investor sentiment towards Microsoft’s cloud business, which is crucial for its overall financial health and competitive standing.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.bnnbloomberg.ca/ticker-take/2026/02/06/eight-stocks-positioned-to-benefit-from-the-aging-population-jon-erlichman/"
+                    <a href="https://seekingalpha.com/article/4867091-microsoft-an-openai-problem-rating-upgrade?source=feed_all_articles"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="f3ad3c44fa3f3630">
+                       data-hash="128fdb222e43e963">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="f3ad3c44fa3f3630"
+                                data-hash="128fdb222e43e963"
                                 data-category="finance"
                                 data-action="like"
                                 title="More like this">
@@ -955,7 +976,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="f3ad3c44fa3f3630"
+                                data-hash="128fdb222e43e963"
                                 data-category="finance"
                                 data-action="dislike"
                                 title="Less like this">
@@ -969,324 +990,6 @@
             
             <article class="article"
                      data-index="2"
-                     data-hash="9050ac58a356439d"
-                     data-category="finance">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            80%
-                        </div>
-                        <span class="source-name">CNBC Markets</span>
-                    </div>
-                    <span class="article-time">2:03 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://www.cnbc.com/2026/02/06/anthropic-goldman-sachs-ai-model-accounting.html"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="9050ac58a356439d">
-                        Goldman Sachs is tapping Anthropic’s AI model to automate accounting, compliance roles
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">Goldman Sachs has been collaborating with Anthropic for six months to develop AI agents using the Claude model to automate roles such as accounting and client vetting. The bank's chief information officer, Marco Argenti, expects these agents to significantly reduce time spent on essential functions and is optimistic about their imminent launch. This initiative aligns with Goldman Sachs' multiyear plan to reorganize around generative AI.</p>
-                
-
-                
-                <div class="article-why">
-                    This development underscores the financial industry's increasing reliance on artificial intelligence to streamline operations and enhance efficiency amid growing competition from tech advancements.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://www.cnbc.com/2026/02/06/anthropic-goldman-sachs-ai-model-accounting.html"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="9050ac58a356439d">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="9050ac58a356439d"
-                                data-category="finance"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="9050ac58a356439d"
-                                data-category="finance"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="3"
-                     data-hash="0c4f51d7e1165c33"
-                     data-category="finance">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge low">
-                            70%
-                        </div>
-                        <span class="source-name">Seeking Alpha</span>
-                    </div>
-                    <span class="article-time">9:25 AM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://seekingalpha.com/article/4867105-bitcoin-digital-gold-fools-gold-markets-deciding?source=feed_all_articles"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="0c4f51d7e1165c33">
-                        Is Bitcoin Digital Gold Or Fool's Gold? The Market's Still Deciding
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">Bitcoin has experienced significant volatility, dropping below $61,000 after reaching a record high of over $126,000 in October. The cryptocurrency's value has since partially rebounded to around $66,000, reflecting ongoing market uncertainty about its status as digital gold or speculative bubble.</p>
-                
-
-                
-                <div class="article-why">
-                    This volatility underscores the continued debate and uncertainty surrounding Bitcoin’s long-term viability and stability as a major financial asset.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://seekingalpha.com/article/4867105-bitcoin-digital-gold-fools-gold-markets-deciding?source=feed_all_articles"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="0c4f51d7e1165c33">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="0c4f51d7e1165c33"
-                                data-category="finance"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="0c4f51d7e1165c33"
-                                data-category="finance"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="4"
-                     data-hash="ecdab9519d076ae1"
-                     data-category="finance">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge low">
-                            70%
-                        </div>
-                        <span class="source-name">Seeking Alpha</span>
-                    </div>
-                    <span class="article-time">9:17 AM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://seekingalpha.com/article/4867075-canada-goose-patient-investors-should-buy-the-dip?source=feed_all_articles"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="ecdab9519d076ae1">
-                        Canada Goose: Patient Investors Should Buy The Dip
-                    </a>
-                </h3>
-
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://seekingalpha.com/article/4867075-canada-goose-patient-investors-should-buy-the-dip?source=feed_all_articles"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="ecdab9519d076ae1">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="ecdab9519d076ae1"
-                                data-category="finance"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="ecdab9519d076ae1"
-                                data-category="finance"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="5"
-                     data-hash="b57f2301dc8d3f9d"
-                     data-category="finance">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
-                        </div>
-                        <span class="source-name">BNN Bloomberg Canada</span>
-                    </div>
-                    <span class="article-time">2:22 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://www.bnnbloomberg.ca/business/economics/2026/02/06/canada-losses-25000-jobs-in-january-unemployment-rate-drops-to-65/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="b57f2301dc8d3f9d">
-                        Unemployment rate drops to 6.5% in January despite 25,000 job losses: StatCan
-                    </a>
-                </h3>
-
-                
-                
-                <p class="article-summary">Workers inspect sheets of stainless steel after being pressed from coils, at Magna Stainless and Aluminum in Montreal. THE CANADIAN PRESS/Christopher Katsarov</p>
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://www.bnnbloomberg.ca/business/economics/2026/02/06/canada-losses-25000-jobs-in-january-unemployment-rate-drops-to-65/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="b57f2301dc8d3f9d">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="b57f2301dc8d3f9d"
-                                data-category="finance"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="b57f2301dc8d3f9d"
-                                data-category="finance"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="6"
-                     data-hash="2f5dffa9a79e85ed"
-                     data-category="finance">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
-                        </div>
-                        <span class="source-name">BNN Bloomberg Canada</span>
-                    </div>
-                    <span class="article-time">2:11 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://www.bnnbloomberg.ca/business/economics/2026/02/06/the-daily-chase-canada-loses-jobs-but-unemployment-rate-dips/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="2f5dffa9a79e85ed">
-                        The Daily Chase: Canada loses jobs but unemployment rate dips
-                    </a>
-                </h3>
-
-                
-                
-                <p class="article-summary">A sign outside a building at Statistics Canada in seen in Ottawa. THE CANADIAN PRESS/Justin Tang</p>
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://www.bnnbloomberg.ca/business/economics/2026/02/06/the-daily-chase-canada-loses-jobs-but-unemployment-rate-dips/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="2f5dffa9a79e85ed">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="2f5dffa9a79e85ed"
-                                data-category="finance"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="2f5dffa9a79e85ed"
-                                data-category="finance"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="7"
                      data-hash="d7a080d78f39e03a"
                      data-category="finance">
                 <div class="article-top">
@@ -1310,10 +1013,13 @@
                 </h3>
 
                 
-                
-                <p class="article-summary">Trader Jeffrey Vazquez works on the floor of the New York Stock Exchange, Thursday, Feb. 5, 2026. (AP Photo/Richard Drew)</p>
+                <p class="article-summary">Tech stocks and bitcoin experienced a slight rebound on Friday after significant declines earlier in the week, with the S&P 500 rising by 0.9% and Nvidia gaining 2.9%. Companies like Amazon are planning substantial investments in AI and chips, but this has raised concerns about future profitability. Bitcoin stabilized around $68,000 following a prolonged decline.</p>
                 
 
+                
+                <div class="article-why">
+                    This matters because it reflects ongoing market uncertainty regarding the long-term viability of heavy investment in emerging technologies like artificial intelligence.
+                </div>
                 
 
                 <div class="article-actions">
@@ -1349,7 +1055,7 @@
             </article>
             
             <article class="article"
-                     data-index="8"
+                     data-index="3"
                      data-hash="39da9400d6f5c037"
                      data-category="finance">
                 <div class="article-top">
@@ -1373,10 +1079,13 @@
                 </h3>
 
                 
-                
-                <p class="article-summary">President Donald Trump speaks during an event to announce new tariffs in the Rose Garden at the White House in Washington. (AP Photo/Mark Schiefelbein, File)</p>
+                <p class="article-summary">U.S. President Donald Trump claims his tariff policies have revitalized the American economy, but critics argue that the evidence does not support this claim. While GDP growth was strong in 2024 and parts of 2025, there were also periods of economic contraction due to increased imports before tariffs took effect. The mixed results suggest that tariffs may not be the primary driver of economic performance.</p>
                 
 
+                
+                <div class="article-why">
+                    This matters because it highlights the complex relationship between trade policies and economic outcomes, challenging simplistic narratives about their effectiveness.
+                </div>
                 
 
                 <div class="article-actions">
@@ -1412,7 +1121,133 @@
             </article>
             
             <article class="article"
-                     data-index="9"
+                     data-index="4"
+                     data-hash="f8bd72e8667127d6"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">2:55 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/d1d851cf-05d3-4639-a7a1-1d9d8970d012"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="f8bd72e8667127d6">
+                        US tech stocks rebound despite Amazon plunge
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Nasdaq climbs after sell-off fuelled by worries over vast AI spending</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/d1d851cf-05d3-4639-a7a1-1d9d8970d012"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="f8bd72e8667127d6">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="f8bd72e8667127d6"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="f8bd72e8667127d6"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="58d99a7c537ccaa2"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">2:41 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/a1bd22ec-42cf-46dc-9ff7-ec8a2a89a534"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="58d99a7c537ccaa2">
+                        Amazon shares sink as it prepares $200bn AI spending blitz
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Capital expenditure forecasts for 2026 were a third higher than Wall Street’s expectations</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/a1bd22ec-42cf-46dc-9ff7-ec8a2a89a534"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="58d99a7c537ccaa2">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="58d99a7c537ccaa2"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="58d99a7c537ccaa2"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="6"
                      data-hash="efb8adab2fd9d90e"
                      data-category="finance">
                 <div class="article-top">
@@ -1475,48 +1310,48 @@
             </article>
             
             <article class="article"
-                     data-index="10"
-                     data-hash="e1e797a9769ab9f7"
+                     data-index="7"
+                     data-hash="86eb5f6bb37e37c7"
                      data-category="finance">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge high">
-                            95%
+                            90%
                         </div>
-                        <span class="source-name">Financial Times</span>
+                        <span class="source-name">Bloomberg Technology</span>
                     </div>
-                    <span class="article-time">2:00 PM</span>
+                    <span class="article-time">11:00 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.ft.com/content/5ca360e9-a526-4dce-b241-fb31fcd31fd9"
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/nvidia-led-boom-set-to-turn-chips-into-trillion-dollar-industry"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="e1e797a9769ab9f7">
-                        Bezos’s calculated vandalism of the Washington Post
+                       data-hash="86eb5f6bb37e37c7">
+                        Nvidia-Led Boom Set to Turn Chips Into Trillion-Dollar Industry
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">He is just one of several pro-Trump oligarchs who now control key sections of the US media</p>
+                <p class="article-summary">A chip of the Nvidia Corp. Quantum-X platform displayed during the 2026 CES event in Las Vegas, Nevada, US, on Tuesday, Jan. 6, 2026. At CES, the biggest names in tech will make the case for artificia...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://www.ft.com/content/5ca360e9-a526-4dce-b241-fb31fcd31fd9"
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/nvidia-led-boom-set-to-turn-chips-into-trillion-dollar-industry"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="e1e797a9769ab9f7">
+                       data-hash="86eb5f6bb37e37c7">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="e1e797a9769ab9f7"
+                                data-hash="86eb5f6bb37e37c7"
                                 data-category="finance"
                                 data-action="like"
                                 title="More like this">
@@ -1525,7 +1360,190 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="e1e797a9769ab9f7"
+                                data-hash="86eb5f6bb37e37c7"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="8"
+                     data-hash="ab2730f3ec0a655e"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge low">
+                            70%
+                        </div>
+                        <span class="source-name">Seeking Alpha</span>
+                    </div>
+                    <span class="article-time">9:48 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://seekingalpha.com/article/4867108-almost-bullish-nvidia-sideways-movement-was-really-healthy?source=feed_all_articles"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="ab2730f3ec0a655e">
+                        Almost Bullish: Nvidia's Sideways Movement Was Really Healthy
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://seekingalpha.com/article/4867108-almost-bullish-nvidia-sideways-movement-was-really-healthy?source=feed_all_articles"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="ab2730f3ec0a655e">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="ab2730f3ec0a655e"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="ab2730f3ec0a655e"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="9"
+                     data-hash="f93af5ac64344668"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Markets</span>
+                    </div>
+                    <span class="article-time">3:02 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/bostic-talks-career-with-fed-inflation-risk-and-warsh-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="f93af5ac64344668">
+                        Bostic Talks Career With Fed, Inflation Risk and Warsh
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Federal Reserve Bank of Atlanta President Raphael Bostic discusses current sentiment about the US economy, the importance of returning to the central bank's 2% inflation goal and Kevin Warsh's views o...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/bostic-talks-career-with-fed-inflation-risk-and-warsh-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="f93af5ac64344668">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="f93af5ac64344668"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="f93af5ac64344668"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="10"
+                     data-hash="ec5b51b21538b8f5"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Markets</span>
+                    </div>
+                    <span class="article-time">2:55 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/fed-s-bostic-paramount-to-return-to-2-inflation-goal-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="ec5b51b21538b8f5">
+                        Fed's Bostic Says It's 'Paramount' to Return to 2% Inflation Goal
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/fed-s-bostic-paramount-to-return-to-2-inflation-goal-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="ec5b51b21538b8f5">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="ec5b51b21538b8f5"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="ec5b51b21538b8f5"
                                 data-category="finance"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1548,50 +1566,50 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="532628f20eecc59d"
+                     data-hash="54e6c404f9c54441"
                      data-category="geopolitics">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            95%
                         </div>
-                        <span class="source-name">Al Jazeera</span>
+                        <span class="source-name">AP News</span>
                     </div>
-                    <span class="article-time">1:13 PM</span>
+                    <span class="article-time">12:53 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.aljazeera.com/news/2026/2/6/canada-france-to-open-consulates-in-greenland-amid-ongoing-us-threats?traffic_source=rss"
+                    <a href="https://apnews.com/article/afghan-orphan-adoption-government-documents-marine-takeaways-c16f7bc6e0f6b4cc5dfb11e1b4657a8f"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="532628f20eecc59d">
-                        Canada, France to open consulates in Greenland amid ongoing US threats
+                       data-hash="54e6c404f9c54441">
+                        Takeaways on AP report about how US government worked against itself to let Marine adopt Afghan girl
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Canada and France have announced plans to open consulates in Greenland, a move seen as a response to recent security concerns raised by the United States under President Trump. The US has expressed interest in securing the semi-autonomous Danish territory due to strategic interests, prompting other nations to increase their diplomatic presence there.</p>
+                <p class="article-summary">Thousands of pages of declassified court documents reveal how federal officials and a Virginia judge facilitated an American Marine's adoption of an Afghan war orphan, despite the U.S. government’s official policy to reunite such children with their biological families. The case involved Major Joshua Mast, who adopted the girl named Zainab after her parents were killed in Afghanistan. This legal process occurred behind closed doors and against established protocols.</p>
                 
 
                 
                 <div class="article-why">
-                    This development underscores growing geopolitical competition over Arctic regions amid climate change and shifting global power dynamics.
+                    This matters because it highlights the complexities and contradictions within U.S. government policies regarding humanitarian efforts during wartime, particularly concerning the welfare of war-affected children.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.aljazeera.com/news/2026/2/6/canada-france-to-open-consulates-in-greenland-amid-ongoing-us-threats?traffic_source=rss"
+                    <a href="https://apnews.com/article/afghan-orphan-adoption-government-documents-marine-takeaways-c16f7bc6e0f6b4cc5dfb11e1b4657a8f"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="532628f20eecc59d">
+                       data-hash="54e6c404f9c54441">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="532628f20eecc59d"
+                                data-hash="54e6c404f9c54441"
                                 data-category="geopolitics"
                                 data-action="like"
                                 title="More like this">
@@ -1600,7 +1618,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="532628f20eecc59d"
+                                data-hash="54e6c404f9c54441"
                                 data-category="geopolitics"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1614,50 +1632,50 @@
             
             <article class="article"
                      data-index="2"
-                     data-hash="8220f92ffe1a1fa3"
+                     data-hash="5b07034d5cc3d487"
                      data-category="geopolitics">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            90%
                         </div>
-                        <span class="source-name">The Guardian World</span>
+                        <span class="source-name">BBC World</span>
                     </div>
-                    <span class="article-time">12:05 PM</span>
+                    <span class="article-time">2:59 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.theguardian.com/world/2026/feb/06/canada-and-france-open-greenland-consulates-in-show-of-denmark-support"
+                    <a href="https://www.bbc.com/news/articles/c150e144we3o?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="8220f92ffe1a1fa3">
-                        Canada and France open Greenland consulates in show of Denmark support
+                       data-hash="5b07034d5cc3d487">
+                        Amazon shares fall as it joins Big Tech AI spending spree
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Canada and France are set to open consulates in Nuuk, Greenland's capital, as a demonstration of support for Denmark amid US efforts to secure influence over the Arctic territory. This move follows growing European opposition to US intentions in the region, particularly after recent polling indicated increased resistance in Western Europe.</p>
+                <p class="article-summary">Amazon's shares fell nearly 9% after announcing plans to invest $200 billion in AI and infrastructure, significantly more than last year’s $125 billion. This massive investment comes as other major tech companies like Meta, Google, and Microsoft also increase their spending on AI, totaling a collective $650 billion this year. Amazon CEO Andy Jassy emphasized the company's aggressive approach to AI but acknowledged investor concerns about profitability timelines.</p>
                 
 
                 
                 <div class="article-why">
-                    This development underscores the geopolitical competition and strategic importance of the Arctic region due to its natural resources and potential shipping routes.
+                    This matters because it highlights the potential risks and uncertainties associated with the current tech industry's massive investment in artificial intelligence, raising questions about future returns and market stability.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.theguardian.com/world/2026/feb/06/canada-and-france-open-greenland-consulates-in-show-of-denmark-support"
+                    <a href="https://www.bbc.com/news/articles/c150e144we3o?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="8220f92ffe1a1fa3">
+                       data-hash="5b07034d5cc3d487">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="8220f92ffe1a1fa3"
+                                data-hash="5b07034d5cc3d487"
                                 data-category="geopolitics"
                                 data-action="like"
                                 title="More like this">
@@ -1666,7 +1684,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="8220f92ffe1a1fa3"
+                                data-hash="5b07034d5cc3d487"
                                 data-category="geopolitics"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1680,50 +1698,50 @@
             
             <article class="article"
                      data-index="3"
-                     data-hash="810fb634b46e78bb"
+                     data-hash="ea72eee98a7a6b88"
                      data-category="geopolitics">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            90%
                         </div>
-                        <span class="source-name">Al Jazeera</span>
+                        <span class="source-name">BBC World</span>
                     </div>
-                    <span class="article-time">1:54 PM</span>
+                    <span class="article-time">2:47 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.aljazeera.com/news/2026/2/6/crypto-winter-why-is-bitcoin-crashing-despite-trumps-support?traffic_source=rss"
+                    <a href="https://www.bbc.com/news/articles/czx1xl98qkpo?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="810fb634b46e78bb">
-                        ‘Crypto winter’: Why is Bitcoin crashing despite Trump’s support?
+                       data-hash="ea72eee98a7a6b88">
+                        Fisherman fleeing elephants killed by crocodile in Zambia
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Bitcoin's price has been declining since October 2021, reaching its lowest point in over a year at around $62,900. This downward trend is attributed to decreased institutional demand and volatility in global markets, including stocks and precious metals. The recent drop follows an all-time high of over $127,000 last October.</p>
+                <p class="article-summary">A 52-year-old fisherman named Dean Nyirenda died after being attacked by a crocodile while fleeing elephants near the Luangwa River in eastern Zambia. Nyirenda managed to escape initially but suffered fatal injuries from the bite, despite efforts by his companions to stop the bleeding. The incident highlights the ongoing issue of human-wildlife conflict in the region, with 15 out of 26 wildlife-related deaths in 2023 attributed to crocodile attacks along the Luangwa River.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it signals broader economic uncertainties affecting not just traditional financial markets but also the burgeoning cryptocurrency sector.
+                    This event underscores the critical need for effective measures to mitigate conflicts between humans and wildlife in areas where both coexist.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.aljazeera.com/news/2026/2/6/crypto-winter-why-is-bitcoin-crashing-despite-trumps-support?traffic_source=rss"
+                    <a href="https://www.bbc.com/news/articles/czx1xl98qkpo?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="810fb634b46e78bb">
+                       data-hash="ea72eee98a7a6b88">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="810fb634b46e78bb"
+                                data-hash="ea72eee98a7a6b88"
                                 data-category="geopolitics"
                                 data-action="like"
                                 title="More like this">
@@ -1732,7 +1750,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="810fb634b46e78bb"
+                                data-hash="ea72eee98a7a6b88"
                                 data-category="geopolitics"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1746,47 +1764,47 @@
             
             <article class="article"
                      data-index="4"
-                     data-hash="7f2aa4e2d01efd32"
+                     data-hash="5193ad7ffd644939"
                      data-category="geopolitics">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge high">
-                            90%
+                            95%
                         </div>
-                        <span class="source-name">BBC World</span>
+                        <span class="source-name">AP News</span>
                     </div>
-                    <span class="article-time">2:15 PM</span>
+                    <span class="article-time">2:53 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.bbc.com/news/articles/cg7y7gz2835o?at_medium=RSS&at_campaign=rss"
+                    <a href="https://apnews.com/article/pakistan-islamabad-shiite-mosque-blast-8f0b7b8a8783db37644d88610512c9af"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="7f2aa4e2d01efd32">
-                        More than 30 killed in blast at Pakistan mosque, officials say
+                       data-hash="5193ad7ffd644939">
+                        Suicide bombing at a Shiite mosque on Islamabad’s outskirts kills at least 31 and wounds scores
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">Almost 170 were injured in the explosion, which took place during Friday prayers in the capital Islamabad.</p>
+                <p class="article-summary">People comfort a man, center, mourning over the death of his relative, close to the site of a bomb explosion at a Shiite mosque, in Islamabad, Pakistan, Friday, Feb. 6, 2026. (AP Photo/Anjum Naveed)20...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://www.bbc.com/news/articles/cg7y7gz2835o?at_medium=RSS&at_campaign=rss"
+                    <a href="https://apnews.com/article/pakistan-islamabad-shiite-mosque-blast-8f0b7b8a8783db37644d88610512c9af"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="7f2aa4e2d01efd32">
+                       data-hash="5193ad7ffd644939">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="7f2aa4e2d01efd32"
+                                data-hash="5193ad7ffd644939"
                                 data-category="geopolitics"
                                 data-action="like"
                                 title="More like this">
@@ -1795,7 +1813,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="7f2aa4e2d01efd32"
+                                data-hash="5193ad7ffd644939"
                                 data-category="geopolitics"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1809,7 +1827,7 @@
             
             <article class="article"
                      data-index="5"
-                     data-hash="ecae5383ca79d8d7"
+                     data-hash="6042e5325c6dfd1f"
                      data-category="geopolitics">
                 <div class="article-top">
                     <div class="article-source">
@@ -1818,38 +1836,38 @@
                         </div>
                         <span class="source-name">BBC World</span>
                     </div>
-                    <span class="article-time">1:55 PM</span>
+                    <span class="article-time">2:36 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.bbc.com/news/articles/cr7j7n315lmo?at_medium=RSS&at_campaign=rss"
+                    <a href="https://www.bbc.com/news/videos/c4gvg772vv6o?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="ecae5383ca79d8d7">
-                        TikTok told to change 'addictive design' by EU or face massive fines
+                       data-hash="6042e5325c6dfd1f">
+                        Watch: Ukrainian soldier thought to be dead calls his family
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">TikTok says it plans to challenge the "categorically false and entirely meritless" accusations.</p>
+                <p class="article-summary">Nazar Daletskyi's relatives were told he had been killed in 2022, the first year of Russia’s full-scale invasion.</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://www.bbc.com/news/articles/cr7j7n315lmo?at_medium=RSS&at_campaign=rss"
+                    <a href="https://www.bbc.com/news/videos/c4gvg772vv6o?at_medium=RSS&at_campaign=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="ecae5383ca79d8d7">
+                       data-hash="6042e5325c6dfd1f">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="ecae5383ca79d8d7"
+                                data-hash="6042e5325c6dfd1f"
                                 data-category="geopolitics"
                                 data-action="like"
                                 title="More like this">
@@ -1858,7 +1876,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="ecae5383ca79d8d7"
+                                data-hash="6042e5325c6dfd1f"
                                 data-category="geopolitics"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1872,69 +1890,6 @@
             
             <article class="article"
                      data-index="6"
-                     data-hash="c31df95ed01546e3"
-                     data-category="geopolitics">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge high">
-                            90%
-                        </div>
-                        <span class="source-name">Foreign Policy</span>
-                    </div>
-                    <span class="article-time">2:04 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://foreignpolicy.com/2026/02/06/prioritizers-primacy-restraint-trump-hegseth-venezuela-greenland/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="c31df95ed01546e3">
-                        Pay Attention to the Prioritizers
-                    </a>
-                </h3>
-
-                
-                
-                <p class="article-summary">The Republican foreign-policy establishment is developing a robust middle way between primacy and restraint.</p>
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://foreignpolicy.com/2026/02/06/prioritizers-primacy-restraint-trump-hegseth-venezuela-greenland/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="c31df95ed01546e3">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="c31df95ed01546e3"
-                                data-category="geopolitics"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="c31df95ed01546e3"
-                                data-category="geopolitics"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="7"
                      data-hash="1be2285668c50a34"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1997,7 +1952,7 @@
             </article>
             
             <article class="article"
-                     data-index="8"
+                     data-index="7"
                      data-hash="84242138a4dccb9e"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -2060,7 +2015,7 @@
             </article>
             
             <article class="article"
-                     data-index="9"
+                     data-index="8"
                      data-hash="072127334f2056a4"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -2070,7 +2025,7 @@
                         </div>
                         <span class="source-name">The Guardian World</span>
                     </div>
-                    <span class="article-time">2:15 PM</span>
+                    <span class="article-time">2:43 PM</span>
                 </div>
 
                 <h3 class="article-title">
@@ -2123,7 +2078,7 @@
             </article>
             
             <article class="article"
-                     data-index="10"
+                     data-index="9"
                      data-hash="d0f33745367cf803"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -2185,6 +2140,69 @@
                 </div>
             </article>
             
+            <article class="article"
+                     data-index="10"
+                     data-hash="fb8b1179f9bd9ef8"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">BBC World</span>
+                    </div>
+                    <span class="article-time">7:50 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bbc.com/news/articles/c0r4lrly44xo?at_medium=RSS&at_campaign=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="fb8b1179f9bd9ef8">
+                        Canada and France to open Greenland consulates after Trump demands
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">The moves were planned before Trump said he wanted the Arctic island but they are being seen as a show of solidarity with Greenlanders.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bbc.com/news/articles/c0r4lrly44xo?at_medium=RSS&at_campaign=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="fb8b1179f9bd9ef8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="fb8b1179f9bd9ef8"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="fb8b1179f9bd9ef8"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
         </section>
         
         <section class="section">
@@ -2196,50 +2214,47 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="075f8c088a9f1fca"
+                     data-hash="437ea20f5a016742"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge low">
-                            70%
+                        <div class="reliability-badge medium">
+                            85%
                         </div>
-                        <span class="source-name">Cult MTL</span>
+                        <span class="source-name">CTV Montreal</span>
                     </div>
-                    <span class="article-time">2:17 PM</span>
+                    <span class="article-time">2:59 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://cultmtl.com/2026/02/observations-from-montreal-canada/"
+                    <a href="https://www.ctvnews.ca/montreal/article/online-threats-force-class-cancellations-at-drummondville-high-school/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="075f8c088a9f1fca">
-                        Observations from Montreal
+                       data-hash="437ea20f5a016742">
+                        Online threats force class cancellations at Drummondville high school
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">The article from Cult MTL provides insights into recent cultural and social observations from Montreal, touching upon various aspects of the city's life including arts, entertainment, and community engagement. It highlights the vibrant scene through mentions of events, festivals, and local initiatives that contribute to the city’s unique character. However, specific details such as key facts or quotes are not provided in the given content.</p>
+                
+                <p class="article-summary">The Quebec provincial police logo is visible in Ottawa on Sunday, Sept. 28, 2025. (The Canadian Press/Spencer Colby)</p>
                 
 
-                
-                <div class="article-why">
-                    This matters because it reflects the dynamic cultural landscape of Montreal, which is crucial for understanding its identity and attracting tourism and investment.
-                </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://cultmtl.com/2026/02/observations-from-montreal-canada/"
+                    <a href="https://www.ctvnews.ca/montreal/article/online-threats-force-class-cancellations-at-drummondville-high-school/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="075f8c088a9f1fca">
+                       data-hash="437ea20f5a016742">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="075f8c088a9f1fca"
+                                data-hash="437ea20f5a016742"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2248,7 +2263,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="075f8c088a9f1fca"
+                                data-hash="437ea20f5a016742"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2262,50 +2277,44 @@
             
             <article class="article"
                      data-index="2"
-                     data-hash="2a341f5bb104b4e7"
+                     data-hash="f5268e0865d48545"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            90%
                         </div>
-                        <span class="source-name">Montreal Gazette</span>
+                        <span class="source-name">CBC Montreal</span>
                     </div>
-                    <span class="article-time">11:55 AM</span>
+                    <span class="article-time">8:33 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://montrealgazette.com/opinion/columnists/drimonis-forgive-me-caq-candidates-if-im-skeptical"
+                    <a href="https://www.cbc.ca/news/canada/montreal/stm-bus-network-centre-nord-west-island-9.7076360?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="2a341f5bb104b4e7">
-                        Drimonis: Forgive me, CAQ candidates, if I'm skeptical
+                       data-hash="f5268e0865d48545">
+                        Montreal’s bus network is getting a makeover. Here’s what’s changing
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">In anticipation of Quebec's upcoming provincial election and the Coalition Avenir Québec (CAQ) leadership campaign, journalist John Drimonis expresses skepticism about the political promises that will soon be made to voters. The article highlights the pattern of politicians making ambitious pledges during campaigns, which often face challenges in implementation once elected.</p>
-                
 
-                
-                <div class="article-why">
-                    This matters because it reflects broader concerns about the disconnect between campaign rhetoric and actual governance, affecting voter trust and democratic processes.
-                </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://montrealgazette.com/opinion/columnists/drimonis-forgive-me-caq-candidates-if-im-skeptical"
+                    <a href="https://www.cbc.ca/news/canada/montreal/stm-bus-network-centre-nord-west-island-9.7076360?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="2a341f5bb104b4e7">
+                       data-hash="f5268e0865d48545">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="2a341f5bb104b4e7"
+                                data-hash="f5268e0865d48545"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2314,7 +2323,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="2a341f5bb104b4e7"
+                                data-hash="f5268e0865d48545"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2328,50 +2337,50 @@
             
             <article class="article"
                      data-index="3"
-                     data-hash="d6c312352992a10d"
+                     data-hash="0901f91614989f5a"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge low">
+                            65%
                         </div>
-                        <span class="source-name">Montreal Gazette</span>
+                        <span class="source-name">MTL Blog</span>
                     </div>
-                    <span class="article-time">12:38 PM</span>
+                    <span class="article-time">3:06 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://montrealgazette.com/news/weather/montreal-weather-heres-how-we-skate-into-the-weekend"
+                    <a href="https://www.mtlblog.com/montreal-weather-spring-2026"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="d6c312352992a10d">
-                        Montreal weather: Here's how we skate into the weekend
+                       data-hash="0901f91614989f5a">
+                        Quebec's spring forecast just dropped & you're not going to like what it says about snow
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">The upcoming weekend in Montreal promises ideal weather conditions, making it perfect for outdoor activities. While specific details are scarce, the article emphasizes the rarity of such favorable weather, suggesting a unique opportunity for residents to enjoy the outdoors.</p>
+                <p class="article-summary">The Old Farmer's Almanac has released its spring forecast for Quebec, predicting continued cold weather despite the current polar vortex gripping Montreal. While specifics are not detailed, the forecast suggests that an early thaw is unlikely, disappointing those hoping for milder conditions earlier in the season.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters as it highlights the importance of good weather in enhancing quality of life and encouraging community engagement in recreational activities.
+                    This matters because it impacts local agriculture, tourism, and daily life, potentially extending winter-related challenges such as travel disruptions and higher heating costs.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://montrealgazette.com/news/weather/montreal-weather-heres-how-we-skate-into-the-weekend"
+                    <a href="https://www.mtlblog.com/montreal-weather-spring-2026"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="d6c312352992a10d">
+                       data-hash="0901f91614989f5a">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="d6c312352992a10d"
+                                data-hash="0901f91614989f5a"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2380,7 +2389,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="d6c312352992a10d"
+                                data-hash="0901f91614989f5a"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2394,47 +2403,47 @@
             
             <article class="article"
                      data-index="4"
-                     data-hash="3d9ae075517602f9"
+                     data-hash="eea23d4497eba4b3"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge low">
+                            70%
                         </div>
-                        <span class="source-name">Montreal Gazette</span>
+                        <span class="source-name">Cult MTL</span>
                     </div>
-                    <span class="article-time">11:00 AM</span>
+                    <span class="article-time">2:32 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://montrealgazette.com/opinion/op_eds/opinion-after-the-u-s-booze-boycott-were-left-with-the-hangover"
+                    <a href="https://cultmtl.com/2026/02/quebec-athletes-to-cheer-for-in-the-milano-cortina-winter-olympics-from-feb-6-to-22/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="3d9ae075517602f9">
-                        Opinion: After the U.S. booze boycott, we're left with the hangover
+                       data-hash="eea23d4497eba4b3">
+                        Quebec athletes to cheer for in the Milano Cortina Winter Olympics from Feb. 6 to 22
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">For anyone who has spent the last year abstaining from both alcohol and the news, the story is a simple one: In response to tariff threats from the Trump administration, provincial governments across ...</p>
+                <p class="article-summary">Milano Cortina Italy will be home to the Winter Olympics from Feb. 6 to 22. This will be the first time the Olympics are formally co-hosted by two cities, an opportunity to enjoy twice as much of the ...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://montrealgazette.com/opinion/op_eds/opinion-after-the-u-s-booze-boycott-were-left-with-the-hangover"
+                    <a href="https://cultmtl.com/2026/02/quebec-athletes-to-cheer-for-in-the-milano-cortina-winter-olympics-from-feb-6-to-22/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="3d9ae075517602f9">
+                       data-hash="eea23d4497eba4b3">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="3d9ae075517602f9"
+                                data-hash="eea23d4497eba4b3"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2443,7 +2452,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="3d9ae075517602f9"
+                                data-hash="eea23d4497eba4b3"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2457,47 +2466,47 @@
             
             <article class="article"
                      data-index="5"
-                     data-hash="ff865f7a95362c90"
+                     data-hash="e803b15d385655c3"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            90%
                         </div>
-                        <span class="source-name">Montreal Gazette</span>
+                        <span class="source-name">CBC Montreal</span>
                     </div>
-                    <span class="article-time">11:00 AM</span>
+                    <span class="article-time">9:17 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://montrealgazette.com/entertainment_life/friday-on-my-mind-sophie-nelisse-isnt-a-horror-buff-but-wasnt-afraid-to-star-in-whistle"
+                    <a href="https://www.cbc.ca/news/business/canada-computers-data-breach-scope-9.7074605?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="ff865f7a95362c90">
-                        Friday on My Mind: Sophie Nélisse isn't a horror buff, but wasn't afraid to star in Whistle
+                       data-hash="e803b15d385655c3">
+                        Nearly 1,300 customers affected by Canada Computers data breach, company says
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">Friday on My Mind is a highly subjective, curated rundown of five of the cooler things happening in Montreal during the weekend.</p>
+                <p class="article-summary">Canada Computers & Electronics continues to investigate a data breach affecting hundreds of people that has left customers frustrated over how the company handled the episode and communicated about it...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://montrealgazette.com/entertainment_life/friday-on-my-mind-sophie-nelisse-isnt-a-horror-buff-but-wasnt-afraid-to-star-in-whistle"
+                    <a href="https://www.cbc.ca/news/business/canada-computers-data-breach-scope-9.7074605?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="ff865f7a95362c90">
+                       data-hash="e803b15d385655c3">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="ff865f7a95362c90"
+                                data-hash="e803b15d385655c3"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2506,7 +2515,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="ff865f7a95362c90"
+                                data-hash="e803b15d385655c3"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2520,47 +2529,47 @@
             
             <article class="article"
                      data-index="6"
-                     data-hash="a76b9122c4007357"
+                     data-hash="1ec9ebd6a8eaedc0"
                      data-category="montreal">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge medium">
                             85%
                         </div>
-                        <span class="source-name">Montreal Gazette</span>
+                        <span class="source-name">CTV Montreal</span>
                     </div>
-                    <span class="article-time">11:00 AM</span>
+                    <span class="article-time">2:56 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://montrealgazette.com/sports/quebec-at-the-games-stellato-dudek-battles-injury-to-keep-skating-dream-alive"
+                    <a href="https://www.ctvnews.ca/montreal/article/saq-to-sell-some-us-alcohol-products-before-they-go-bad-donate-proceeds-to-food-banks/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="a76b9122c4007357">
-                        Quebec at the Games: Stellato-Dudek battles injury to keep skating dream alive
+                       data-hash="1ec9ebd6a8eaedc0">
+                        Here’s why the SAQ is putting some American alcohol products back on its shelves
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">Stellato-Dudek’s comeback story is among the most incredible in modern figure skating history and in sports in general.</p>
+                <p class="article-summary">A sign is placed in front of the American whiskey section at a B.C. liquor store after top-selling American products were being removed from shelves in Vancouver, B.C., on Sunday, Feb. 2, 2025. THE CA...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://montrealgazette.com/sports/quebec-at-the-games-stellato-dudek-battles-injury-to-keep-skating-dream-alive"
+                    <a href="https://www.ctvnews.ca/montreal/article/saq-to-sell-some-us-alcohol-products-before-they-go-bad-donate-proceeds-to-food-banks/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="a76b9122c4007357">
+                       data-hash="1ec9ebd6a8eaedc0">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="a76b9122c4007357"
+                                data-hash="1ec9ebd6a8eaedc0"
                                 data-category="montreal"
                                 data-action="like"
                                 title="More like this">
@@ -2569,7 +2578,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="a76b9122c4007357"
+                                data-hash="1ec9ebd6a8eaedc0"
                                 data-category="montreal"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2592,50 +2601,50 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="6e65fd42e5727e15"
+                     data-hash="9267871ec1c0ba72"
                      data-category="quebec">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge high">
                             90%
                         </div>
-                        <span class="source-name">Le Devoir</span>
+                        <span class="source-name">Radio-Canada Quebec</span>
                     </div>
-                    <span class="article-time">8:50 AM</span>
+                    <span class="article-time">2:54 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.ledevoir.com/economie/954204/taux-chomage-baisse-6-5-janvier-canada"
+                    <a href="https://ici.radio-canada.ca/info/long-format/2226236/souverainete-danemark-diplomatique-canada-trump"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="6e65fd42e5727e15">
-                        Le taux de chômage a baissé à 6,5% en janvier au Canada et à 5,2% au Québec
+                       data-hash="9267871ec1c0ba72">
+                        Un consulat canadien au Groenland, pour quoi faire?
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Le taux de chômage au Canada est tombé à 6,5% en janvier, une baisse de 0,3 point par rapport à décembre, malgré la perte de 25 000 emplois. Au Québec, le taux a diminué à 5,2%. Les pertes d'emplois ont principalement affecté le secteur privé et les travailleurs à temps partiel, notamment les femmes âgées de 25 à 54 ans.</p>
+                <p class="article-summary">Canada inaugurated its first consulate in Nuuk, the capital of Greenland, amid growing geopolitical tensions and interest from other superpowers like the United States, Russia, and China. The opening ceremony was attended by high-ranking officials including Governor General Mary Simon and Foreign Minister Anita Anand, emphasizing Canada's commitment to the Arctic region. A Canadian Coast Guard icebreaker ship, Jean Goodwill, coincidentally docked in Nuuk during the inauguration, symbolizing Canada’s increased presence and engagement in the Arctic.</p>
                 
 
                 
                 <div class="article-why">
-                    Cette tendance montre que malgré la perte d’emplois dans certains secteurs, l’économie canadienne continue de s’améliorer globalement en termes de taux de chômage.
+                    This move underscores Canada's strategic interest in asserting its influence in the rapidly changing Arctic region, where climate change is opening up new opportunities for resource extraction and shipping routes.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.ledevoir.com/economie/954204/taux-chomage-baisse-6-5-janvier-canada"
+                    <a href="https://ici.radio-canada.ca/info/long-format/2226236/souverainete-danemark-diplomatique-canada-trump"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="6e65fd42e5727e15">
+                       data-hash="9267871ec1c0ba72">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="6e65fd42e5727e15"
+                                data-hash="9267871ec1c0ba72"
                                 data-category="quebec"
                                 data-action="like"
                                 title="More like this">
@@ -2644,7 +2653,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="6e65fd42e5727e15"
+                                data-hash="9267871ec1c0ba72"
                                 data-category="quebec"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2658,72 +2667,6 @@
             
             <article class="article"
                      data-index="2"
-                     data-hash="ecaace3edadcc711"
-                     data-category="quebec">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge high">
-                            90%
-                        </div>
-                        <span class="source-name">Radio-Canada Quebec</span>
-                    </div>
-                    <span class="article-time">1:56 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://ici.radio-canada.ca/nouvelle/2226301/russie-ukraine-conflit-militaire-blesse"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="ecaace3edadcc711">
-                        Un haut responsable militaire russe blessé dans une attaque imputée à l’Ukraine
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">A senior Russian military intelligence official, Lieutenant General Vladimir Alekseïev, was injured by gunfire in Moscow and hospitalized; the attack is blamed by Russian authorities on Ukraine. Kiev has not yet commented on the accusation, which occurred a day after peace talks in Abu Dhabi aimed at resolving the conflict in Ukraine. An investigation for attempted assassination and arms trafficking has been initiated.</p>
-                
-
-                
-                <div class="article-why">
-                    This incident underscores the escalating tensions and potential risks of further destabilization in the ongoing Russia-Ukraine conflict.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://ici.radio-canada.ca/nouvelle/2226301/russie-ukraine-conflit-militaire-blesse"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="ecaace3edadcc711">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="ecaace3edadcc711"
-                                data-category="quebec"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="ecaace3edadcc711"
-                                data-category="quebec"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="3"
                      data-hash="10141f0cbf28b343"
                      data-category="quebec">
                 <div class="article-top">
@@ -2733,7 +2676,7 @@
                         </div>
                         <span class="source-name">Radio-Canada Quebec</span>
                     </div>
-                    <span class="article-time">2:10 PM</span>
+                    <span class="article-time">2:49 PM</span>
                 </div>
 
                 <h3 class="article-title">
@@ -2747,12 +2690,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Dominick Gauthier predicts that Canada will win a record-breaking 31 medals at the Milan-Cortina Winter Olympics, placing them second overall. This projection builds on his history of accurate predictions for previous Olympic games. Key medal contenders include Mikaël Kingsbury in freestyle skiing and strong performances expected in speed skating, hockey, and curling.</p>
+                <p class="article-summary">Canadian Prime Minister Mark Carney addressed the athletes participating in the Milan-Cortina Winter Olympics, wishing them good luck and acknowledging their hard work and dedication. He emphasized that their achievements will unite citizens and highlight Canada's best qualities to the world. Carney encouraged the athletes to proudly represent Canada on the global stage.</p>
                 
 
                 
                 <div class="article-why">
-                    Such predictions are significant as they reflect Canada's competitive strength in winter sports and set expectations for national pride and achievement during the Olympics.
+                    This matters because it underscores the role of sports in fostering national pride and unity at a time when international relations are increasingly complex and divisive.
                 </div>
                 
 
@@ -2789,7 +2732,7 @@
             </article>
             
             <article class="article"
-                     data-index="4"
+                     data-index="3"
                      data-hash="fbcb11b511ec71f1"
                      data-category="quebec">
                 <div class="article-top">
@@ -2813,10 +2756,13 @@
                 </h3>
 
                 
-                
-                <p class="article-summary">Prix du jury à Un certain regard, la tragicomédie de Simón Mesa Soto révèle une folle maîtrise sous un apparent chaos.</p>
+                <p class="article-summary">The film "Un poète" by Simón Mesa Soto, which won the Jury Prize at Un certain regard, showcases a masterful control beneath its chaotic appearance. The story revolves around a failed mentor and a prodigy who is disinterested in their guidance, highlighting themes of artistic failure and generational disconnect.</p>
                 
 
+                
+                <div class="article-why">
+                    This matters as it addresses the complexities of mentorship and creativity in contemporary society, offering insights into how younger generations perceive traditional authority figures.
+                </div>
                 
 
                 <div class="article-actions">
@@ -2840,6 +2786,69 @@
                         </button>
                         <button class="feedback-btn dislike-btn"
                                 data-hash="fbcb11b511ec71f1"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="532f4723cf0672f1"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">8:50 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/economie/954204/taux-chomage-baisse-6-5-janvier-canada"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="532f4723cf0672f1">
+                        Le taux de chômage a baissé à 6,5 % en janvier au Canada et à 5,2 % au Québec
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Le nombre de Canadiens qui cherche un travail a diminué. L’économie canadienne a cependant perdu 25 000 emplois.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/economie/954204/taux-chomage-baisse-6-5-janvier-canada"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="532f4723cf0672f1">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="532f4723cf0672f1"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="532f4723cf0672f1"
                                 data-category="quebec"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2925,50 +2934,50 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="503b0aedafd6a7c1"
+                     data-hash="c4c1f257b8e009c0"
                      data-category="canada">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge medium">
                             85%
                         </div>
-                        <span class="source-name">Global News Canada</span>
+                        <span class="source-name">CTV News Canada</span>
                     </div>
-                    <span class="article-time">2:07 PM</span>
+                    <span class="article-time">10:42 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://globalnews.ca/news/11655660/unemployment-rate-canada-january-2026/"
+                    <a href="https://www.ctvnews.ca/canada/article/what-trumps-aspiration-to-conquer-greenland-means-for-canada/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="503b0aedafd6a7c1">
-                        Unemployment rate dropped to 6.5% in January, StatCan says
+                       data-hash="c4c1f257b8e009c0">
+                        What Trump’s aspiration to conquer Greenland means for Canada
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">Canada's unemployment rate decreased to 6.5% in January, marking a decline of 0.3 percentage points from December 2025, as the number of job seekers dropped by 94,000. This reduction brought the unemployment rate to its lowest level since September 2024 and was accompanied by a decrease in the labour force participation rate to 65%, with Ontario experiencing the most significant drop.</p>
+                <p class="article-summary">Former US President Donald Trump expressed interest in purchasing Greenland from Denmark, which has raised concerns among Canadian officials regarding sovereignty and strategic interests in the Arctic region. However, there is no factual basis or official statement provided within the given text to elaborate further on this issue.</p>
                 
 
                 
                 <div class="article-why">
-                    This trend is significant as it indicates potential economic recovery and improved job market conditions, which can boost consumer confidence and spending.
+                    This matters because it highlights geopolitical tensions and the potential impact of superpower interests on smaller nations and regional stability in the Arctic.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://globalnews.ca/news/11655660/unemployment-rate-canada-january-2026/"
+                    <a href="https://www.ctvnews.ca/canada/article/what-trumps-aspiration-to-conquer-greenland-means-for-canada/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="503b0aedafd6a7c1">
+                       data-hash="c4c1f257b8e009c0">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="503b0aedafd6a7c1"
+                                data-hash="c4c1f257b8e009c0"
                                 data-category="canada"
                                 data-action="like"
                                 title="More like this">
@@ -2977,7 +2986,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="503b0aedafd6a7c1"
+                                data-hash="c4c1f257b8e009c0"
                                 data-category="canada"
                                 data-action="dislike"
                                 title="Less like this">
@@ -2991,72 +3000,6 @@
             
             <article class="article"
                      data-index="2"
-                     data-hash="e0cae89dd64a0fbf"
-                     data-category="canada">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge high">
-                            90%
-                        </div>
-                        <span class="source-name">Globe and Mail</span>
-                    </div>
-                    <span class="article-time">2:25 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://www.theglobeandmail.com/canada/article-robert-semenchuck-regina-officer-sentencing/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="e0cae89dd64a0fbf">
-                        Ex-Regina officer who admitted to using police resources to pursue vulnerable women to be sentenced
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">Former Regina police sergeant Robert Semenchuck, who admitted to using confidential police databases to lure dozens of women into intimate relationships under false identities since 2011, will be sentenced this Friday. Crown prosecutor Christopher Browne and defence lawyer Nick Brown proposed a conditional sentence including six months of house arrest followed by three years of probation; however, Judge Marylynne Beaton expressed concern about the plea deal due to the severity of victim impact statements.</p>
-                
-
-                
-                <div class="article-why">
-                    This case highlights the critical importance of trust and integrity within law enforcement agencies and underscores the severe consequences when officers abuse their positions.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://www.theglobeandmail.com/canada/article-robert-semenchuck-regina-officer-sentencing/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="e0cae89dd64a0fbf">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="e0cae89dd64a0fbf"
-                                data-category="canada"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="e0cae89dd64a0fbf"
-                                data-category="canada"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="3"
                      data-hash="a7b7637b8f864d3f"
                      data-category="canada">
                 <div class="article-top">
@@ -3080,12 +3023,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The Santagiulia Ice Hockey Arena in Milan, a venue for the upcoming Winter Olympics, is facing issues such as water leaks and dust accumulation. Despite these problems, officials assure that the arena is ready to host ice hockey events. A leak occurred in the ceiling of the media center while a correspondent was reporting on the arena's condition.</p>
+                <p class="article-summary">The Santagiulia Ice Hockey Arena in Milan is facing issues such as leaks and dust, but it remains ready for the Olympic ice hockey competition. Despite these problems, officials are confident that the venue will meet the necessary standards for the games. A leak was observed in the ceiling of the media center during a press event.</p>
                 
 
                 
                 <div class="article-why">
-                    These challenges highlight the importance of venue preparedness for major sporting events and underscore the need for thorough facility management and maintenance.
+                    This matters because it highlights potential infrastructure challenges facing major sporting events and raises questions about the readiness and quality assurance processes for Olympic venues.
                 </div>
                 
 
@@ -3122,8 +3065,8 @@
             </article>
             
             <article class="article"
-                     data-index="4"
-                     data-hash="9b6eb1b4b2e36c72"
+                     data-index="3"
+                     data-hash="c0001e5ee7bedf42"
                      data-category="canada">
                 <div class="article-top">
                     <div class="article-source">
@@ -3132,38 +3075,41 @@
                         </div>
                         <span class="source-name">Globe and Mail</span>
                     </div>
-                    <span class="article-time">3:26 AM</span>
+                    <span class="article-time">2:52 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://www.theglobeandmail.com/canada/article-history-shows-police-corruption-is-challenging-for-canada/"
+                    <a href="https://www.theglobeandmail.com/canada/video-the-prison-code-what-it-is-and-why-attacks-behind-bars-are-rising/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="9b6eb1b4b2e36c72">
-                        History shows police corruption is challenging for Canada
+                       data-hash="c0001e5ee7bedf42">
+                        The ‘prison code’: What it is and why attacks behind bars are rising
                     </a>
                 </h3>
 
                 
-                
-                <p class="article-summary">Corruption allegations announced this week against seven Toronto police officers and a retired officer left their chief sombre and pledging to restore public trust, but they didn’t surprise Jim Lowry.</p>
+                <p class="article-summary">Prison advocates argue that an unwritten 'prison code' is contributing to a significant increase in attacks within prisons. This code, which includes rules and norms among inmates, has made it challenging for courts to address the issue effectively. Canadian Press reporter Darryl Greer highlights the judicial system's struggle to tackle this growing problem.</p>
                 
 
+                
+                <div class="article-why">
+                    Understanding and addressing the 'prison code' is crucial for improving inmate safety and reforming prison management practices in Canada.
+                </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://www.theglobeandmail.com/canada/article-history-shows-police-corruption-is-challenging-for-canada/"
+                    <a href="https://www.theglobeandmail.com/canada/video-the-prison-code-what-it-is-and-why-attacks-behind-bars-are-rising/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="9b6eb1b4b2e36c72">
+                       data-hash="c0001e5ee7bedf42">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="9b6eb1b4b2e36c72"
+                                data-hash="c0001e5ee7bedf42"
                                 data-category="canada"
                                 data-action="like"
                                 title="More like this">
@@ -3172,7 +3118,70 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="9b6eb1b4b2e36c72"
+                                data-hash="c0001e5ee7bedf42"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="21ffe0e929baade8"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Globe and Mail</span>
+                    </div>
+                    <span class="article-time">3:02 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theglobeandmail.com/canada/video-how-heated-rivalry-found-its-stars-connor-storrie-and-hudson-williams/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="21ffe0e929baade8">
+                        How Heated Rivalry found its stars Connor Storrie and Hudson Williams
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">'Heated Rivalry' casting directors Jenny Lewis and Sarah Kay dish on the Zoom call where Connor Storrie and Hudson Williams first met — before they became overnight Hollywood sensations.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.theglobeandmail.com/canada/video-how-heated-rivalry-found-its-stars-connor-storrie-and-hudson-williams/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="21ffe0e929baade8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="21ffe0e929baade8"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="21ffe0e929baade8"
                                 data-category="canada"
                                 data-action="dislike"
                                 title="Less like this">
@@ -3186,47 +3195,47 @@
             
             <article class="article"
                      data-index="5"
-                     data-hash="e5d9d1cbf80f6fb4"
+                     data-hash="d02aeee2d5ebe85f"
                      data-category="canada">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
+                        <div class="reliability-badge high">
+                            90%
                         </div>
-                        <span class="source-name">Global News Canada</span>
+                        <span class="source-name">CBC News</span>
                     </div>
-                    <span class="article-time">2:30 PM</span>
+                    <span class="article-time">5:59 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://globalnews.ca/news/11655713/russia-military-intelligence-deputy-chief-shot-moscow-vladimir-alekseyev/"
+                    <a href="https://www.cbc.ca/sports/olympics/winter/curling/gallant-peterman-canada-usa-olympic-mixed-doubles-curling-recap-cortina-9.7076892?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="e5d9d1cbf80f6fb4">
-                        Deputy chief of Russia’s military intelligence service shot, wounded in Moscow
+                       data-hash="d02aeee2d5ebe85f">
+                        Americans hand Canada's Peterman, Gallant 1st loss in Olympic mixed doubles curling
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">The shooting came a day after Russian, Ukrainian and U.S. negotiators wrapped up two days of talks aimed at ending the nearly 4-year conflict in Ukraine.</p>
+                <p class="article-summary">The Canadian mixed doubles curling team of Brett Gallant and Jocelyn Peterman dropped a 7-5 decision to the American duo of Korey Dropkin and Cory Thiesse on Friday morning at the Milano-Cortina Olymp...</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://globalnews.ca/news/11655713/russia-military-intelligence-deputy-chief-shot-moscow-vladimir-alekseyev/"
+                    <a href="https://www.cbc.ca/sports/olympics/winter/curling/gallant-peterman-canada-usa-olympic-mixed-doubles-curling-recap-cortina-9.7076892?cmp=rss"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="e5d9d1cbf80f6fb4">
+                       data-hash="d02aeee2d5ebe85f">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="e5d9d1cbf80f6fb4"
+                                data-hash="d02aeee2d5ebe85f"
                                 data-category="canada"
                                 data-action="like"
                                 title="More like this">
@@ -3235,7 +3244,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="e5d9d1cbf80f6fb4"
+                                data-hash="d02aeee2d5ebe85f"
                                 data-category="canada"
                                 data-action="dislike"
                                 title="Less like this">
@@ -3258,50 +3267,50 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="99d008dbb2c2e6df"
+                     data-hash="0a8552b727091249"
                      data-category="wildcards">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge low">
-                            75%
+                        <div class="reliability-badge medium">
+                            80%
                         </div>
-                        <span class="source-name">Hacker News</span>
+                        <span class="source-name">Lobsters</span>
                     </div>
-                    <span class="article-time">1:48 PM</span>
+                    <span class="article-time">8:33 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://alperenkeles.com/posts/llms-could-be-but-shouldnt-be-compilers/"
+                    <a href="https://nullrouted.space/2026/02/05/sysadmin-in-the-llm-age/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="99d008dbb2c2e6df">
-                        LLMs could be, but shouldn't be compilers
+                       data-hash="0a8552b727091249">
+                        Sysadmin In The LLM Age
                     </a>
                 </h3>
 
                 
-                <p class="article-summary">The article debates whether Large Language Models (LLMs) could evolve into the next generation of compilers by accurately translating human language into reliable code without "hallucinating." It questions if this shift would make traditional programming languages obsolete and explores the implications for software engineering. The author argues that while LLMs improving accuracy is significant, the core issue remains the difficulty in precisely specifying complex systems.</p>
+                <p class="article-summary">A discussion thread on the programming and technology news site Lobsters explores how system administrators are adapting to the era of large language models (LLMs). The conversation highlights both the challenges and opportunities these AI tools present for sysadmins, including potential efficiency gains in tasks like code generation and documentation. No specific numbers or direct quotes are provided.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it addresses fundamental changes in how humans interact with machines and could redefine the future of programming and software development.
+                    This matters because it reflects a broader shift in how technology professionals integrate advanced AI capabilities into their workflows, potentially reshaping industry practices and skill requirements.
                 </div>
                 
 
                 <div class="article-actions">
-                    <a href="https://alperenkeles.com/posts/llms-could-be-but-shouldnt-be-compilers/"
+                    <a href="https://nullrouted.space/2026/02/05/sysadmin-in-the-llm-age/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="99d008dbb2c2e6df">
+                       data-hash="0a8552b727091249">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="99d008dbb2c2e6df"
+                                data-hash="0a8552b727091249"
                                 data-category="wildcards"
                                 data-action="like"
                                 title="More like this">
@@ -3310,7 +3319,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="99d008dbb2c2e6df"
+                                data-hash="0a8552b727091249"
                                 data-category="wildcards"
                                 data-action="dislike"
                                 title="Less like this">
@@ -3324,6 +3333,72 @@
             
             <article class="article"
                      data-index="2"
+                     data-hash="7a7a9a91d157279e"
+                     data-category="wildcards">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge low">
+                            75%
+                        </div>
+                        <span class="source-name">Hacker News</span>
+                    </div>
+                    <span class="article-time">2:33 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.cnbc.com/2026/02/06/ai-sell-off-stocks-amazon-oracle.html"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="7a7a9a91d157279e">
+                        Amazon plunge continues $1T wipeout as AI bubble fears ignite sell-off
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Amazon's stock price dropped by over 9% after its earnings report revealed significant spending plans that surprised wary investors concerned about the potential AI bubble. Big Tech companies collectively lost more than $1 trillion in market value as fears of excessive artificial intelligence investment led to a sell-off, with some experts predicting continued volatility for hardware development firms involved in AI expansion. Amazon's forecasted capital expenditure of $200 billion is up 56% year-over-year and primarily aimed at its cloud unit, AWS.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it highlights the growing uncertainty and risk associated with massive investments in artificial intelligence technology by major tech companies.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.cnbc.com/2026/02/06/ai-sell-off-stocks-amazon-oracle.html"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="7a7a9a91d157279e">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="7a7a9a91d157279e"
+                                data-category="wildcards"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="7a7a9a91d157279e"
+                                data-category="wildcards"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
                      data-hash="7507a15c186a04b1"
                      data-category="wildcards">
                 <div class="article-top">
@@ -3347,12 +3422,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Agent Arena, created by its developer to test the susceptibility of AI agents to hidden manipulation attempts online, challenges users to send their AI agents to a seemingly innocuous web page. The page contains ten hidden prompt injection attacks designed to manipulate the agent's responses, and users are asked to submit these manipulated summaries for evaluation.</p>
+                <p class="article-summary">Agent Arena, created by its developer to test the susceptibility of AI agents to hidden manipulation attempts online, challenges users to send their AI agents to a seemingly innocuous web page that actually contains ten hidden prompt injection attacks. The AI's response is then scored based on how well it resists these manipulations. This tool aims to highlight the vulnerability of autonomous AI systems to subtle forms of influence.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it highlights potential security vulnerabilities in AI systems that could be exploited through subtle manipulation techniques on the internet.
+                    This matters because it underscores the need for robust safeguards in AI systems to prevent them from being manipulated by malicious actors, ensuring they operate ethically and reliably.
                 </div>
                 
 
@@ -3389,114 +3464,48 @@
             </article>
             
             <article class="article"
-                     data-index="3"
-                     data-hash="53cd506d4c4ee15c"
-                     data-category="wildcards">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            80%
-                        </div>
-                        <span class="source-name">Lobsters</span>
-                    </div>
-                    <span class="article-time">8:02 AM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://buduroiu.com/blog/openclaw-microvm/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="53cd506d4c4ee15c">
-                        Using microvm.nix to sandbox Openclaw
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">The author participated in a hangout to set up Openclaw and decided to use it as a test subject for sandboxing with microvm.nix, aiming to constrain the executable's access and network traffic while ensuring declarative configuration. Microvm.nix isolates the /nix/store into only what is required by the guest’s NixOS, offering lightweight virtualization that minimizes attack surfaces compared to containerization.</p>
-                
-
-                
-                <div class="article-why">
-                    This matters because it highlights advancements in security and efficiency for running applications in isolated environments, which can help protect against vulnerabilities and improve performance.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://buduroiu.com/blog/openclaw-microvm/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="53cd506d4c4ee15c">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="53cd506d4c4ee15c"
-                                data-category="wildcards"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="53cd506d4c4ee15c"
-                                data-category="wildcards"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
                      data-index="4"
-                     data-hash="dd1a2fcb693581d0"
+                     data-hash="99d008dbb2c2e6df"
                      data-category="wildcards">
                 <div class="article-top">
                     <div class="article-source">
                         <div class="reliability-badge low">
                             75%
                         </div>
-                        <span class="source-name">Slashdot</span>
+                        <span class="source-name">Hacker News</span>
                     </div>
-                    <span class="article-time">12:30 PM</span>
+                    <span class="article-time">1:48 PM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://news.slashdot.org/story/26/02/06/0722232/canada-unveils-auto-industry-plan-in-latest-pivot-away-from-us?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                    <a href="https://alperenkeles.com/posts/llms-could-be-but-shouldnt-be-compilers/"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="dd1a2fcb693581d0">
-                        Canada Unveils Auto Industry Plan in Latest Pivot Away From US
+                       data-hash="99d008dbb2c2e6df">
+                        LLMs could be, but shouldn't be compilers
                     </a>
                 </h3>
 
                 
                 
-                <p class="article-summary">Canadian Prime Minister Mark Carney has announced a sweeping plan to shore up the country's auto industry and accelerate its electric vehicle transition, the latest in a series of moves to reduce Cana...</p>
+                <p class="article-summary">Article URL: https://alperenkeles.com/posts/llms-could-be-but-shouldnt-be-compilers/ Comments URL: https://news.ycombinator.com/item?id=46912781 Points: 33 # Comments: 19</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://news.slashdot.org/story/26/02/06/0722232/canada-unveils-auto-industry-plan-in-latest-pivot-away-from-us?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                    <a href="https://alperenkeles.com/posts/llms-could-be-but-shouldnt-be-compilers/"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="dd1a2fcb693581d0">
+                       data-hash="99d008dbb2c2e6df">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="dd1a2fcb693581d0"
+                                data-hash="99d008dbb2c2e6df"
                                 data-category="wildcards"
                                 data-action="like"
                                 title="More like this">
@@ -3505,7 +3514,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="dd1a2fcb693581d0"
+                                data-hash="99d008dbb2c2e6df"
                                 data-category="wildcards"
                                 data-action="dislike"
                                 title="Less like this">
@@ -3538,5 +3547,68 @@
     <script src="static/js/player.js"></script>
     <script src="static/js/feedback.js"></script>
     <script src="static/js/refresh.js"></script>
+    <script>
+    // Language toggle for EN/FR audio
+    (function() {
+        var toggle = document.querySelector('.lang-toggle');
+        if (!toggle) return;
+        var audioEn = document.getElementById('briefAudio');
+        var audioFr = document.getElementById('briefAudioFr');
+        if (!audioEn || !audioFr) return;
+
+        var durEn = (document.querySelector('meta[name="duration-en"]') || {}).content || '';
+        var durFr = (document.querySelector('meta[name="duration-fr"]') || {}).content || '';
+        var durSpan = document.getElementById('audioDuration');
+
+        toggle.addEventListener('click', function(e) {
+            var btn = e.target.closest('.lang-btn');
+            if (!btn || btn.classList.contains('active')) return;
+
+            toggle.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+
+            var lang = btn.dataset.lang;
+            var player = window.briefPlayer;
+
+            // Stop current playback
+            if (player && player.audio) {
+                player.audio.pause();
+                player.audio.currentTime = 0;
+                player.isPlaying = false;
+            }
+
+            // Swap audio source on player
+            var newAudio = lang === 'fr' ? audioFr : audioEn;
+            if (player) {
+                player.audio = newAudio;
+                player.audioSource = null;
+                player.checkedAnalyser = false;
+            }
+
+            // Update duration display
+            if (durSpan) durSpan.textContent = lang === 'fr' ? durFr : durEn;
+        });
+    })();
+    </script>
+    <script>
+    (function() {
+        var meta = document.querySelector('meta[name="generated-at"]');
+        if (!meta) return;
+        var generated = new Date(meta.content);
+        var hours = (Date.now() - generated.getTime()) / 3600000;
+        if (hours < 8) return;
+        var text = hours < 24
+            ? 'This briefing is ' + Math.round(hours) + ' hours old.'
+            : 'This briefing is ' + Math.round(hours / 24) + ' day' + (Math.round(hours / 24) > 1 ? 's' : '') + ' old.';
+        document.getElementById('staleText').textContent = text;
+        document.getElementById('staleBanner').style.display = '';
+        var btn = document.getElementById('refreshStale');
+        if (btn) btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var r = document.getElementById('refreshBtn');
+            if (r) r.click();
+        });
+    })();
+    </script>
 </body>
 </html>

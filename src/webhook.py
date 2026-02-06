@@ -6,12 +6,18 @@ Run with: venv/bin/uvicorn src.webhook:app --host 127.0.0.1 --port 8090
 import asyncio
 import os
 import re
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+# Ensure src package is importable
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from src.database import init_database, record_click, record_feedback
 
 PROJECT_ROOT = Path(__file__).parent.parent
 WEBHOOK_TOKEN = os.environ.get("BRIEF_WEBHOOK_TOKEN", "")
@@ -27,6 +33,7 @@ STEP_LABELS = {
 TOTAL_STEPS = 5
 
 app = FastAPI(title="BRIEF Webhook", docs_url=None, redoc_url=None)
+init_database()
 
 app.add_middleware(
     CORSMiddleware,
@@ -87,6 +94,24 @@ async def trigger(request: Request):
     asyncio.create_task(_run_pipeline())
 
     return {"status": "started", "message": "Pipeline triggered"}
+
+
+class FeedbackEvent(BaseModel):
+    hash: str
+    category: str = ""
+    action: str  # "click", "like", "dislike"
+
+
+@app.post("/feedback")
+async def feedback(event: FeedbackEvent):
+    """Record user feedback (clicks, likes, dislikes) directly into the DB."""
+    if event.action == "click":
+        record_click(event.hash, event.category)
+    elif event.action in ("like", "dislike"):
+        record_feedback(event.hash, event.action, event.category)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid action")
+    return {"status": "ok"}
 
 
 async def _run_pipeline():

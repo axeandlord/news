@@ -55,4 +55,14 @@
 .refresh-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;cursor:pointer;transition:color .2s}.refresh-link:hover{color:var(--text-primary)}.refresh-link.disabled{opacity:.4;pointer-events:none}.refresh-link svg{fill:currentColor}.refresh-link.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.85rem;color:var(--accent);min-width:0;transition:opacity .3s}.refresh-status:empty{display:none}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
+/* Language toggle */
+.lang-toggle{display:flex;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:1rem}
+.lang-btn{background:transparent;border:none;color:var(--text-muted);padding:.35rem .75rem;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.lang-btn.active{background:var(--accent);color:var(--bg-primary)}
+.lang-btn:hover:not(.active){color:var(--text-primary);background:var(--bg-elevated)}
+
+/* Stale content warning */
+.stale-banner{background:rgba(240,173,78,.12);border-bottom:1px solid rgba(240,173,78,.3);padding:.6rem 2rem;text-align:center;font-size:.85rem;color:var(--trust-medium);display:flex;justify-content:center;align-items:center;gap:1rem}
+.stale-refresh{color:var(--accent);text-decoration:none;font-weight:600}.stale-refresh:hover{text-decoration:underline}
+
 @media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}}

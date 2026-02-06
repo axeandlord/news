@@ -7,6 +7,9 @@
     <title>BRIEF | Your AI News Assistant</title>
     <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
     <link rel="stylesheet" href="static/css/brief.css">
+    <meta name="generated-at" content="{{ generated_utc }}">
+    <meta name="duration-en" content="{{ duration }}">
+    <meta name="duration-fr" content="{{ duration_fr }}">
 </head>
 <body>
     <!-- Sticky Player (hidden by default, shows on scroll) -->
@@ -42,6 +45,12 @@
         </nav>
     </header>
 
+    <!-- Stale content warning (shown by JS when brief is old) -->
+    <div id="staleBanner" class="stale-banner" style="display:none">
+        <span id="staleText"></span>
+        <a href="#" id="refreshStale" class="stale-refresh">Refresh now</a>
+    </div>
+
     <!-- Hero Section -->
     <section class="hero">
         <h1 class="greeting" id="greeting">Good morning, sir.</h1>
@@ -55,8 +64,15 @@
             <span>Play Briefing</span>
         </button>
 
+        {% if audio_file_fr %}
+        <div class="lang-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+        </div>
+        {% endif %}
+
         <p class="brief-meta">
-            {{ date_display }}<span>&middot;</span>{{ article_count }} stories<span>&middot;</span>{{ duration }}
+            {{ date_display }}<span>&middot;</span>{{ article_count }} stories<span>&middot;</span><span id="audioDuration">{{ duration }}</span>
         </p>
 
         <div class="playback-controls">
@@ -83,10 +99,15 @@
         </a>
     </section>
 
-    <!-- Audio Element -->
+    <!-- Audio Elements -->
     {% if audio_file %}
     <audio id="briefAudio" preload="metadata" crossorigin="anonymous">
         <source src="{{ audio_file }}" type="audio/mpeg">
+    </audio>
+    {% endif %}
+    {% if audio_file_fr %}
+    <audio id="briefAudioFr" preload="metadata" crossorigin="anonymous">
+        <source src="{{ audio_file_fr }}" type="audio/mpeg">
     </audio>
     {% endif %}
 
@@ -190,5 +211,68 @@
     <script src="static/js/player.js"></script>
     <script src="static/js/feedback.js"></script>
     <script src="static/js/refresh.js"></script>
+    <script>
+    // Language toggle for EN/FR audio
+    (function() {
+        var toggle = document.querySelector('.lang-toggle');
+        if (!toggle) return;
+        var audioEn = document.getElementById('briefAudio');
+        var audioFr = document.getElementById('briefAudioFr');
+        if (!audioEn || !audioFr) return;
+
+        var durEn = (document.querySelector('meta[name="duration-en"]') || {}).content || '';
+        var durFr = (document.querySelector('meta[name="duration-fr"]') || {}).content || '';
+        var durSpan = document.getElementById('audioDuration');
+
+        toggle.addEventListener('click', function(e) {
+            var btn = e.target.closest('.lang-btn');
+            if (!btn || btn.classList.contains('active')) return;
+
+            toggle.querySelectorAll('.lang-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+
+            var lang = btn.dataset.lang;
+            var player = window.briefPlayer;
+
+            // Stop current playback
+            if (player && player.audio) {
+                player.audio.pause();
+                player.audio.currentTime = 0;
+                player.isPlaying = false;
+            }
+
+            // Swap audio source on player
+            var newAudio = lang === 'fr' ? audioFr : audioEn;
+            if (player) {
+                player.audio = newAudio;
+                player.audioSource = null;
+                player.checkedAnalyser = false;
+            }
+
+            // Update duration display
+            if (durSpan) durSpan.textContent = lang === 'fr' ? durFr : durEn;
+        });
+    })();
+    </script>
+    <script>
+    (function() {
+        var meta = document.querySelector('meta[name="generated-at"]');
+        if (!meta) return;
+        var generated = new Date(meta.content);
+        var hours = (Date.now() - generated.getTime()) / 3600000;
+        if (hours < 8) return;
+        var text = hours < 24
+            ? 'This briefing is ' + Math.round(hours) + ' hours old.'
+            : 'This briefing is ' + Math.round(hours / 24) + ' day' + (Math.round(hours / 24) > 1 ? 's' : '') + ' old.';
+        document.getElementById('staleText').textContent = text;
+        document.getElementById('staleBanner').style.display = '';
+        var btn = document.getElementById('refreshStale');
+        if (btn) btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            var r = document.getElementById('refreshBtn');
+            if (r) r.click();
+        });
+    })();
+    </script>
 </body>
 </html>

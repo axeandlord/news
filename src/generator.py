@@ -14,6 +14,7 @@ from .jarvis import clean_summary
 def generate_html(
     sections: dict[str, list[CuratedArticle]],
     audio_file: str | None = None,
+    audio_file_fr: str | None = None,
     output_path: str = "index.html"
 ) -> str:
     """
@@ -53,13 +54,28 @@ def generate_html(
             if info.get("duration_str"):
                 duration = info["duration_str"]
 
+    # UTC timestamp for stale content detection
+    generated_utc = datetime.now(timezone.utc).isoformat()
+
+    # Get French audio duration if available
+    duration_fr = "~4 min"
+    if audio_file_fr:
+        audio_path_fr = Path(audio_file_fr)
+        if audio_path_fr.exists():
+            info_fr = get_audio_info(str(audio_path_fr))
+            if info_fr.get("duration_str"):
+                duration_fr = info_fr["duration_str"]
+
     # Render template
     html = template.render(
         sections=sections,
         audio_file=audio_file,
+        audio_file_fr=audio_file_fr,
         date_display=date_display,
         article_count=article_count,
         duration=duration,
+        duration_fr=duration_fr,
+        generated_utc=generated_utc,
     )
 
     # Write output
