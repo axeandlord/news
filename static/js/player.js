@@ -69,6 +69,7 @@ class BriefPlayer {
             this.analyser.smoothingTimeConstant = 0.75;
 
             this.audioSource = this.audioCtx.createMediaElementSource(this.audio);
+            if (this._sources) this._sources.set(this.audio, this.audioSource);
             this.audioSource.connect(this.analyser);
             this.analyser.connect(this.audioCtx.destination);
 
@@ -218,11 +219,6 @@ class BriefPlayer {
     bindEvents() {
         this.playBtn.addEventListener('click', () => this.togglePlay());
         this.stickyPlayBtn.addEventListener('click', () => this.togglePlay());
-        this.audio.addEventListener('timeupdate', () => this.onTimeUpdate());
-        this.audio.addEventListener('loadedmetadata', () => this.updateTimeDisplay());
-        this.audio.addEventListener('ended', () => this.onEnded());
-        this.audio.addEventListener('play', () => this.onPlay());
-        this.audio.addEventListener('pause', () => this.onPause());
         this.progressBar.addEventListener('click', e => this.seek(e));
         this.stickyProgress.addEventListener('click', e => this.seekSticky(e));
         this.speedBtn.addEventListener('click', () => this.cycleSpeed());
@@ -230,6 +226,67 @@ class BriefPlayer {
         this.skipBack.addEventListener('click', () => this.skip(-15));
         this.skipForward.addEventListener('click', () => this.skip(15));
         window.addEventListener('scroll', () => this.handleScroll());
+
+        // Audio-specific events (rebound on language switch)
+        this._audioHandlers = {
+            timeupdate: () => this.onTimeUpdate(),
+            loadedmetadata: () => this.updateTimeDisplay(),
+            ended: () => this.onEnded(),
+            play: () => this.onPlay(),
+            pause: () => this.onPause(),
+        };
+        this._bindAudioEvents(this.audio);
+
+        // Track sources per element for Web Audio API
+        this._sources = new Map();
+    }
+
+    _bindAudioEvents(el) {
+        for (var evt in this._audioHandlers) {
+            el.addEventListener(evt, this._audioHandlers[evt]);
+        }
+    }
+
+    _unbindAudioEvents(el) {
+        for (var evt in this._audioHandlers) {
+            el.removeEventListener(evt, this._audioHandlers[evt]);
+        }
+    }
+
+    switchAudio(newAudio) {
+        if (newAudio === this.audio) return;
+
+        // Stop current
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this._unbindAudioEvents(this.audio);
+
+        // Swap
+        this.audio = newAudio;
+        this.audio.playbackRate = this.speeds[this.currentSpeedIndex];
+        this._bindAudioEvents(this.audio);
+
+        // Reconnect Web Audio analyser
+        if (this.audioCtx && this.analyser) {
+            // Disconnect old source
+            if (this.audioSource) {
+                try { this.audioSource.disconnect(); } catch(e) {}
+            }
+            // Get or create source for new element
+            if (!this._sources.has(newAudio)) {
+                this._sources.set(newAudio, this.audioCtx.createMediaElementSource(newAudio));
+            }
+            this.audioSource = this._sources.get(newAudio);
+            this.audioSource.connect(this.analyser);
+        }
+
+        // Reset state
+        this.isPlaying = false;
+        this.checkedAnalyser = false;
+        this.analyserWorking = false;
+        this.playBtn.classList.remove('playing');
+        this.updateTimeDisplay();
+        this.drawIdleWaveform();
     }
 
     togglePlay() {

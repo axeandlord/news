@@ -234,23 +234,10 @@
 
             var lang = btn.dataset.lang;
             var player = window.briefPlayer;
-
-            // Stop current playback
-            if (player && player.audio) {
-                player.audio.pause();
-                player.audio.currentTime = 0;
-                player.isPlaying = false;
-            }
-
-            // Swap audio source on player
             var newAudio = lang === 'fr' ? audioFr : audioEn;
-            if (player) {
-                player.audio = newAudio;
-                player.audioSource = null;
-                player.checkedAnalyser = false;
-            }
 
-            // Update duration display
+            if (player) player.switchAudio(newAudio);
+
             if (durSpan) durSpan.textContent = lang === 'fr' ? durFr : durEn;
         });
     })();
