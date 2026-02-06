@@ -1,26 +1,23 @@
 /**
  * BRIEF v2 Feedback System
  *
- * Tracks user engagement (clicks, likes, dislikes) for learning.
- * Stores feedback locally and syncs to server API.
+ * Tracks user engagement (clicks, likes, dislikes) in localStorage.
+ * Export button lets user download feedback JSON for pipeline import.
  */
 
 (function() {
     'use strict';
 
     const STORAGE_KEY = 'brief_feedback';
-    const API_ENDPOINT = '/api/feedback';
 
-    // Initialize feedback storage
     function getStoredFeedback() {
         try {
             return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
                 clicks: {},
-                feedback: {},
-                pendingSync: []
+                feedback: {}
             };
         } catch {
-            return { clicks: {}, feedback: {}, pendingSync: [] };
+            return { clicks: {}, feedback: {} };
         }
     }
 
@@ -32,7 +29,6 @@
         }
     }
 
-    // Track article clicks
     function trackClick(hash, category) {
         const data = getStoredFeedback();
         const now = new Date().toISOString();
@@ -48,86 +44,47 @@
         data.clicks[hash].clickCount++;
         data.clicks[hash].lastClick = now;
 
-        // Add to pending sync
-        data.pendingSync.push({
-            type: 'click',
-            hash: hash,
-            category: category,
-            timestamp: now
-        });
-
         saveFeedback(data);
-
-        // Try to sync
-        syncToServer(data);
     }
 
-    // Track explicit feedback (like/dislike)
     function trackFeedback(hash, category, action) {
         const data = getStoredFeedback();
         const now = new Date().toISOString();
 
-        // Store feedback
         data.feedback[hash] = {
             action: action,
             category: category,
             timestamp: now
         };
 
-        // Add to pending sync
-        data.pendingSync.push({
-            type: 'feedback',
-            hash: hash,
-            category: category,
-            action: action,
-            timestamp: now
-        });
-
         saveFeedback(data);
-
-        // Try to sync
-        syncToServer(data);
     }
 
-    // Sync pending feedback to server
-    async function syncToServer(data) {
-        if (data.pendingSync.length === 0) return;
+    function exportFeedback() {
+        const data = getStoredFeedback();
+        const hasData = Object.keys(data.clicks).length > 0 || Object.keys(data.feedback).length > 0;
+        if (!hasData) return;
 
-        try {
-            const response = await fetch(API_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    events: data.pendingSync
-                })
-            });
+        const exportData = {
+            exported_at: new Date().toISOString(),
+            clicks: data.clicks,
+            feedback: data.feedback
+        };
 
-            if (response.ok) {
-                // Clear pending sync on success
-                data.pendingSync = [];
-                saveFeedback(data);
-            }
-        } catch (e) {
-            // Server not available, keep pending for later
-            console.log('Feedback sync deferred');
-        }
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'brief-feedback-' + new Date().toISOString().slice(0, 10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
-    // Update UI for feedback button state
-    function updateButtonState(button, isActive) {
-        if (isActive) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    }
-
-    // Initialize click tracking on article links
     function initClickTracking() {
         document.querySelectorAll('.article-link, .article-link-title').forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function() {
                 const hash = this.dataset.hash;
                 const article = this.closest('.article');
                 const category = article ? article.dataset.category : '';
@@ -139,7 +96,6 @@
         });
     }
 
-    // Initialize feedback buttons
     function initFeedbackButtons() {
         const data = getStoredFeedback();
 
@@ -148,14 +104,10 @@
             const action = button.dataset.action;
 
             // Restore saved state
-            if (data.feedback[hash]) {
-                const savedAction = data.feedback[hash].action;
-                if (savedAction === action) {
-                    button.classList.add('active');
-                }
+            if (data.feedback[hash] && data.feedback[hash].action === action) {
+                button.classList.add('active');
             }
 
-            // Handle click
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -163,8 +115,6 @@
                 const hash = this.dataset.hash;
                 const category = this.dataset.category;
                 const action = this.dataset.action;
-
-                // Toggle state
                 const isActive = this.classList.contains('active');
 
                 // Clear other button in pair
@@ -177,7 +127,6 @@
                     this.classList.add('active');
                     trackFeedback(hash, category, action);
 
-                    // Visual feedback
                     this.style.transform = 'scale(1.2)';
                     setTimeout(() => {
                         this.style.transform = '';
@@ -187,7 +136,24 @@
         });
     }
 
-    // Initialize on DOM ready
+    function initExportButton() {
+        const data = getStoredFeedback();
+        const hasData = Object.keys(data.clicks).length > 0 || Object.keys(data.feedback).length > 0;
+
+        const exportLink = document.getElementById('exportFeedback');
+        if (exportLink) {
+            if (hasData) {
+                exportLink.style.display = 'inline';
+                exportLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    exportFeedback();
+                });
+            } else {
+                exportLink.style.display = 'none';
+            }
+        }
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -197,11 +163,6 @@
     function init() {
         initClickTracking();
         initFeedbackButtons();
-
-        // Try to sync any pending feedback on load
-        const data = getStoredFeedback();
-        if (data.pendingSync.length > 0) {
-            syncToServer(data);
-        }
+        initExportButton();
     }
 })();

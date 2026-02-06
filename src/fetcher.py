@@ -12,6 +12,8 @@ import feedparser
 import yaml
 from dateutil import parser as date_parser
 
+from .database import record_source_health, get_unhealthy_sources
+
 
 def generate_article_hash(title: str, link: str) -> str:
     """Generate a unique hash for an article."""
@@ -87,6 +89,7 @@ async def fetch_feed(
         async with session.get(url, timeout=aiohttp.ClientTimeout(total=timeout)) as resp:
             if resp.status != 200:
                 print(f"  [WARN] {source_name}: HTTP {resp.status}")
+                record_source_health(source_name, url, success=False)
                 return []
 
             content = await resp.text()
@@ -125,11 +128,14 @@ async def fetch_feed(
                 ))
 
             print(f"  [OK] {source_name}: {len(articles)} articles")
+            record_source_health(source_name, url, success=True, article_count=len(articles))
 
     except asyncio.TimeoutError:
         print(f"  [WARN] {source_name}: Timeout")
+        record_source_health(source_name, url, success=False)
     except Exception as e:
         print(f"  [WARN] {source_name}: {type(e).__name__}: {e}")
+        record_source_health(source_name, url, success=False)
 
     return articles
 
@@ -175,6 +181,11 @@ async def fetch_all_feeds(config_path: str = "config/feeds.yaml") -> list[Articl
     all_articles.sort(key=lambda a: a.published, reverse=True)
 
     print(f"Total: {len(all_articles)} articles")
+
+    # Report unhealthy sources
+    unhealthy = get_unhealthy_sources()
+    if unhealthy:
+        print(f"  Unhealthy sources ({len(unhealthy)}): {', '.join(unhealthy)}")
 
     # Extract full article text for top articles
     print("Extracting full article text...")

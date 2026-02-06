@@ -16,7 +16,9 @@ from .database import (
     record_article_shown,
     cache_article,
     decay_old_preferences,
+    record_article_relation,
 )
+from .utils.reliability import calculate_cross_reference_bonus
 
 
 @dataclass
@@ -148,13 +150,19 @@ def calculate_base_score(
 
 def deduplicate_articles(
     articles: list[Article],
-    threshold: float = 0.7
-) -> list[Article]:
-    """Remove duplicate/similar articles, keeping higher reliability source."""
+    threshold: float = 0.7,
+    relation_threshold: float = 0.5
+) -> tuple[list[Article], list[tuple[str, str, float]]]:
+    """Remove duplicate/similar articles, keeping higher reliability source.
+
+    Returns (deduped_articles, related_pairs) where related_pairs is a list of
+    (hash_a, hash_b, similarity) for articles above relation_threshold.
+    """
     if len(articles) < 2:
-        return articles
+        return articles, []
 
     titles = [a.title for a in articles]
+    related_pairs = []
 
     try:
         vectorizer = TfidfVectorizer(stop_words="english", max_features=1000)
@@ -165,22 +173,27 @@ def deduplicate_articles(
         keep = [True] * len(articles)
 
         for i in range(len(articles)):
-            if not keep[i]:
-                continue
             for j in range(i + 1, len(articles)):
-                if not keep[j]:
-                    continue
-                if similarity_matrix[i, j] >= threshold:
-                    # Keep the one with higher reliability
+                sim = similarity_matrix[i, j]
+
+                # Record relations above lower threshold
+                if sim >= relation_threshold:
+                    related_pairs.append((
+                        articles[i].article_hash,
+                        articles[j].article_hash,
+                        float(sim),
+                    ))
+
+                # Dedup above higher threshold
+                if sim >= threshold and keep[i] and keep[j]:
                     if articles[i].reliability >= articles[j].reliability:
                         keep[j] = False
                     else:
                         keep[i] = False
-                        break
 
-        return [a for a, k in zip(articles, keep) if k]
+        return [a for a, k in zip(articles, keep) if k], related_pairs
     except Exception:
-        return articles
+        return articles, []
 
 
 def generate_ai_summary(
@@ -328,8 +341,15 @@ def curate_articles(
     decay_old_preferences(days=decay_days, decay_factor=decay_factor)
 
     print("Deduplicating articles...")
-    articles = deduplicate_articles(articles, similarity_threshold)
+    articles, related_pairs = deduplicate_articles(articles, similarity_threshold)
     print(f"  {len(articles)} unique articles")
+
+    # Store article relations from similarity analysis
+    if related_pairs:
+        for hash_a, hash_b, sim in related_pairs:
+            relation_type = "same_story" if sim >= similarity_threshold else "related_topic"
+            record_article_relation(hash_a, hash_b, relation_type, sim)
+        print(f"  Recorded {len(related_pairs)} article relations")
 
     # Score all articles with learned weights
     print("Scoring articles...")
@@ -341,6 +361,19 @@ def curate_articles(
 
     scored.sort(key=lambda c: c.score, reverse=True)
     print(f"  {len(scored)} articles above threshold")
+
+    # Cross-reference bonus: reward stories covered by multiple sources
+    cross_ref_weight = scoring_config.get("cross_reference_bonus", 0.15)
+    all_article_dicts = [{"title": c.article.title, "source": c.article.source} for c in scored]
+    boosted = 0
+    for curated in scored:
+        bonus = calculate_cross_reference_bonus(curated.article.title, all_article_dicts)
+        if bonus > 0:
+            curated.score += bonus * cross_ref_weight
+            boosted += 1
+    if boosted:
+        scored.sort(key=lambda c: c.score, reverse=True)
+        print(f"  Cross-reference bonus applied to {boosted} articles")
 
     # Generate AI summaries for top articles
     scored = generate_ai_summary(scored, config)

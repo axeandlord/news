@@ -356,6 +356,19 @@ def find_related_cached_articles(keywords: list[str], category: str,
         return [dict(row) for row in cursor.fetchall()]
 
 
+def record_article_relation(article_hash: str, related_hash: str,
+                            relation_type: str = "same_story",
+                            similarity_score: float = 0.0):
+    """Record a relationship between two articles."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT OR IGNORE INTO article_relations
+            (article_hash, related_hash, relation_type, similarity_score)
+            VALUES (?, ?, ?, ?)
+        """, (article_hash, related_hash, relation_type, similarity_score))
+
+
 def get_engagement_stats() -> dict:
     """Get engagement statistics for analysis."""
     with get_connection() as conn:
