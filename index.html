@@ -29,18 +29,18 @@
         <nav class="header-nav">
             <a href="about.html">How it works</a>
             <a href="archive/">Archive</a>
-            <button id="refreshBtn" class="refresh-btn" title="Fetch fresh news">
-                <svg class="refresh-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                <span>Refresh</span>
-            </button>
+            <a href="#" id="refreshBtn" class="refresh-link" title="Fetch fresh news">
+                <svg class="refresh-icon" viewBox="0 0 24 24" width="14" height="14"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Refresh
+            </a>
             <span id="refreshStatus" class="refresh-status"></span>
         </nav>
     </header>
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1 class="greeting">Good morning, sir.</h1>
-        <p class="greeting-sub">Your briefing is ready.</p>
+        <h1 class="greeting" id="greeting">Good morning, sir.</h1>
+        <p class="greeting-sub" id="greetingSub">Your briefing is ready.</p>
 
         <div class="waveform-container" aria-hidden="true"></div>
 
@@ -51,7 +51,7 @@
         </button>
 
         <p class="brief-meta">
-            February 6, 2026<span>&middot;</span>52 stories<span>&middot;</span>4:18
+            February 6, 2026<span>&middot;</span>52 stories<span>&middot;</span>5:13
         </p>
 
         <div class="playback-controls">
@@ -120,12 +120,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have developed a structured multi-evaluator framework to assess the reliability and bias of Large Language Models (LLMs) in merchant risk assessment, using a five-criterion rubric and Monte-Carlo scoring. The study reveals significant variability among LLMs, with GPT-5.1 and Claude 4.5 Sonnet showing negative self-evaluation biases, while Gemini-2.5 Pro and Grok 4 exhibit positive biases; anonymization reduces bias by 25.8 percent. Payment-industry experts confirm that the framework captures genuine quality, aligning with ground-truth payment-network data.</p>
+                <p class="article-summary">Researchers have developed a structured multi-evaluator framework to assess the reliability and bias of Large Language Models (LLMs) in merchant risk assessment, using a five-criterion rubric and Monte-Carlo scoring. The study reveals significant variability among models like GPT-5.1 and Claude 4.5 Sonnet showing negative self-evaluation bias, while Gemini-2.5 Pro and Grok 4 exhibit positive bias; anonymization reduces this bias by 25.8 percent. Human expert evaluations confirm that LLM scores align closely with human judgment in payment-industry contexts.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it provides a critical tool for understanding and mitigating potential biases in AI-driven financial decision-making processes, ensuring more reliable and fair risk assessments.
+                    This matters because it provides a critical framework for understanding and mitigating biases in AI models used for financial risk assessment, ensuring more reliable and fair decision-making processes.
                 </div>
                 
 
@@ -186,12 +186,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have developed a combined Explainable AI (XAI) framework that integrates GRAD-CAM, LRP, and SHAP techniques to enhance the interpretability of deep learning models for brain tumour detection. This custom Convolutional Neural Network achieved 91.24% accuracy on the BraTS 2021 dataset, providing comprehensive insights into decision-making processes by highlighting important spatial regions, detailing pixel-level relevance, and quantifying feature contributions.</p>
+                <p class="article-summary">Researchers have developed a combined Explainable AI (XAI) framework using GRAD-CAM, LRP, and SHAP to enhance the interpretability of deep learning models for brain tumour detection. The custom Convolutional Neural Network achieved 91.24% accuracy on the BraTS 2021 dataset, providing detailed explanations from broad regions to pixel-level details. This multi-technique approach offers superior explanatory power compared to individual XAI methods.</p>
                 
 
                 
                 <div class="article-why">
-                    This research is significant because it enhances transparency and trust in AI-driven medical imaging analysis, particularly for critical tasks like brain tumour detection.
+                    This research is significant because it enhances transparency and trust in AI-driven medical imaging analysis, crucial for reliable diagnosis and treatment of brain tumours.
                 </div>
                 
 
@@ -252,12 +252,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have developed a framework to mitigate the unreliability and hallucination issues of large language models (LLMs) in security management tasks. The framework uses an iterative process where LLM-generated actions are checked for consistency with system constraints, and external feedback is collected when necessary to refine these actions through in-context learning. Experiments on four public datasets demonstrate a 30% reduction in recovery times compared to current state-of-the-art LLMs.</p>
+                <p class="article-summary">Researchers have developed a framework to mitigate the unreliability and hallucination tendencies of large language models (LLMs) when used for security management tasks. The iterative loop framework checks candidate actions generated by LLMs against system constraints, using external feedback from digital twins or other sources to refine these actions through in-context learning. Experiments on four public datasets demonstrate that this approach can reduce recovery times by up to 30% compared to current state-of-the-art LLMs.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it enhances the reliability of AI tools in critical security operations, potentially saving time and resources during incident responses.
+                    This matters because it enhances the reliability and practical applicability of AI tools in critical security management, potentially saving time and resources during incident responses.
                 </div>
                 
 
@@ -318,12 +318,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have found that feature steering, a technique for controlling large language model behavior through internal representation manipulation, significantly degrades performance when compared to traditional prompt engineering. Evaluating Goodfire's Auto Steer across 171 MMLU questions using Llama-8B and Llama-70B models, they discovered that while target behaviors are effectively modified, accuracy drops from 66% to 46% on Llama-8B and from 87% to 73% on Llama-70B. Coherence also suffers, falling from 4.62 to 2.24 for Llama-8B and from 4.94 to 3.89 for Llama-70B.</p>
+                <p class="article-summary">A study from ArXiv Machine Learning reveals that feature steering, a technique for controlling large language model behavior through internal representation manipulation, significantly degrades model performance. Evaluating Goodfire's Auto Steer against prompt engineering methods across 14 steering queries and 171 MMLU questions on Llama-8B and Llama-70B models, the research shows that while behavioral control is improved (scores of 3.33 vs. 2.98 for Llama-8B), accuracy drops from 66% to 46%, and coherence decreases substantially. Prompting remains more effective overall.</p>
                 
 
                 
                 <div class="article-why">
-                    This study highlights critical limitations in current feature steering methods, emphasizing the need for further research on balancing behavioral control with model performance before practical deployment.
+                    This matters because it underscores fundamental limitations in current feature steering methods, highlighting the need for further research before these techniques can be deployed practically without sacrificing model performance.
                 </div>
                 
 
@@ -384,12 +384,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers introduced STIR, a framework that enhances large language model reasoning by dynamically controlling latent trajectories through three stages: inducing intrinsic actions, constructing sparse control bases, and modulating trajectory interventions. Experiments show STIR improves accuracy by 1.9% to 7.5% while reducing token consumption by up to 35%, demonstrating the effectiveness of internalizing chain-of-thought processes.</p>
+                <p class="article-summary">Researchers have introduced STIR, a framework that enhances large language model reasoning by dynamically controlling latent trajectories. This method improves accuracy and reduces token consumption compared to standard decoding techniques across various benchmarks.</p>
                 
 
                 
                 <div class="article-why">
-                    This approach could significantly enhance the efficiency and performance of large language models in complex reasoning tasks, potentially leading to more resource-efficient AI systems.
+                    This advancement could lead to more efficient and effective use of large language models in complex reasoning tasks, potentially reducing computational costs and improving performance.
                 </div>
                 
 
@@ -450,12 +450,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Transolver-3 is a scalable deep learning framework designed to address the memory complexity issue of neural PDE solvers when dealing with high-resolution industrial-scale geometries. It introduces optimizations such as faster slice and deslice techniques, geometry slice tiling, amortized training on random mesh subsets, and physical state caching during inference, enabling it to handle meshes with over 160 million cells effectively.</p>
+                <p class="article-summary">Transolver-3, a scalable deep learning framework for high-fidelity physics simulations, addresses the challenge of processing industrial-scale geometries by introducing optimizations such as faster slice and deslice techniques and geometry slice tiling. This enables efficient handling of meshes with over 160 million cells, demonstrating superior performance in complex engineering tasks like aircraft and automotive design.</p>
                 
 
                 
                 <div class="article-why">
-                    This advancement allows for more accurate and efficient high-fidelity physics simulations in complex engineering tasks such as aircraft and automotive design.
+                    Transolver-3 significantly advances the applicability of neural PDE solvers to real-world industrial problems by overcoming memory limitations associated with high-resolution mesh processing.
                 </div>
                 
 
@@ -516,12 +516,12 @@
                 </h3>
 
                 
-                <p class="article-summary">DeepRead is a new framework that enhances agentic search by utilizing document structure, such as hierarchical organization and sequential discourse, to improve long-document question answering. It converts PDFs into structured Markdown with headings and paragraph boundaries, then uses retrieval and reading tools to locate and read relevant sections efficiently.</p>
+                <p class="article-summary">DeepRead is a new framework that enhances agentic search by incorporating document structure-aware reasoning, treating long documents as hierarchically organized texts rather than flat collections of chunks. It uses an LLM-based OCR model to convert PDFs into structured Markdown and provides tools for the LLM to retrieve relevant paragraphs and read sections in order, improving question answering on documents.</p>
                 
 
                 
                 <div class="article-why">
-                    This approach significantly improves the accuracy of information retrieval from complex documents, bringing agentic search closer to human-like comprehension capabilities.
+                    This approach significantly improves the efficiency and accuracy of information retrieval from complex documents, bringing AI closer to human-like comprehension and decision-making processes.
                 </div>
                 
 
@@ -582,12 +582,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The article discusses the need for a new uncertainty quantification (UQ) framework for large language model agents, moving beyond single-turn question-answering to interactive scenarios. It introduces a conditional uncertainty reduction process that models reducible uncertainty over an agent's trajectory and provides guidance for designing UQ in complex LLM applications.</p>
+                <p class="article-summary">The article discusses the need for a new framework to quantify uncertainty in large language models (LLMs) when used as interactive agents, moving beyond traditional single-turn question-answering scenarios. It proposes a conditional uncertainty reduction process that accounts for the interactivity and trajectory of LLMs in complex tasks.</p>
                 
 
                 
                 <div class="article-why">
-                    This shift is crucial for enhancing the reliability and safety of large language model agents in real-world, interactive settings.
+                    This shift is crucial for enhancing the reliability and safety of LLM applications in real-world settings where continuous interaction is essential.
                 </div>
                 
 
@@ -648,12 +648,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The article evaluates three mission planning methods for Active Debris Removal (ADR) in Low Earth Orbit, focusing on their robustness and adaptability under varying constraints. It finds that while a domain-randomized Masked Proximal Policy Optimization (PPO) policy offers better adaptability to changes compared to a nominal PPO method, Monte Carlo Tree Search (MCTS) provides the best handling of constraint changes but at significantly higher computational cost.</p>
+                <p class="article-summary">Researchers compared three mission planning methods for Active Debris Removal (ADR) in Low Earth Orbit, finding that while a nominal Masked Proximal Policy Optimization (PPO) policy excels under training conditions, it fails to adapt well to varying constraints. In contrast, domain-randomized PPO and Monte Carlo Tree Search (MCTS) showed better adaptability but with trade-offs in performance or computational efficiency.</p>
                 
 
                 
                 <div class="article-why">
-                    This research highlights the trade-offs between learning-based and search-based methods in ADR mission planning, suggesting potential avenues for developing more resilient autonomous systems.
+                    The study highlights the need for adaptable yet efficient mission planning algorithms in space debris management, suggesting a potential hybrid approach combining learned policies with real-time search methods.
                 </div>
                 
 
@@ -714,12 +714,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The paper introduces SocialVeil, a social learning environment that simulates communication barriers such as semantic vagueness, sociocultural mismatch, and emotional interference to evaluate the social intelligence of large language models (LLMs). Experiments reveal significant performance degradation in LLMs under these conditions, highlighting the need for better adaptation strategies.</p>
+                <p class="article-summary">The paper introduces SocialVeil, a social learning environment that simulates communication barriers to test the social intelligence of large language models (LLMs) under imperfect conditions. It evaluates LLMs across 720 scenarios and finds significant impairments in performance metrics like mutual understanding and unresolved confusion when faced with realistic communication challenges.</p>
                 
 
                 
                 <div class="article-why">
-                    This research advances our understanding of how AI can effectively navigate complex social interactions, which is crucial for developing more socially intelligent and adaptable AI systems.
+                    This research advances the evaluation of AI's social interaction capabilities, providing a more accurate assessment framework that reflects real-world complexities.
                 </div>
                 
 
@@ -780,12 +780,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have introduced ProAct, a framework designed to improve long-term planning capabilities of large language model agents in interactive environments. This is achieved through two stages: Grounded LookAhead Distillation (GLAD) for teaching lookahead reasoning and Monte-Carlo Critic (MC-Critic) for refining decision accuracy.</p>
+                <p class="article-summary">Researchers have introduced ProAct, a framework designed to improve long-term planning capabilities of large language model agents in interactive environments. This is achieved through two stages: Grounded LookAhead Distillation (GLAD) for teaching foresight logic and Monte-Carlo Critic (MC-Critic) for refining decision accuracy.</p>
                 
 
                 
                 <div class="article-why">
-                    ProAct enhances the ability of AI agents to make accurate long-term decisions, which could lead to better performance in complex real-world applications requiring extensive planning.
+                    ProAct enhances the ability of AI models to make accurate long-term plans, which could lead to more effective and adaptable intelligent agents in complex real-world scenarios.
                 </div>
                 
 
@@ -846,12 +846,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Researchers have introduced Causal Analyst, a framework that uses causal discovery to identify the direct causes of jailbreaks in large language models (LLMs) by analyzing 35k jailbreak attempts across seven LLMs. This approach enhances both attack and defense strategies for LLM security.</p>
+                <p class="article-summary">Researchers have developed Causal Analyst, a framework that uses causal discovery to identify the direct causes of jailbreak attacks in large language models (LLMs) and enhance both attack strategies and defensive measures. By analyzing 35k jailbreak attempts across seven LLMs, they found specific prompt features like "Positive Character" are key drivers of successful jailbreaks.</p>
                 
 
                 
                 <div class="article-why">
-                    Understanding and leveraging causal relationships can significantly improve the safety and reliability of LLMs, offering a new direction for mitigating potential risks associated with AI systems.
+                    This approach provides a new method for improving the safety and reliability of AI systems by offering actionable insights into how to both exploit and defend against vulnerabilities in language models.
                 </div>
                 
 
@@ -921,12 +921,12 @@
                 </h3>
 
                 
-                <p class="article-summary">KPMG, an auditing firm, reportedly pressured its auditor to pass along cost savings from AI technology. The Financial Times reported that the discussions involved a significant amount of money but did not specify exact figures. No direct quotes were provided in the summary content.</p>
+                <p class="article-summary">KPMG reportedly pressured its auditor, EY (Ernst & Young), to pass along cost savings from AI technology implementation. The Financial Times reported that the discussions involved potential reductions in audit fees for KPMG based on efficiency gains from AI tools. No direct quotes are provided, but the implication is that there was an expectation for auditors to benefit financially from advancements in technology.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it highlights potential conflicts of interest within the auditing industry and raises questions about transparency and ethical standards in financial reporting.
+                    This matters because it highlights potential conflicts of interest and ethical concerns in how large firms leverage technological efficiencies within their auditing processes.
                 </div>
                 
 
@@ -987,12 +987,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The Financial Times article discusses how former US President Donald Trump's behavior and policies have contributed to a normalization of deviance within American politics, where once-unacceptable actions become routine. It highlights specific instances under the Trump administration that set dangerous precedents for political norms. However, no direct quotes or numerical data are provided in the summary content.</p>
+                <p class="article-summary">The article discusses how former US President Donald Trump's behavior and policies have contributed to a normalization of deviance within American politics, undermining democratic norms and institutions. It highlights specific instances where Trump's actions were seen as aberrant but became accepted over time. However, the actual content provided does not contain detailed facts or quotes from the article itself.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it underscores how repeated breaches of ethical and legal standards can erode democratic institutions and public trust over time.
+                    This matters because it underscores how repeated breaches of ethical standards can gradually be perceived as normal, posing a significant threat to democratic stability and governance.
                 </div>
                 
 
@@ -1053,12 +1053,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Donald Trump's policies have led to a decline in international travel to the United States, significantly impacting the tourism sector. According to industry reports, visitor numbers from key markets such as China and Europe dropped by over 20% during his presidency. The financial impact has been substantial, with billions of dollars in lost revenue for hotels, airlines, and other travel-related businesses.</p>
+                <p class="article-summary">Donald Trump's policies have led to a decline in international travel to the United States, significantly impacting the tourism sector. According to data from the US Department of Commerce, visitor numbers dropped by 7% year-over-year in October 2019 compared to pre-Trump administration levels. The president’s restrictive visa rules and anti-immigration rhetoric are cited as key factors.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it highlights how national policies can have far-reaching economic consequences on industries that rely heavily on international engagement and cooperation.
+                    This matters because it underscores how national policies can have far-reaching economic consequences on industries that rely heavily on international engagement and trade.
                 </div>
                 
 
@@ -1471,44 +1471,47 @@
             
             <article class="article"
                      data-index="10"
-                     data-hash="6ae935fb263e4ef0"
+                     data-hash="347968f1d9fe38dd"
                      data-category="finance">
                 <div class="article-top">
                     <div class="article-source">
-                        <div class="reliability-badge low">
-                            70%
+                        <div class="reliability-badge high">
+                            95%
                         </div>
-                        <span class="source-name">Seeking Alpha</span>
+                        <span class="source-name">Financial Times</span>
                     </div>
-                    <span class="article-time">12:02 AM</span>
+                    <span class="article-time">12:48 AM</span>
                 </div>
 
                 <h3 class="article-title">
-                    <a href="https://seekingalpha.com/article/4866917-envista-holdings-corporation-2025-q4-results-earnings-call-presentation?source=feed_all_articles"
+                    <a href="https://www.ft.com/content/f0184274-1ece-4827-add1-e96a870efa53"
                        target="_blank"
                        rel="noopener"
                        class="article-link-title"
-                       data-hash="6ae935fb263e4ef0">
-                        Envista Holdings Corporation 2025 Q4 - Results - Earnings Call Presentation
+                       data-hash="347968f1d9fe38dd">
+                        Bitcoin falls below $65,000 to wipe out ‘Trump rally’
                     </a>
                 </h3>
 
+                
+                
+                <p class="article-summary">Cryptocurrency returns to November 2024 level as it is swept up in tech stock sell-off</p>
                 
 
                 
 
                 <div class="article-actions">
-                    <a href="https://seekingalpha.com/article/4866917-envista-holdings-corporation-2025-q4-results-earnings-call-presentation?source=feed_all_articles"
+                    <a href="https://www.ft.com/content/f0184274-1ece-4827-add1-e96a870efa53"
                        target="_blank"
                        rel="noopener"
                        class="article-link"
-                       data-hash="6ae935fb263e4ef0">
+                       data-hash="347968f1d9fe38dd">
                         Read full article &rarr;
                     </a>
 
                     <div class="feedback-buttons">
                         <button class="feedback-btn like-btn"
-                                data-hash="6ae935fb263e4ef0"
+                                data-hash="347968f1d9fe38dd"
                                 data-category="finance"
                                 data-action="like"
                                 title="More like this">
@@ -1517,7 +1520,7 @@
                             </svg>
                         </button>
                         <button class="feedback-btn dislike-btn"
-                                data-hash="6ae935fb263e4ef0"
+                                data-hash="347968f1d9fe38dd"
                                 data-category="finance"
                                 data-action="dislike"
                                 title="Less like this">
@@ -1563,12 +1566,12 @@
                 </h3>
 
                 
-                <p class="article-summary">An article from War on the Rocks introduces an 11-part series focusing on integrating economic statecraft into U.S. strategy and national security, highlighting significant annual losses of $225-$600 billion due to stolen trade secrets and pirated software from China. The piece underscores the strategic importance of supply chain management in modern economic warfare.</p>
+                <p class="article-summary">This article is the first in an 11-part series exploring how the U.S. can integrate economic statecraft into its national security strategy. It highlights that the U.S. incurs annual losses of $225-$600 billion due to stolen trade secrets and pirated software from China, emphasizing the need for a strategic approach akin to "Sun Tzu in the Supply Chain."</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it addresses critical vulnerabilities in U.S. economic security and highlights the need for robust strategies against intellectual property theft and technological espionage.
+                    This matters because it underscores the critical economic challenges facing the U.S. and the necessity for a coordinated national security response to protect intellectual property and maintain economic stability.
                 </div>
                 
 
@@ -1629,12 +1632,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Turkey's drone industry, which has seen significant growth and expansion across various regions, is now facing a critical juncture as it seeks to integrate with NATO while continuing its defense exports. This dual strategy may become unsustainable due to increasing geopolitical tensions, posing challenges for Ankara’s future military-industrial ambitions. The article highlights the strategic importance of balancing these competing interests.</p>
+                <p class="article-summary">Turkey's drone industry, which has seen significant growth and expansion across Africa, Central Asia, and the Middle East, is now facing a critical juncture as it seeks to integrate with NATO and European defense industries. This dual strategy of expanding exports to conflict-prone regions while aligning with Western military alliances may become unsustainable due to increasing geopolitical tensions.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it underscores the evolving dynamics in global arms trade and regional security alliances, particularly as nations navigate complex international relations amid rising polarization.
+                    The situation highlights the growing complexity in global arms trade and defense cooperation, reflecting broader challenges in international relations and security dynamics.
                 </div>
                 
 
@@ -1672,6 +1675,72 @@
             
             <article class="article"
                      data-index="3"
+                     data-hash="467dbaeff77ca656"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Al Jazeera</span>
+                    </div>
+                    <span class="article-time">5:13 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.aljazeera.com/news/2026/2/6/thailand-election-2026-what-are-the-main-parties-what-do-polls-suggest?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="467dbaeff77ca656">
+                        Thailand election 2026: What are the main parties? What do polls suggest?
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Thailand's upcoming election on February 8, 2026, is a critical test for the country’s political stability after years of coups and protests. The main contest is between Prime Minister Anutin Charnvirakul’s Bhumjaithai party and the progressive People’s Party, with Pheu Thai also attempting a comeback despite recent setbacks. Voter turnout among Thailand's 53 million eligible voters will determine whether the cycle of political turmoil can be broken.</p>
+                
+
+                
+                <div class="article-why">
+                    This election matters because it could signal a shift towards more stable democratic governance in Thailand or reinforce existing patterns of political instability and judicial intervention.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.aljazeera.com/news/2026/2/6/thailand-election-2026-what-are-the-main-parties-what-do-polls-suggest?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="467dbaeff77ca656">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="467dbaeff77ca656"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="467dbaeff77ca656"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
                      data-hash="7390ae283379a4bf"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1695,13 +1764,10 @@
                 </h3>
 
                 
-                <p class="article-summary">Following former U.S. President Donald Trump's criticisms of Canada's defense capabilities, Ottawa has unveiled ambitious military spending plans, including a significant boost for the Arctic region which is sparsely protected. The Canadian government aims to increase its defense budget by 74% over two decades and enhance its presence in the Arctic amid growing strategic importance due to climate change and increased activity from other nations.</p>
+                
+                <p class="article-summary">Ottawa has announced ambitious military spending plans, including in the sparsely protected Arctic.</p>
                 
 
-                
-                <div class="article-why">
-                    This matters because it signals a shift in Canada's approach to national security and sovereignty, particularly in contested regions like the Arctic where resources and geopolitical influence are at stake.
-                </div>
                 
 
                 <div class="article-actions">
@@ -1737,7 +1803,7 @@
             </article>
             
             <article class="article"
-                     data-index="4"
+                     data-index="5"
                      data-hash="a15b792d28331038"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1747,7 +1813,7 @@
                         </div>
                         <span class="source-name">The Guardian World</span>
                     </div>
-                    <span class="article-time">4:56 AM</span>
+                    <span class="article-time">5:13 AM</span>
                 </div>
 
                 <h3 class="article-title">
@@ -1800,7 +1866,7 @@
             </article>
             
             <article class="article"
-                     data-index="5"
+                     data-index="6"
                      data-hash="447058023fb42edb"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1863,7 +1929,70 @@
             </article>
             
             <article class="article"
-                     data-index="6"
+                     data-index="7"
+                     data-hash="961c19d5e1cd6590"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Al Jazeera</span>
+                    </div>
+                    <span class="article-time">5:03 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.aljazeera.com/features/2026/2/6/elderly-palestinians-determined-stay-gaza-despite-terrible-conditions?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="961c19d5e1cd6590">
+                        Elderly Palestinians determined to stay in Gaza despite terrible conditions
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Chronic displacement and trauma burden Gaza's elderly, but they cling to their homeland as an act of defiance.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.aljazeera.com/features/2026/2/6/elderly-palestinians-determined-stay-gaza-despite-terrible-conditions?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="961c19d5e1cd6590">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="961c19d5e1cd6590"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="961c19d5e1cd6590"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="8"
                      data-hash="16fb42a6e0469ca2"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1926,7 +2055,7 @@
             </article>
             
             <article class="article"
-                     data-index="7"
+                     data-index="9"
                      data-hash="4bf452ebac3aba0a"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -1989,7 +2118,7 @@
             </article>
             
             <article class="article"
-                     data-index="8"
+                     data-index="10"
                      data-hash="5049c28b90ac04e1"
                      data-category="geopolitics">
                 <div class="article-top">
@@ -2051,132 +2180,6 @@
                 </div>
             </article>
             
-            <article class="article"
-                     data-index="9"
-                     data-hash="899ef35f993326b1"
-                     data-category="geopolitics">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            88%
-                        </div>
-                        <span class="source-name">The Diplomat</span>
-                    </div>
-                    <span class="article-time">11:22 PM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://thediplomat.com/2026/02/new-starts-expiration-is-a-win-for-china/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="899ef35f993326b1">
-                        New START’s Expiration Is a Win for China
-                    </a>
-                </h3>
-
-                
-                
-                <p class="article-summary">The treaty’s looming end sends a damaging signal about how the United States now views nuclear competition – and China is watching.</p>
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://thediplomat.com/2026/02/new-starts-expiration-is-a-win-for-china/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="899ef35f993326b1">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="899ef35f993326b1"
-                                data-category="geopolitics"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="899ef35f993326b1"
-                                data-category="geopolitics"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="10"
-                     data-hash="995d219ae0417a05"
-                     data-category="geopolitics">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge high">
-                            90%
-                        </div>
-                        <span class="source-name">BBC World</span>
-                    </div>
-                    <span class="article-time">3:25 AM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://www.bbc.com/news/articles/c5yd14r2mgno?at_medium=RSS&at_campaign=rss"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="995d219ae0417a05">
-                        Trump endorses Japan's Takaichi ahead of snap election
-                    </a>
-                </h3>
-
-                
-                
-                <p class="article-summary">It is rare for US presidents to publicly back candidates in foreign elections.</p>
-                
-
-                
-
-                <div class="article-actions">
-                    <a href="https://www.bbc.com/news/articles/c5yd14r2mgno?at_medium=RSS&at_campaign=rss"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="995d219ae0417a05">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="995d219ae0417a05"
-                                data-category="geopolitics"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="995d219ae0417a05"
-                                data-category="geopolitics"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
         </section>
         
         <section class="section">
@@ -2211,12 +2214,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Some American alcoholic beverages are set to reappear on the shelves of Quebec's government-owned SAQ stores after an absence of nearly a year, and will be offered at discounted prices. The return is seen as a positive move for consumers who have missed out on certain U.S.-made spirits, wines, and beers.</p>
+                <p class="article-summary">Some American alcohol brands are set to reappear on the shelves of SAQ (Société des alcools du Québec) stores after a nine-month absence, with certain products offered at discounted prices. The return includes popular spirits and wines from the United States, though specific brand names have not been disclosed. This move comes as part of SAQ's efforts to diversify its product offerings and cater to consumer demand.</p>
                 
 
                 
                 <div class="article-why">
-                    This development matters because it reflects broader trends in international trade relations and consumer demand, potentially boosting sales and choice for Quebec residents.
+                    This development matters because it reflects changes in Quebec’s alcohol import policies and highlights the importance of American products in the local market.
                 </div>
                 
 
@@ -2277,12 +2280,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The race to replace Quebec Premier François Legault has become contentious, with opposition parties criticizing the government for lacking direction. Bernard Drainville, a candidate for the CAQ leadership, questioned his opponent's abilities, while she accused him of showing "lack of elegance." This comes after the party was previously criticized for failing to fulfill its third link promise.</p>
+                <p class="article-summary">The race to replace outgoing Premier François Legault as leader of the Coalition Avenir Québec (CAQ) has become contentious, with candidate Bernard Drainville criticizing his opponent's leadership abilities. In response, the opposing candidate accused Drainville of lacking "elegance," reflecting internal divisions within the party. This tension stems from past promises made by the CAQ regarding a third link between Montreal and the South Shore.</p>
                 
 
                 
                 <div class="article-why">
-                    The internal strife within the CAQ highlights the challenges the party faces in maintaining public trust and addressing past promises, which could impact its future electoral success.
+                    The infighting highlights the challenges the CAQ faces in maintaining its political momentum and public support amid unfulfilled campaign pledges, potentially impacting Quebec's governance stability.
                 </div>
                 
 
@@ -2343,12 +2346,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The city of Montreal has declared a state of emergency due to an overwhelming number of potholes, describing the situation as "disastrous." In response, the city is implementing emergency measures to repair roads more efficiently. While specific numbers were not provided in the content, the severity of the issue highlights the urgent need for action.</p>
+                <p class="article-summary">The city of Montreal has declared a state of emergency due to an overwhelming number of potholes, describing the situation as "disastrous." In response, the city is implementing emergency measures to address this infrastructure issue. While specific numbers were not provided in the content, the severity of the problem underscores the urgent need for action.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it underscores the challenges cities face in maintaining infrastructure during harsh weather conditions and the immediate impact on public safety and transportation efficiency.
+                    This matters because it highlights the critical state of urban road maintenance and the immediate impact on public safety and transportation efficiency.
                 </div>
                 
 
@@ -2607,12 +2610,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The Olympic Village, known for fostering camaraderie among athletes from various disciplines and countries, is facing a new reality at the Milan-Cortina Winter Olympics due to logistical constraints. Instead of being centralized, these games are spread across six villages in four zones over 22,000 square kilometers, making it difficult for athletes to interact freely as they did in previous years. This setup emphasizes the International Olympic Committee's push towards more sustainable and cost-effective hosting.</p>
+                <p class="article-summary">The Olympic Village at the Milan-Cortina Winter Games lacks the usual camaraderie among athletes due to strict health protocols and logistical challenges. Unlike previous games, athletes are dispersed across six villages spanning over 22,000 square kilometers, making it difficult for them to interact freely or travel between sites.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it challenges the traditional Olympic spirit of unity and cross-disciplinary interaction, potentially impacting athlete experiences and the global perception of the Games.
+                    This matters because it underscores a shift in Olympic organization towards sustainability and cost-effectiveness, but at the potential expense of the traditional spirit of unity and shared experience among athletes.
                 </div>
                 
 
@@ -2673,12 +2676,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Emmanuelle Querry discusses her debut album "Au 10e étage," a collection of twelve pop and R&B songs recorded over several years at Maze Studio in Montreal. She emphasizes the depth and meticulous attention to detail behind her work, rejecting stereotypes that associate feminine or colorful aesthetics with superficiality. Despite facing skepticism from the industry, Querry remains committed to her artistic vision.</p>
+                <p class="article-summary">Emmanuelle Querry discusses her debut album "Au 10e étage," a collection of twelve songs blending pop and R&B, recorded over several years at Maze Studio in Montreal. She emphasizes the depth and meticulous planning behind her work, countering perceptions that it is superficial due to its feminine aesthetic. Querry also highlights the challenges women face in the music industry, including being underestimated based on appearance.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it highlights the challenges faced by female artists in breaking through gender biases within the music industry.
+                    This matters because it sheds light on the gender biases and superficial judgments prevalent in the music industry, affecting how female artists are perceived and valued.
                 </div>
                 
 
@@ -2739,12 +2742,12 @@
                 </h3>
 
                 
-                <p class="article-summary">Taxi Driver, directed by Martin Scorsese and released 50 years ago, is a seminal film that portrays New York City as an urban hell. The story follows Travis Bickle, a Vietnam War veteran turned night taxi driver who becomes increasingly isolated and alienated, leading to violent consequences. Paul Schrader, the film's screenwriter, drew inspiration from his own personal struggles during a period of unemployment and despair.</p>
+                <p class="article-summary">"Taxi Driver," directed by Martin Scorsese and released 50 years ago, remains a definitive portrayal of New York City as an urban hell. The film is based on a screenplay by Paul Schrader, who was inspired by his own personal struggles and isolation to create the character of Travis Bickle, a Vietnam veteran turned night cab driver obsessed with saving a child prostitute. Schrader's experience of social alienation and mental breakdown led him to conceptualize the taxi as a metaphor for societal disconnection.</p>
                 
 
                 
                 <div class="article-why">
-                    This film matters because it offers a profound critique of societal disconnection and mental health issues in urban environments, resonating with contemporary audiences facing similar challenges.
+                    This film matters because it captures the essence of urban decay and isolation in the 1970s, resonating with contemporary issues of loneliness and disconnection in modern society.
                 </div>
                 
 
@@ -2917,72 +2920,6 @@
             
             <article class="article"
                      data-index="1"
-                     data-hash="ae3678838ba23c16"
-                     data-category="canada">
-                <div class="article-top">
-                    <div class="article-source">
-                        <div class="reliability-badge medium">
-                            85%
-                        </div>
-                        <span class="source-name">Global News Canada</span>
-                    </div>
-                    <span class="article-time">4:56 AM</span>
-                </div>
-
-                <h3 class="article-title">
-                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link-title"
-                       data-hash="ae3678838ba23c16">
-                        British man who was living in Vancouver convicted in U.S. dark web drug trafficking
-                    </a>
-                </h3>
-
-                
-                <p class="article-summary">Paul Anthony Nicholls, a British man living in Vancouver, was convicted in Georgia for his role in trafficking fentanyl and other controlled substances through the dark web marketplace "Dream Market," which led to the deaths of two U.S. Navy members. RCMP intercepted over 40 packages containing fentanyl during their investigation, and Nicholls faced charges including conspiracy to import controlled substances resulting in death. The case highlights international law enforcement cooperation.</p>
-                
-
-                
-                <div class="article-why">
-                    This case underscores the global nature of drug trafficking and the critical role of international collaboration between law enforcement agencies in combating such crimes.
-                </div>
-                
-
-                <div class="article-actions">
-                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
-                       target="_blank"
-                       rel="noopener"
-                       class="article-link"
-                       data-hash="ae3678838ba23c16">
-                        Read full article &rarr;
-                    </a>
-
-                    <div class="feedback-buttons">
-                        <button class="feedback-btn like-btn"
-                                data-hash="ae3678838ba23c16"
-                                data-category="canada"
-                                data-action="like"
-                                title="More like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
-                            </svg>
-                        </button>
-                        <button class="feedback-btn dislike-btn"
-                                data-hash="ae3678838ba23c16"
-                                data-category="canada"
-                                data-action="dislike"
-                                title="Less like this">
-                            <svg viewBox="0 0 24 24" width="18" height="18">
-                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            
-            <article class="article"
-                     data-index="2"
                      data-hash="9b6eb1b4b2e36c72"
                      data-category="canada">
                 <div class="article-top">
@@ -3006,12 +2943,12 @@
                 </h3>
 
                 
-                <p class="article-summary">This week's corruption allegations against seven Toronto police officers and a retired officer have left the chief sombre, with a pledge to restore public trust. These allegations did not surprise Jim Lowry, who points out that similar issues have persisted in Canadian policing for decades. The Globe and Mail highlights the ongoing challenge of addressing systemic corruption within law enforcement.</p>
+                <p class="article-summary">Toronto police Chief James Ramer expressed concern over the recent corruption allegations against seven officers and a retired officer, vowing to rebuild public trust. Former Toronto Police Chief Jim Lowry stated that these developments were expected given historical patterns of misconduct within the force. The announcement highlights ongoing challenges in addressing systemic issues within law enforcement agencies.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it underscores the persistent issue of police integrity and accountability in Canada, affecting public confidence in law enforcement institutions.
+                    This matters because it underscores persistent problems with police integrity and accountability, which are crucial for maintaining public safety and trust in institutions.
                 </div>
                 
 
@@ -3048,7 +2985,7 @@
             </article>
             
             <article class="article"
-                     data-index="3"
+                     data-index="2"
                      data-hash="52591cbc4a69b87a"
                      data-category="canada">
                 <div class="article-top">
@@ -3108,7 +3045,7 @@
             </article>
             
             <article class="article"
-                     data-index="4"
+                     data-index="3"
                      data-hash="80270c5018b9311d"
                      data-category="canada">
                 <div class="article-top">
@@ -3132,10 +3069,13 @@
                 </h3>
 
                 
-                
-                <p class="article-summary">Brian Twaites said in a statement that a patient 'became combative and damaged the inside of a parked ambulance in the Vancouver General Hospital ambulance bay.'</p>
+                <p class="article-summary">A man has been arrested for damaging an ambulance and attempting to steal it from the Vancouver General Hospital. According to Brian Twaites, a hospital spokesperson, the incident occurred when a patient became combative inside the parked ambulance in the hospital's ambulance bay. No injuries were reported.</p>
                 
 
+                
+                <div class="article-why">
+                    This event highlights the increasing security challenges faced by healthcare facilities and underscores the need for enhanced safety measures to protect medical staff and equipment.
+                </div>
                 
 
                 <div class="article-actions">
@@ -3171,7 +3111,7 @@
             </article>
             
             <article class="article"
-                     data-index="5"
+                     data-index="4"
                      data-hash="d81ff5035b05d5ad"
                      data-category="canada">
                 <div class="article-top">
@@ -3230,6 +3170,69 @@
                 </div>
             </article>
             
+            <article class="article"
+                     data-index="5"
+                     data-hash="ae3678838ba23c16"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Global News Canada</span>
+                    </div>
+                    <span class="article-time">4:56 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="ae3678838ba23c16">
+                        British man who was living in Vancouver convicted in U.S. dark web drug trafficking
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Paul Anthony Nicholls, 47, was living in Vancouver, B.C., in 2017 and conspired with at least one other person to run a drug trafficking operation titled Canada1.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="ae3678838ba23c16">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="ae3678838ba23c16"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="ae3678838ba23c16"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
         </section>
         
         <section class="section">
@@ -3264,12 +3267,12 @@
                 </h3>
 
                 
-                <p class="article-summary">The European Commission is evaluating a communications platform based on the open-source Matrix protocol as an alternative to Microsoft Teams. This initiative follows issues with Signal, which was previously used as a backup tool but deemed too inflexible for such a large organization. The new solution aims to connect not only the Commission but also other EU bodies like the Parliament.</p>
+                <p class="article-summary">The European Commission is testing an open-source communication platform based on Matrix as a potential alternative to Microsoft Teams. This initiative follows issues with Signal, which was previously used as the backup tool but deemed too inflexible for the Commission's needs. The new solution aims to connect the Commission with other EU bodies and is already adopted by various governmental entities across Europe.</p>
                 
 
                 
                 <div class="article-why">
-                    This move underscores the growing trend towards open-source alternatives and data sovereignty in government IT infrastructure.
+                    This move underscores the European Union’s push towards digital sovereignty and reducing reliance on proprietary software solutions from non-EU companies.
                 </div>
                 
 
@@ -3330,12 +3333,12 @@
                 </h3>
 
                 
-                <p class="article-summary">A federal court in California has ruled that creators who use stream-ripping tools to download clips from YouTube for reaction and commentary videos may be liable under the DMCA's anti-circumvention provisions. This decision, made by U.S. Magistrate Judge Virginia K. DeMarchi, denies a motion to dismiss in Cordova v. Huneault, potentially altering how creators use copyrighted material on the platform.</p>
+                <p class="article-summary">A federal court in California has ruled that creators using stream-ripping tools to download clips from YouTube for reaction and commentary videos may be liable under the DMCA's anti-circumvention provisions. This decision, which denied a motion to dismiss in Cordova v. Huneault, could significantly impact how this popular content genre operates on the platform. The court found that downloading copyrighted material without permission violates the Digital Millennium Copyright Act.</p>
                 
 
                 
                 <div class="article-why">
-                    This ruling could significantly impact content creation on YouTube, affecting the legality and prevalence of reaction videos that rely on downloading clips for commentary.
+                    This ruling has significant implications for content creators who rely on short clips from existing videos to produce their own derivative works, potentially stifling creativity and free speech online.
                 </div>
                 
 
@@ -3396,12 +3399,12 @@
                 </h3>
 
                 
-                <p class="article-summary">A discussion thread on the Lobsters platform delves into the landscape of large language models (LLMs), emphasizing responsible use and ethical considerations. Participants highlight concerns about bias, privacy issues, and the environmental impact of training these models. The conversation includes a call for transparency from tech companies regarding their LLM development practices.</p>
+                <p class="article-summary">A discussion thread on the platform Lobsters explores the landscape of large language models (LLMs) and emphasizes responsible use, highlighting concerns about bias, privacy, and ethical implications. The conversation includes insights from various contributors who discuss the importance of transparency in AI model development and deployment. While specific numbers are not provided, the dialogue underscores the need for robust governance frameworks to ensure that LLMs benefit society without causing harm.</p>
                 
 
                 
                 <div class="article-why">
-                    This matters because it underscores the need for industry-wide standards and regulations to ensure that AI technologies benefit society while minimizing risks.
+                    This matters because it addresses critical issues surrounding the responsible development and use of advanced AI technologies, which have significant implications for privacy, ethics, and societal well-being.
                 </div>
                 
 
@@ -3517,6 +3520,7 @@
         </nav>
     </footer>
 
+    <script src="static/js/greeting.js"></script>
     <script src="static/js/player.js"></script>
     <script src="static/js/feedback.js"></script>
     <script src="static/js/refresh.js"></script>

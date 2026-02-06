@@ -7,7 +7,7 @@
 .greeting{font-size:clamp(2rem,5vw,3.5rem);font-weight:300;color:var(--text-primary);margin-bottom:.5rem;letter-spacing:-.02em}
 .greeting-sub{font-size:1.25rem;color:var(--text-muted);margin-bottom:3rem}
 .waveform-container{width:100%;max-width:600px;height:80px;margin-bottom:2rem;display:flex;align-items:center;justify-content:center;gap:3px}
-.waveform-bar{width:4px;background:var(--accent);border-radius:2px;transition:height .1s ease;opacity:.4}.waveform-bar.active{opacity:1}
+.waveform-bar{width:4px;background:var(--accent);border-radius:2px;transition:height 80ms ease-out,opacity 80ms ease-out;opacity:.35;will-change:height}
 .play-btn{display:flex;align-items:center;gap:.75rem;padding:1rem 2.5rem;background:var(--accent);color:var(--bg-primary);border:none;border-radius:50px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:1.5rem}
 .play-btn:hover{background:var(--accent-hover);transform:scale(1.02)}.play-btn svg{width:24px;height:24px;fill:currentColor}.play-btn .stop-icon{display:none}.play-btn.playing .play-icon{display:none}.play-btn.playing .stop-icon{display:block}.play-btn.playing span{display:none}
 .brief-meta{font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem}.brief-meta span{margin:0 .5rem;opacity:.5}
@@ -47,8 +47,8 @@
 .feedback-btn.dislike-btn:hover,.feedback-btn.dislike-btn.active{border-color:var(--trust-low);color:var(--trust-low)}
 .feedback-btn.active{background:rgba(255,255,255,.05)}
 
-/* Refresh button */
-.refresh-btn{display:flex;align-items:center;gap:.4rem;background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:.35rem .75rem;border-radius:6px;font-size:.85rem;cursor:pointer;transition:all .2s}.refresh-btn:hover{border-color:var(--accent);color:var(--accent)}.refresh-btn:disabled{opacity:.5;cursor:default}.refresh-btn svg{fill:currentColor}.refresh-btn.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.8rem;color:var(--accent);min-width:0}
+/* Refresh link */
+.refresh-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;cursor:pointer;transition:color .2s}.refresh-link:hover{color:var(--text-primary)}.refresh-link.disabled{opacity:.4;pointer-events:none}.refresh-link svg{fill:currentColor}.refresh-link.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.8rem;color:var(--accent);min-width:0}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
-@media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}.refresh-btn span{display:none}}
+@media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}}

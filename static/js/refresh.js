@@ -21,7 +21,7 @@
         e.preventDefault();
         if (polling) return;
 
-        btn.disabled = true;
+        btn.classList.add('disabled');
         btn.classList.add('refreshing');
         setStatus('Triggering pipeline...');
 
@@ -34,14 +34,14 @@
             if (resp.status === 429) {
                 const data = await resp.json();
                 setStatus(data.detail || 'Rate limited');
-                btn.disabled = false;
+                btn.classList.remove('disabled');
                 btn.classList.remove('refreshing');
                 return;
             }
 
             if (!resp.ok) {
                 setStatus('Error: ' + resp.status);
-                btn.disabled = false;
+                btn.classList.remove('disabled');
                 btn.classList.remove('refreshing');
                 return;
             }
@@ -52,7 +52,7 @@
 
         } catch (err) {
             setStatus('Connection failed');
-            btn.disabled = false;
+            btn.classList.remove('disabled');
             btn.classList.remove('refreshing');
         }
     });
@@ -70,7 +70,7 @@
                     polling = false;
                     if (data.last_error) {
                         setStatus('Error - check logs');
-                        btn.disabled = false;
+                        btn.classList.remove('disabled');
                         btn.classList.remove('refreshing');
                     } else {
                         setStatus('Done! Reloading...');
@@ -92,7 +92,7 @@
         .then(r => r.json())
         .then(data => {
             if (data.running) {
-                btn.disabled = true;
+                btn.classList.add('disabled');
                 btn.classList.add('refreshing');
                 setStatus('Pipeline running...');
                 polling = true;
