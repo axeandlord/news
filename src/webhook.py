@@ -115,7 +115,7 @@ async def _run_pipeline():
             if match:
                 step_num = int(match.group(1))
                 _state["step"] = STEP_LABELS.get(step_num, f"Step {step_num}")
-                _state["progress"] = int((step_num - 1) / TOTAL_STEPS * 100)
+                _state["progress"] = int(step_num / TOTAL_STEPS * 100)
 
         await proc.wait()
 
