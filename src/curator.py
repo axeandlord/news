@@ -388,14 +388,21 @@ def curate_articles(
         category = section.get("category")
 
         section_articles = []
+        source_counts = {}  # Source diversity: max 3 per source per section
 
-        # First pass: exact category match
+        # First pass: exact category match with source diversity
         for curated in scored:
             if curated.article.link in used_links:
                 continue
 
             if category and curated.article.category != category:
                 continue
+
+            # Source diversity cap
+            src = curated.article.source
+            if source_counts.get(src, 0) >= 3:
+                continue
+            source_counts[src] = source_counts.get(src, 0) + 1
 
             section_articles.append(curated)
             used_links.add(curated.article.link)
