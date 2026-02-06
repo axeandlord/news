@@ -52,7 +52,7 @@
 .pipeline-progress-fill{height:100%;width:0;background:var(--accent);transition:width .6s ease;border-radius:0 2px 2px 0;box-shadow:0 0 8px rgba(212,165,116,.4)}
 
 /* Refresh link */
-.refresh-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;cursor:pointer;transition:color .2s}.refresh-link:hover{color:var(--text-primary)}.refresh-link.disabled{opacity:.4;pointer-events:none}.refresh-link svg{fill:currentColor}.refresh-link.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.8rem;color:var(--accent);min-width:0}
+.refresh-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;cursor:pointer;transition:color .2s}.refresh-link:hover{color:var(--text-primary)}.refresh-link.disabled{opacity:.4;pointer-events:none}.refresh-link svg{fill:currentColor}.refresh-link.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.85rem;color:var(--accent);min-width:0;transition:opacity .3s}.refresh-status:empty{display:none}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 @media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}}
