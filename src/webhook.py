@@ -5,7 +5,7 @@ Run with: venv/bin/uvicorn src.webhook:app --host 127.0.0.1 --port 8090
 
 import asyncio
 import os
-import subprocess
+import re
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,6 +16,15 @@ from fastapi.middleware.cors import CORSMiddleware
 PROJECT_ROOT = Path(__file__).parent.parent
 WEBHOOK_TOKEN = os.environ.get("BRIEF_WEBHOOK_TOKEN", "")
 RATE_LIMIT_SECONDS = 600  # 10 minutes between runs
+
+STEP_LABELS = {
+    1: "Fetching RSS feeds",
+    2: "Curating articles",
+    3: "Generating audio",
+    4: "Generating HTML",
+    5: "Archiving brief",
+}
+TOTAL_STEPS = 5
 
 app = FastAPI(title="BRIEF Webhook", docs_url=None, redoc_url=None)
 
@@ -33,7 +42,12 @@ _state = {
     "last_duration": None,
     "last_error": None,
     "last_trigger": 0,
+    "step": None,
+    "progress": 0,
 }
+
+# Regex to match [N/5] step markers from main.py
+_step_re = re.compile(r"\[(\d)/5\]")
 
 
 def _verify_token(request: Request):
@@ -49,6 +63,8 @@ async def status():
         "last_run": _state["last_run"],
         "last_duration": _state["last_duration"],
         "last_error": _state["last_error"],
+        "step": _state["step"],
+        "progress": _state["progress"],
     }
 
 
@@ -76,7 +92,10 @@ async def trigger(request: Request):
 async def _run_pipeline():
     _state["running"] = True
     _state["last_error"] = None
+    _state["step"] = "Starting"
+    _state["progress"] = 0
     start = time.time()
+    output_lines = []
 
     try:
         proc = await asyncio.create_subprocess_exec(
@@ -86,31 +105,43 @@ async def _run_pipeline():
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.STDOUT,
         )
-        stdout, _ = await proc.communicate()
+
+        # Read stdout line-by-line for real-time progress
+        async for raw_line in proc.stdout:
+            line = raw_line.decode(errors="replace").rstrip()
+            output_lines.append(line)
+
+            match = _step_re.search(line)
+            if match:
+                step_num = int(match.group(1))
+                _state["step"] = STEP_LABELS.get(step_num, f"Step {step_num}")
+                _state["progress"] = int((step_num - 1) / TOTAL_STEPS * 100)
+
+        await proc.wait()
 
         if proc.returncode != 0:
-            _state["last_error"] = stdout.decode()[-500:] if stdout else "Unknown error"
+            _state["last_error"] = "\n".join(output_lines[-10:])
             return
 
-        # Auto-push to GitHub Pages
-        push_proc = await asyncio.create_subprocess_exec(
-            "git", "add", "-A",
-            cwd=str(PROJECT_ROOT),
-        )
-        await push_proc.communicate()
+        # Push to GitHub Pages
+        _state["step"] = "Pushing to GitHub"
+        _state["progress"] = 95
 
-        push_proc = await asyncio.create_subprocess_exec(
-            "git", "commit", "-m",
-            f"Auto-refresh: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-            cwd=str(PROJECT_ROOT),
-        )
-        await push_proc.communicate()
+        for cmd in [
+            ["git", "add", "-A"],
+            ["git", "commit", "-m",
+             f"Auto-refresh: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}"],
+            ["git", "push"],
+        ]:
+            p = await asyncio.create_subprocess_exec(
+                *cmd, cwd=str(PROJECT_ROOT),
+                stdout=asyncio.subprocess.DEVNULL,
+                stderr=asyncio.subprocess.DEVNULL,
+            )
+            await p.wait()
 
-        push_proc = await asyncio.create_subprocess_exec(
-            "git", "push",
-            cwd=str(PROJECT_ROOT),
-        )
-        await push_proc.communicate()
+        _state["progress"] = 100
+        _state["step"] = "Done"
 
     except Exception as e:
         _state["last_error"] = str(e)

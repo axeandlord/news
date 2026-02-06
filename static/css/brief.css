@@ -47,6 +47,10 @@
 .feedback-btn.dislike-btn:hover,.feedback-btn.dislike-btn.active{border-color:var(--trust-low);color:var(--trust-low)}
 .feedback-btn.active{background:rgba(255,255,255,.05)}
 
+/* Pipeline progress bar */
+.pipeline-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:1001;opacity:0;transition:opacity .3s}.pipeline-progress.active{opacity:1}
+.pipeline-progress-fill{height:100%;width:0;background:var(--accent);transition:width .6s ease;border-radius:0 2px 2px 0;box-shadow:0 0 8px rgba(212,165,116,.4)}
+
 /* Refresh link */
 .refresh-link{display:inline-flex;align-items:center;gap:.35rem;color:var(--text-muted);text-decoration:none;font-size:.9rem;cursor:pointer;transition:color .2s}.refresh-link:hover{color:var(--text-primary)}.refresh-link.disabled{opacity:.4;pointer-events:none}.refresh-link svg{fill:currentColor}.refresh-link.refreshing .refresh-icon{animation:spin 1s linear infinite}.refresh-status{font-size:.8rem;color:var(--accent);min-width:0}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}

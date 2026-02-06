@@ -1,7 +1,7 @@
 /**
- * BRIEF Refresh Button
+ * BRIEF Refresh Button with real pipeline progress.
  *
- * Triggers pipeline run via webhook, polls status, reloads on completion.
+ * Polls /status for step + progress, drives a thin progress bar under the header.
  */
 
 (function() {
@@ -9,21 +9,48 @@
 
     const WEBHOOK_URL = 'https://refresh.bezman.ca';
     const TOKEN = '6sefFgFwuRuSZvjoPsnyts-yilTypp-7h9mkhwpE1e8';
-    const POLL_INTERVAL = 5000;
+    const POLL_INTERVAL = 3000;
 
     const btn = document.getElementById('refreshBtn');
     const statusEl = document.getElementById('refreshStatus');
+    const progressBar = document.getElementById('pipelineProgress');
+    const progressFill = document.getElementById('pipelineProgressFill');
     if (!btn) return;
 
     let polling = false;
+
+    function setStatus(msg) {
+        if (statusEl) statusEl.textContent = msg;
+    }
+
+    function setProgress(percent) {
+        if (!progressBar || !progressFill) return;
+        if (percent > 0) {
+            progressBar.classList.add('active');
+            progressFill.style.width = percent + '%';
+        } else {
+            progressFill.style.width = '0%';
+            progressBar.classList.remove('active');
+        }
+    }
+
+    function startUI() {
+        btn.classList.add('disabled', 'refreshing');
+        setProgress(2);
+    }
+
+    function stopUI() {
+        btn.classList.remove('disabled', 'refreshing');
+        setProgress(0);
+        setStatus('');
+    }
 
     btn.addEventListener('click', async function(e) {
         e.preventDefault();
         if (polling) return;
 
-        btn.classList.add('disabled');
-        btn.classList.add('refreshing');
-        setStatus('Triggering pipeline...');
+        startUI();
+        setStatus('Triggering...');
 
         try {
             const resp = await fetch(WEBHOOK_URL + '/trigger', {
@@ -34,26 +61,22 @@
             if (resp.status === 429) {
                 const data = await resp.json();
                 setStatus(data.detail || 'Rate limited');
-                btn.classList.remove('disabled');
-                btn.classList.remove('refreshing');
+                stopUI();
                 return;
             }
 
             if (!resp.ok) {
                 setStatus('Error: ' + resp.status);
-                btn.classList.remove('disabled');
-                btn.classList.remove('refreshing');
+                stopUI();
                 return;
             }
 
-            setStatus('Pipeline running...');
             polling = true;
             pollStatus();
 
         } catch (err) {
             setStatus('Connection failed');
-            btn.classList.remove('disabled');
-            btn.classList.remove('refreshing');
+            stopUI();
         }
     });
 
@@ -64,17 +87,18 @@
             .then(r => r.json())
             .then(data => {
                 if (data.running) {
-                    setStatus('Pipeline running...');
+                    setProgress(Math.max(data.progress || 2, 2));
+                    setStatus(data.step || 'Working...');
                     setTimeout(pollStatus, POLL_INTERVAL);
                 } else {
                     polling = false;
                     if (data.last_error) {
                         setStatus('Error - check logs');
-                        btn.classList.remove('disabled');
-                        btn.classList.remove('refreshing');
+                        stopUI();
                     } else {
+                        setProgress(100);
                         setStatus('Done! Reloading...');
-                        setTimeout(() => location.reload(), 3000);
+                        setTimeout(() => location.reload(), 2000);
                     }
                 }
             })
@@ -83,18 +107,14 @@
             });
     }
 
-    function setStatus(msg) {
-        if (statusEl) statusEl.textContent = msg;
-    }
-
-    // Check if webhook is reachable on load
+    // On page load: check if a run is already in progress
     fetch(WEBHOOK_URL + '/status')
         .then(r => r.json())
         .then(data => {
             if (data.running) {
-                btn.classList.add('disabled');
-                btn.classList.add('refreshing');
-                setStatus('Pipeline running...');
+                startUI();
+                setStatus(data.step || 'Pipeline running...');
+                setProgress(Math.max(data.progress || 2, 2));
                 polling = true;
                 pollStatus();
             }
