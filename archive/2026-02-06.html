@@ -1,0 +1,3524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3600">
+    <title>BRIEF | Your AI News Assistant</title>
+    <meta name="description" content="AI-curated news briefings, personalized and delivered with style.">
+    <link rel="stylesheet" href="static/css/brief.css">
+</head>
+<body>
+    <!-- Sticky Player (hidden by default, shows on scroll) -->
+    <div class="sticky-player">
+        <span class="logo">BRIEF</span>
+        <div class="sticky-waveform"></div>
+        <button class="sticky-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <span class="sticky-time">0:00 / 0:00</span>
+        <div class="sticky-progress">
+            <div class="sticky-progress-fill"></div>
+        </div>
+        <button class="sticky-speed">1x</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <span class="logo">BRIEF</span>
+        <nav class="header-nav">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+            <button id="refreshBtn" class="refresh-btn" title="Fetch fresh news">
+                <svg class="refresh-icon" viewBox="0 0 24 24" width="16" height="16"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                <span>Refresh</span>
+            </button>
+            <span id="refreshStatus" class="refresh-status"></span>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="greeting">Good morning, sir.</h1>
+        <p class="greeting-sub">Your briefing is ready.</p>
+
+        <div class="waveform-container" aria-hidden="true"></div>
+
+        <button class="play-btn" id="playBtn">
+            <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="stop-icon" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/></svg>
+            <span>Play Briefing</span>
+        </button>
+
+        <p class="brief-meta">
+            February 6, 2026<span>&middot;</span>52 stories<span>&middot;</span>4:18
+        </p>
+
+        <div class="playback-controls">
+            <button class="skip-btn skip-back" aria-label="Back 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <span class="time-display">0:00 / 0:00</span>
+            <button class="skip-btn skip-forward" aria-label="Forward 15 seconds">
+                <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            </button>
+            <button class="speed-btn">1x</button>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+                <div class="progress-handle"></div>
+            </div>
+        </div>
+
+        <a href="#stories" class="scroll-hint">
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            Explore today's stories
+        </a>
+    </section>
+
+    <!-- Audio Element -->
+    
+    <audio id="briefAudio" preload="metadata">
+        <source src="audio/brief-en.mp3" type="audio/mpeg">
+    </audio>
+    
+
+    <!-- Main Content -->
+    <main class="content" id="stories">
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">AI & Technology</h2>
+                <span class="section-count">12 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="cf106abcb2f38735"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05110"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="cf106abcb2f38735">
+                        Understanding LLM Evaluator Behavior: A Structured Multi-Evaluator Framework for Merchant Risk Assessment
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have developed a structured multi-evaluator framework to assess the reliability and bias of Large Language Models (LLMs) in merchant risk assessment, using a five-criterion rubric and Monte-Carlo scoring. The study reveals significant variability among LLMs, with GPT-5.1 and Claude 4.5 Sonnet showing negative self-evaluation biases, while Gemini-2.5 Pro and Grok 4 exhibit positive biases; anonymization reduces bias by 25.8 percent. Payment-industry experts confirm that the framework captures genuine quality, aligning with ground-truth payment-network data.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it provides a critical tool for understanding and mitigating potential biases in AI-driven financial decision-making processes, ensuring more reliable and fair risk assessments.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05110"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="cf106abcb2f38735">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="cf106abcb2f38735"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="cf106abcb2f38735"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="d029031e28f65175"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05240"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="d029031e28f65175">
+                        Explainable AI: A Combined XAI Framework for Explaining Brain Tumour Detection Models
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have developed a combined Explainable AI (XAI) framework that integrates GRAD-CAM, LRP, and SHAP techniques to enhance the interpretability of deep learning models for brain tumour detection. This custom Convolutional Neural Network achieved 91.24% accuracy on the BraTS 2021 dataset, providing comprehensive insights into decision-making processes by highlighting important spatial regions, detailing pixel-level relevance, and quantifying feature contributions.</p>
+                
+
+                
+                <div class="article-why">
+                    This research is significant because it enhances transparency and trust in AI-driven medical imaging analysis, particularly for critical tasks like brain tumour detection.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05240"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="d029031e28f65175">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="d029031e28f65175"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="d029031e28f65175"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="d95906c78f13de65"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05279"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="d95906c78f13de65">
+                        Hallucination-Resistant Security Planning with a Large Language Model
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have developed a framework to mitigate the unreliability and hallucination issues of large language models (LLMs) in security management tasks. The framework uses an iterative process where LLM-generated actions are checked for consistency with system constraints, and external feedback is collected when necessary to refine these actions through in-context learning. Experiments on four public datasets demonstrate a 30% reduction in recovery times compared to current state-of-the-art LLMs.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it enhances the reliability of AI tools in critical security operations, potentially saving time and resources during incident responses.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05279"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="d95906c78f13de65">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="d95906c78f13de65"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="d95906c78f13de65"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="4a8e88d327073526"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04903"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="4a8e88d327073526">
+                        Mind the Performance Gap: Capability-Behavior Trade-offs in Feature Steering
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have found that feature steering, a technique for controlling large language model behavior through internal representation manipulation, significantly degrades performance when compared to traditional prompt engineering. Evaluating Goodfire's Auto Steer across 171 MMLU questions using Llama-8B and Llama-70B models, they discovered that while target behaviors are effectively modified, accuracy drops from 66% to 46% on Llama-8B and from 87% to 73% on Llama-70B. Coherence also suffers, falling from 4.62 to 2.24 for Llama-8B and from 4.94 to 3.89 for Llama-70B.</p>
+                
+
+                
+                <div class="article-why">
+                    This study highlights critical limitations in current feature steering methods, emphasizing the need for further research on balancing behavioral control with model performance before practical deployment.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04903"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="4a8e88d327073526">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="4a8e88d327073526"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="4a8e88d327073526"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="edfe30f82df533ff"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04925"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="edfe30f82df533ff">
+                        Internalizing LLM Reasoning via Discovery and Replay of Latent Actions
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers introduced STIR, a framework that enhances large language model reasoning by dynamically controlling latent trajectories through three stages: inducing intrinsic actions, constructing sparse control bases, and modulating trajectory interventions. Experiments show STIR improves accuracy by 1.9% to 7.5% while reducing token consumption by up to 35%, demonstrating the effectiveness of internalizing chain-of-thought processes.</p>
+                
+
+                
+                <div class="article-why">
+                    This approach could significantly enhance the efficiency and performance of large language models in complex reasoning tasks, potentially leading to more resource-efficient AI systems.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04925"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="edfe30f82df533ff">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="edfe30f82df533ff"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="edfe30f82df533ff"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="6"
+                     data-hash="dc4814e82a304d2c"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04940"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="dc4814e82a304d2c">
+                        Transolver-3: Scaling Up Transformer Solvers to Industrial-Scale Geometries
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Transolver-3 is a scalable deep learning framework designed to address the memory complexity issue of neural PDE solvers when dealing with high-resolution industrial-scale geometries. It introduces optimizations such as faster slice and deslice techniques, geometry slice tiling, amortized training on random mesh subsets, and physical state caching during inference, enabling it to handle meshes with over 160 million cells effectively.</p>
+                
+
+                
+                <div class="article-why">
+                    This advancement allows for more accurate and efficient high-fidelity physics simulations in complex engineering tasks such as aircraft and automotive design.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04940"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="dc4814e82a304d2c">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="dc4814e82a304d2c"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="dc4814e82a304d2c"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="7"
+                     data-hash="df3e0f545c4f7f5e"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05014"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="df3e0f545c4f7f5e">
+                        DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">DeepRead is a new framework that enhances agentic search by utilizing document structure, such as hierarchical organization and sequential discourse, to improve long-document question answering. It converts PDFs into structured Markdown with headings and paragraph boundaries, then uses retrieval and reading tools to locate and read relevant sections efficiently.</p>
+                
+
+                
+                <div class="article-why">
+                    This approach significantly improves the accuracy of information retrieval from complex documents, bringing agentic search closer to human-like comprehension capabilities.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05014"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="df3e0f545c4f7f5e">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="df3e0f545c4f7f5e"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="df3e0f545c4f7f5e"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="8"
+                     data-hash="990d76dbb8b11161"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05073"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="990d76dbb8b11161">
+                        Towards Reducible Uncertainty Modeling for Reliable Large Language Model Agents
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The article discusses the need for a new uncertainty quantification (UQ) framework for large language model agents, moving beyond single-turn question-answering to interactive scenarios. It introduces a conditional uncertainty reduction process that models reducible uncertainty over an agent's trajectory and provides guidance for designing UQ in complex LLM applications.</p>
+                
+
+                
+                <div class="article-why">
+                    This shift is crucial for enhancing the reliability and safety of large language model agents in real-world, interactive settings.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05073"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="990d76dbb8b11161">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="990d76dbb8b11161"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="990d76dbb8b11161"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="9"
+                     data-hash="0e3e8fe21521f8d8"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05091"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="0e3e8fe21521f8d8">
+                        Evaluating Robustness and Adaptability in Learning-Based Mission Planning for Active Debris Removal
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The article evaluates three mission planning methods for Active Debris Removal (ADR) in Low Earth Orbit, focusing on their robustness and adaptability under varying constraints. It finds that while a domain-randomized Masked Proximal Policy Optimization (PPO) policy offers better adaptability to changes compared to a nominal PPO method, Monte Carlo Tree Search (MCTS) provides the best handling of constraint changes but at significantly higher computational cost.</p>
+                
+
+                
+                <div class="article-why">
+                    This research highlights the trade-offs between learning-based and search-based methods in ADR mission planning, suggesting potential avenues for developing more resilient autonomous systems.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05091"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="0e3e8fe21521f8d8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="0e3e8fe21521f8d8"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="0e3e8fe21521f8d8"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="10"
+                     data-hash="23d27435f63e6d7b"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05115"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="23d27435f63e6d7b">
+                        SocialVeil: Probing Social Intelligence of Language Agents under Communication Barriers
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The paper introduces SocialVeil, a social learning environment that simulates communication barriers such as semantic vagueness, sociocultural mismatch, and emotional interference to evaluate the social intelligence of large language models (LLMs). Experiments reveal significant performance degradation in LLMs under these conditions, highlighting the need for better adaptation strategies.</p>
+                
+
+                
+                <div class="article-why">
+                    This research advances our understanding of how AI can effectively navigate complex social interactions, which is crucial for developing more socially intelligent and adaptable AI systems.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05115"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="23d27435f63e6d7b">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="23d27435f63e6d7b"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="23d27435f63e6d7b"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="11"
+                     data-hash="b5133156b7a732a2"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv AI/ML</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.05327"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="b5133156b7a732a2">
+                        ProAct: Agentic Lookahead in Interactive Environments
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have introduced ProAct, a framework designed to improve long-term planning capabilities of large language model agents in interactive environments. This is achieved through two stages: Grounded LookAhead Distillation (GLAD) for teaching lookahead reasoning and Monte-Carlo Critic (MC-Critic) for refining decision accuracy.</p>
+                
+
+                
+                <div class="article-why">
+                    ProAct enhances the ability of AI agents to make accurate long-term decisions, which could lead to better performance in complex real-world applications requiring extensive planning.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.05327"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="b5133156b7a732a2">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="b5133156b7a732a2"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="b5133156b7a732a2"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="12"
+                     data-hash="7293847ce1827e7d"
+                     data-category="tech_ai">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            100%
+                        </div>
+                        <span class="source-name">ArXiv Machine Learning</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://arxiv.org/abs/2602.04893"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="7293847ce1827e7d">
+                        A Causal Perspective for Enhancing Jailbreak Attack and Defense
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Researchers have introduced Causal Analyst, a framework that uses causal discovery to identify the direct causes of jailbreaks in large language models (LLMs) by analyzing 35k jailbreak attempts across seven LLMs. This approach enhances both attack and defense strategies for LLM security.</p>
+                
+
+                
+                <div class="article-why">
+                    Understanding and leveraging causal relationships can significantly improve the safety and reliability of LLMs, offering a new direction for mitigating potential risks associated with AI systems.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://arxiv.org/abs/2602.04893"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="7293847ce1827e7d">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="7293847ce1827e7d"
+                                data-category="tech_ai"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="7293847ce1827e7d"
+                                data-category="tech_ai"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Finance & Markets</h2>
+                <span class="section-count">10 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="e07c5911118eec02"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">5:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/c891c47c-b21f-4e0f-84b3-b80c794eff3d"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="e07c5911118eec02">
+                        KPMG pressed its auditor to pass on AI cost savings
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">KPMG, an auditing firm, reportedly pressured its auditor to pass along cost savings from AI technology. The Financial Times reported that the discussions involved a significant amount of money but did not specify exact figures. No direct quotes were provided in the summary content.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it highlights potential conflicts of interest within the auditing industry and raises questions about transparency and ethical standards in financial reporting.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/c891c47c-b21f-4e0f-84b3-b80c794eff3d"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="e07c5911118eec02">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="e07c5911118eec02"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="e07c5911118eec02"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="466718b84c06fb3f"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">5:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/35adacb7-7881-4d99-a6b4-d6f2e81c901a"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="466718b84c06fb3f">
+                        Trump and the normalisation of deviance
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The Financial Times article discusses how former US President Donald Trump's behavior and policies have contributed to a normalization of deviance within American politics, where once-unacceptable actions become routine. It highlights specific instances under the Trump administration that set dangerous precedents for political norms. However, no direct quotes or numerical data are provided in the summary content.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it underscores how repeated breaches of ethical and legal standards can erode democratic institutions and public trust over time.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/35adacb7-7881-4d99-a6b4-d6f2e81c901a"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="466718b84c06fb3f">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="466718b84c06fb3f"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="466718b84c06fb3f"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="4d90392eaf73b6ce"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">5:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/8f6d4196-6f61-4be9-8cb7-1d93253e4e8b"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="4d90392eaf73b6ce">
+                        Trump’s policies dent international travel to US in blow to tourism sector
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Donald Trump's policies have led to a decline in international travel to the United States, significantly impacting the tourism sector. According to industry reports, visitor numbers from key markets such as China and Europe dropped by over 20% during his presidency. The financial impact has been substantial, with billions of dollars in lost revenue for hotels, airlines, and other travel-related businesses.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it highlights how national policies can have far-reaching economic consequences on industries that rely heavily on international engagement and cooperation.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/8f6d4196-6f61-4be9-8cb7-1d93253e4e8b"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="4d90392eaf73b6ce">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="4d90392eaf73b6ce"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="4d90392eaf73b6ce"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="c2b02bb674a9886c"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Technology</span>
+                    </div>
+                    <span class="article-time">1:08 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/softbank-taps-on-openai-investment-while-japanese-automakers-drag"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="c2b02bb674a9886c">
+                        SoftBank Taps on OpenAI Investment, While Japanese Automakers Drag
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">OpenAI CEO Sam Altman, right, and SoftBank Group CEO Masayoshi Son.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/softbank-taps-on-openai-investment-while-japanese-automakers-drag"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="c2b02bb674a9886c">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="c2b02bb674a9886c"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="c2b02bb674a9886c"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="56e172e6801a4ed8"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Technology</span>
+                    </div>
+                    <span class="article-time">1:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/coupang-s-influence-campaign-creates-powerful-washington-allies"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="56e172e6801a4ed8">
+                        Coupang’s Influence Campaign Creates Powerful Washington Allies
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Coupang Inc. delivery trucks parked at the company’s fulfillment center in Goyang, South Korea.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/coupang-s-influence-campaign-creates-powerful-washington-allies"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="56e172e6801a4ed8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="56e172e6801a4ed8"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="56e172e6801a4ed8"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="6"
+                     data-hash="9d38aecfb12aa7a8"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            95%
+                        </div>
+                        <span class="source-name">Financial Times</span>
+                    </div>
+                    <span class="article-time">5:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ft.com/content/826949fc-118e-4708-b1a3-b938bc82db82"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="9d38aecfb12aa7a8">
+                        Inside Jeffrey Epstein’s social Ponzi scheme
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">New emails reveal the convicted sex offender’s ability to fulfil the wants and needs of some of the world’s richest and most powerful people</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ft.com/content/826949fc-118e-4708-b1a3-b938bc82db82"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="9d38aecfb12aa7a8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="9d38aecfb12aa7a8"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="9d38aecfb12aa7a8"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="7"
+                     data-hash="5e4885119d410de8"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Markets</span>
+                    </div>
+                    <span class="article-time">4:18 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/gic-backed-thai-startup-weighs-ipo-in-hong-kong-or-new-york"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="5e4885119d410de8">
+                        GIC-Backed Thai Startup Weighs IPO in Hong Kong or New York
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Yod Chinsupakul Source: Line Man Wong Nai</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/articles/2026-02-06/gic-backed-thai-startup-weighs-ipo-in-hong-kong-or-new-york"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="5e4885119d410de8">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="5e4885119d410de8"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="5e4885119d410de8"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="8"
+                     data-hash="a759a1fa4b6c6fc0"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Markets</span>
+                    </div>
+                    <span class="article-time">2:46 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/newsletters/2026-02-06/local-funds-stake-in-nifty-500-hits-record-high-promoters-stake-at-record-low"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="a759a1fa4b6c6fc0">
+                        Indian Founders Slash Holdings to All-Time Low as Funds Stay Bullish
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">The National Stock Exchange (NSE) building in Mumbai, India, on Wednesday, Dec. 10, 2025. Meesho Ltd., an Indian e-commerce platform, surged in its debut in Mumbai on Wednesday, showing growing invest...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/newsletters/2026-02-06/local-funds-stake-in-nifty-500-hits-record-high-promoters-stake-at-record-low"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="a759a1fa4b6c6fc0">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="a759a1fa4b6c6fc0"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="a759a1fa4b6c6fc0"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="9"
+                     data-hash="16c38ba5c92abd92"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Bloomberg Markets</span>
+                    </div>
+                    <span class="article-time">3:32 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/the-asia-trade-2-6-2026-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="16c38ba5c92abd92">
+                        Asian stocks fall as tech, bitcoin rout extends | The Asia Trade 2/6/2026
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bloomberg.com/news/videos/2026-02-06/the-asia-trade-2-6-2026-video"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="16c38ba5c92abd92">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="16c38ba5c92abd92"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="16c38ba5c92abd92"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="10"
+                     data-hash="6ae935fb263e4ef0"
+                     data-category="finance">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge low">
+                            70%
+                        </div>
+                        <span class="source-name">Seeking Alpha</span>
+                    </div>
+                    <span class="article-time">12:02 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://seekingalpha.com/article/4866917-envista-holdings-corporation-2025-q4-results-earnings-call-presentation?source=feed_all_articles"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="6ae935fb263e4ef0">
+                        Envista Holdings Corporation 2025 Q4 - Results - Earnings Call Presentation
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://seekingalpha.com/article/4866917-envista-holdings-corporation-2025-q4-results-earnings-call-presentation?source=feed_all_articles"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="6ae935fb263e4ef0">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="6ae935fb263e4ef0"
+                                data-category="finance"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="6ae935fb263e4ef0"
+                                data-category="finance"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">World & Geopolitics</h2>
+                <span class="section-count">10 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="1be2285668c50a34"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">War on the Rocks</span>
+                    </div>
+                    <span class="article-time">8:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://warontherocks.com/2026/02/sun-tzu-in-the-supply-chain-the-new-face-of-economic-war-with-china/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="1be2285668c50a34">
+                        Sun Tzu in the Supply Chain: The New Face of Economic War With China
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">An article from War on the Rocks introduces an 11-part series focusing on integrating economic statecraft into U.S. strategy and national security, highlighting significant annual losses of $225-$600 billion due to stolen trade secrets and pirated software from China. The piece underscores the strategic importance of supply chain management in modern economic warfare.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it addresses critical vulnerabilities in U.S. economic security and highlights the need for robust strategies against intellectual property theft and technological espionage.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://warontherocks.com/2026/02/sun-tzu-in-the-supply-chain-the-new-face-of-economic-war-with-china/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="1be2285668c50a34">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="1be2285668c50a34"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="1be2285668c50a34"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="84242138a4dccb9e"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">War on the Rocks</span>
+                    </div>
+                    <span class="article-time">8:30 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://warontherocks.com/2026/01/turkeys-drone-industry-at-a-strategic-crossroads/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="84242138a4dccb9e">
+                        Turkey’s Drone Industry at a Strategic Crossroads
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Turkey's drone industry, which has seen significant growth and expansion across various regions, is now facing a critical juncture as it seeks to integrate with NATO while continuing its defense exports. This dual strategy may become unsustainable due to increasing geopolitical tensions, posing challenges for Ankara’s future military-industrial ambitions. The article highlights the strategic importance of balancing these competing interests.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it underscores the evolving dynamics in global arms trade and regional security alliances, particularly as nations navigate complex international relations amid rising polarization.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://warontherocks.com/2026/01/turkeys-drone-industry-at-a-strategic-crossroads/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="84242138a4dccb9e">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="84242138a4dccb9e"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="84242138a4dccb9e"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="7390ae283379a4bf"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Foreign Policy</span>
+                    </div>
+                    <span class="article-time">5:29 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://foreignpolicy.com/2026/02/05/trump-canada-defense-spending-nato-norad-carney-arctic/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="7390ae283379a4bf">
+                        Trump Shocked Canada Out of Complacency on Defense. Will It Last?
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Following former U.S. President Donald Trump's criticisms of Canada's defense capabilities, Ottawa has unveiled ambitious military spending plans, including a significant boost for the Arctic region which is sparsely protected. The Canadian government aims to increase its defense budget by 74% over two decades and enhance its presence in the Arctic amid growing strategic importance due to climate change and increased activity from other nations.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it signals a shift in Canada's approach to national security and sovereignty, particularly in contested regions like the Arctic where resources and geopolitical influence are at stake.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://foreignpolicy.com/2026/02/05/trump-canada-defense-spending-nato-norad-carney-arctic/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="7390ae283379a4bf">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="7390ae283379a4bf"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="7390ae283379a4bf"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="a15b792d28331038"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">The Guardian World</span>
+                    </div>
+                    <span class="article-time">4:56 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theguardian.com/australia-news/live/2026/feb/06/anthony-albanese-indonesia-security-pact-sussan-ley-coalition-liberals-nationals-leadership-rba-interest-rates-inflation-ntwnfb"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="a15b792d28331038">
+                        Australia news live: Gus Lamont’s grandmothers ‘devastated’ after police update; five-day search for Dezi Freeman ends without a trace
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Lawyers confirm they are acting for two grandmothers of missing four-year-old. Follow the latest updates liveGet our breaking news email, free app or daily news podcastRideshare driver in court over a...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.theguardian.com/australia-news/live/2026/feb/06/anthony-albanese-indonesia-security-pact-sussan-ley-coalition-liberals-nationals-leadership-rba-interest-rates-inflation-ntwnfb"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="a15b792d28331038">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="a15b792d28331038"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="a15b792d28331038"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="447058023fb42edb"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Al Jazeera</span>
+                    </div>
+                    <span class="article-time">2:45 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.aljazeera.com/economy/2026/2/6/bitcoin-plummets-in-value-again-after-week-of-heavy-losses?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="447058023fb42edb">
+                        Bitcoin plummets in value again after week of heavy losses
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">The world's most popular cryptocurrency has lost about one-third of its value since the start of the year.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.aljazeera.com/economy/2026/2/6/bitcoin-plummets-in-value-again-after-week-of-heavy-losses?traffic_source=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="447058023fb42edb">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="447058023fb42edb"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="447058023fb42edb"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="6"
+                     data-hash="16fb42a6e0469ca2"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Foreign Policy</span>
+                    </div>
+                    <span class="article-time">6:36 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://foreignpolicy.com/2026/02/04/iran-sanctions-trump-despair-protest-revolution-reform-khamenei/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="16fb42a6e0469ca2">
+                        Iran’s Despair Is U.S. Policy
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Western sanctions helped kill Iranians’ earlier hopes of their country’s transformation from within.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://foreignpolicy.com/2026/02/04/iran-sanctions-trump-despair-protest-revolution-reform-khamenei/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="16fb42a6e0469ca2">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="16fb42a6e0469ca2"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="16fb42a6e0469ca2"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="7"
+                     data-hash="4bf452ebac3aba0a"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">War on the Rocks</span>
+                    </div>
+                    <span class="article-time">8:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://warontherocks.com/2026/01/economic-statecraft-is-back-is-america-ready/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="4bf452ebac3aba0a">
+                        Economic Statecraft Is Back. Is America Ready?
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">In 432 B.C.E., a year before the outbreak of the Peloponnesian War, the Megarians received an unusual decree from the Athenian assembly: They were prevented from accessing the vast Athenian Empire’s h...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://warontherocks.com/2026/01/economic-statecraft-is-back-is-america-ready/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="4bf452ebac3aba0a">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="4bf452ebac3aba0a"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="4bf452ebac3aba0a"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="8"
+                     data-hash="5049c28b90ac04e1"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">War on the Rocks</span>
+                    </div>
+                    <span class="article-time">6:30 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://warontherocks.com/2026/01/how-does-canadas-military-fare-without-the-united-states/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="5049c28b90ac04e1">
+                        How Does Canada’s Military Fare Without the United States?
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">In 2024, Philippe Lagassé and Justin Massie wrote, “Don’t Count on Us: Canada’s Military Unreadiness,” where they argued that Canada’s military was in a death spiral. In the midst of heightened tensio...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://warontherocks.com/2026/01/how-does-canadas-military-fare-without-the-united-states/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="5049c28b90ac04e1">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="5049c28b90ac04e1"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="5049c28b90ac04e1"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="9"
+                     data-hash="899ef35f993326b1"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            88%
+                        </div>
+                        <span class="source-name">The Diplomat</span>
+                    </div>
+                    <span class="article-time">11:22 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://thediplomat.com/2026/02/new-starts-expiration-is-a-win-for-china/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="899ef35f993326b1">
+                        New START’s Expiration Is a Win for China
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">The treaty’s looming end sends a damaging signal about how the United States now views nuclear competition – and China is watching.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://thediplomat.com/2026/02/new-starts-expiration-is-a-win-for-china/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="899ef35f993326b1">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="899ef35f993326b1"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="899ef35f993326b1"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="10"
+                     data-hash="995d219ae0417a05"
+                     data-category="geopolitics">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">BBC World</span>
+                    </div>
+                    <span class="article-time">3:25 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.bbc.com/news/articles/c5yd14r2mgno?at_medium=RSS&at_campaign=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="995d219ae0417a05">
+                        Trump endorses Japan's Takaichi ahead of snap election
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">It is rare for US presidents to publicly back candidates in foreign elections.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.bbc.com/news/articles/c5yd14r2mgno?at_medium=RSS&at_campaign=rss"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="995d219ae0417a05">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="995d219ae0417a05"
+                                data-category="geopolitics"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="995d219ae0417a05"
+                                data-category="geopolitics"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Montreal</h2>
+                <span class="section-count">6 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="c141efb6ff0879da"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">1:20 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/u-s-alcohol-is-briefly-returning-to-saq-shelves-and-at-a-discount"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="c141efb6ff0879da">
+                        U.S. alcohol is (briefly) returning to SAQ shelves — and at a discount
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Some American alcoholic beverages are set to reappear on the shelves of Quebec's government-owned SAQ stores after an absence of nearly a year, and will be offered at discounted prices. The return is seen as a positive move for consumers who have missed out on certain U.S.-made spirits, wines, and beers.</p>
+                
+
+                
+                <div class="article-why">
+                    This development matters because it reflects broader trends in international trade relations and consumer demand, potentially boosting sales and choice for Quebec residents.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://montrealgazette.com/news/u-s-alcohol-is-briefly-returning-to-saq-shelves-and-at-a-discount"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="c141efb6ff0879da">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="c141efb6ff0879da"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="c141efb6ff0879da"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="14563fcf5493d5ee"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">12:38 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/provincial_politics/analysis-caq-haunted-by-third-link-promise-even-in-leadership-race"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="14563fcf5493d5ee">
+                        Analysis: CAQ haunted by third link promise even in leadership race
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The race to replace Quebec Premier François Legault has become contentious, with opposition parties criticizing the government for lacking direction. Bernard Drainville, a candidate for the CAQ leadership, questioned his opponent's abilities, while she accused him of showing "lack of elegance." This comes after the party was previously criticized for failing to fulfill its third link promise.</p>
+                
+
+                
+                <div class="article-why">
+                    The internal strife within the CAQ highlights the challenges the party faces in maintaining public trust and addressing past promises, which could impact its future electoral success.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://montrealgazette.com/news/provincial_politics/analysis-caq-haunted-by-third-link-promise-even-in-leadership-race"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="14563fcf5493d5ee">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="14563fcf5493d5ee"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="14563fcf5493d5ee"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="a77e99437fec19e7"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">10:50 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/local-news/montreal-takes-emergency-measures-to-address-disastrous-potholes"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="a77e99437fec19e7">
+                        Montreal takes emergency measures to address 'disastrous' potholes
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The city of Montreal has declared a state of emergency due to an overwhelming number of potholes, describing the situation as "disastrous." In response, the city is implementing emergency measures to repair roads more efficiently. While specific numbers were not provided in the content, the severity of the issue highlights the urgent need for action.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it underscores the challenges cities face in maintaining infrastructure during harsh weather conditions and the immediate impact on public safety and transportation efficiency.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://montrealgazette.com/news/local-news/montreal-takes-emergency-measures-to-address-disastrous-potholes"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="a77e99437fec19e7">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="a77e99437fec19e7"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="a77e99437fec19e7"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="b21e0a03dc381bf4"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">10:09 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/local-news/3-of-5-montreal-parties-have-blown-the-deadline-for-election-spending-report"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="b21e0a03dc381bf4">
+                        3 of 5 Montreal parties have blown the deadline for election spending report
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Only two of the five political parties that ran candidates for mayor of Montreal last fall submitted an election spending report as of the legal deadline this past Monday.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://montrealgazette.com/news/local-news/3-of-5-montreal-parties-have-blown-the-deadline-for-election-spending-report"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="b21e0a03dc381bf4">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="b21e0a03dc381bf4"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="b21e0a03dc381bf4"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="6fe7597acde55231"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Montreal Gazette</span>
+                    </div>
+                    <span class="article-time">9:45 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://montrealgazette.com/news/provincial_politics/indigenous-leaders-clash-with-jolin-barrette-over-caqs-colonialist-constitution"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="6fe7597acde55231">
+                        Indigenous leaders clash with Jolin-Barrette over CAQ's 'colonialist' constitution
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">A National Assembly hearing on Quebec’s proposed constitution turned confrontational on Thursday, with Indigenous leaders denouncing the plan as assimilationist and colonialist — and Justice Minister ...</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://montrealgazette.com/news/provincial_politics/indigenous-leaders-clash-with-jolin-barrette-over-caqs-colonialist-constitution"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="6fe7597acde55231">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="6fe7597acde55231"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="6fe7597acde55231"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="6"
+                     data-hash="d36aae99f743050d"
+                     data-category="montreal">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">Montreal City News</span>
+                    </div>
+                    <span class="article-time">8:50 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://globalnews.ca/news/11653267/montreal-influencer-eating-disorder-recovery/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="d36aae99f743050d">
+                        Quebec influencer shares eating disorder recovery journey to help others seek support
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Laetitia de Carufel is speaking openly about her long struggle with disordered eating, saying she hopes her story will help people recognize warning signs.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://globalnews.ca/news/11653267/montreal-influencer-eating-disorder-recovery/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="d36aae99f743050d">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="d36aae99f743050d"
+                                data-category="montreal"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="d36aae99f743050d"
+                                data-category="montreal"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Quebec</h2>
+                <span class="section-count">5 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="1f7ebf114e23f2de"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/sports/954084/finie-fete-village-olympique"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="1f7ebf114e23f2de">
+                        Finie, la fête au village olympique
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The Olympic Village, known for fostering camaraderie among athletes from various disciplines and countries, is facing a new reality at the Milan-Cortina Winter Olympics due to logistical constraints. Instead of being centralized, these games are spread across six villages in four zones over 22,000 square kilometers, making it difficult for athletes to interact freely as they did in previous years. This setup emphasizes the International Olympic Committee's push towards more sustainable and cost-effective hosting.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it challenges the traditional Olympic spirit of unity and cross-disciplinary interaction, potentially impacting athlete experiences and the global perception of the Games.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/sports/954084/finie-fete-village-olympique"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="1f7ebf114e23f2de">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="1f7ebf114e23f2de"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="1f7ebf114e23f2de"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="0b393a24217361e7"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/culture/musique/954021/10e-etage-emmanuelle-querry-defend-pop"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="0b393a24217361e7">
+                        «Au 10e étage»: Emmanuelle Querry défend sa pop
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Emmanuelle Querry discusses her debut album "Au 10e étage," a collection of twelve pop and R&B songs recorded over several years at Maze Studio in Montreal. She emphasizes the depth and meticulous attention to detail behind her work, rejecting stereotypes that associate feminine or colorful aesthetics with superficiality. Despite facing skepticism from the industry, Querry remains committed to her artistic vision.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it highlights the challenges faced by female artists in breaking through gender biases within the music industry.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/culture/musique/954021/10e-etage-emmanuelle-querry-defend-pop"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="0b393a24217361e7">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="0b393a24217361e7"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="0b393a24217361e7"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="eb77c01657cc3f99"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/culture/cinema/954036/taxi-driver-enfer-damnation-retroviseur"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="eb77c01657cc3f99">
+                        «Taxi Driver»: enfer et damnation dans le rétroviseur
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Taxi Driver, directed by Martin Scorsese and released 50 years ago, is a seminal film that portrays New York City as an urban hell. The story follows Travis Bickle, a Vietnam War veteran turned night taxi driver who becomes increasingly isolated and alienated, leading to violent consequences. Paul Schrader, the film's screenwriter, drew inspiration from his own personal struggles during a period of unemployment and despair.</p>
+                
+
+                
+                <div class="article-why">
+                    This film matters because it offers a profound critique of societal disconnection and mental health issues in urban environments, resonating with contemporary audiences facing similar challenges.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/culture/cinema/954036/taxi-driver-enfer-damnation-retroviseur"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="eb77c01657cc3f99">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="eb77c01657cc3f99"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="eb77c01657cc3f99"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="1b86acd526bef34a"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/culture/cinema/954027/scarlet-eternite-etre-ou-ne-pas-etre"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="1b86acd526bef34a">
+                        «Scarlet et l’éternité» : être ou ne pas être
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Librement inspirée de «Hamlet», la nouvelle animation de Mamoru Hosoda séduit l’œil, mais embrouille l’esprit.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/culture/cinema/954027/scarlet-eternite-etre-ou-ne-pas-etre"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="1b86acd526bef34a">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="1b86acd526bef34a"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="1b86acd526bef34a"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="7d779f7f77912239"
+                     data-category="quebec">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Le Devoir</span>
+                    </div>
+                    <span class="article-time">12:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.ledevoir.com/culture/cinema/954024/dracula-sanglant-navet-luc-besson"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="7d779f7f77912239">
+                        «Dracula»: le sanglant navet de Luc Besson
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">En adaptant à son tour «Dracula», le controversé réalisateur français semble vouloir faire du Coppola, et c’est gênant.</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.ledevoir.com/culture/cinema/954024/dracula-sanglant-navet-luc-besson"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="7d779f7f77912239">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="7d779f7f77912239"
+                                data-category="quebec"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="7d779f7f77912239"
+                                data-category="quebec"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Canada</h2>
+                <span class="section-count">5 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="ae3678838ba23c16"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Global News Canada</span>
+                    </div>
+                    <span class="article-time">4:56 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="ae3678838ba23c16">
+                        British man who was living in Vancouver convicted in U.S. dark web drug trafficking
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">Paul Anthony Nicholls, a British man living in Vancouver, was convicted in Georgia for his role in trafficking fentanyl and other controlled substances through the dark web marketplace "Dream Market," which led to the deaths of two U.S. Navy members. RCMP intercepted over 40 packages containing fentanyl during their investigation, and Nicholls faced charges including conspiracy to import controlled substances resulting in death. The case highlights international law enforcement cooperation.</p>
+                
+
+                
+                <div class="article-why">
+                    This case underscores the global nature of drug trafficking and the critical role of international collaboration between law enforcement agencies in combating such crimes.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://globalnews.ca/news/11654642/british-man-living-vancouver-convicted-us-dark-web-drug-trafficking/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="ae3678838ba23c16">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="ae3678838ba23c16"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="ae3678838ba23c16"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="9b6eb1b4b2e36c72"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Globe and Mail</span>
+                    </div>
+                    <span class="article-time">3:26 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theglobeandmail.com/canada/article-history-shows-police-corruption-is-challenging-for-canada/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="9b6eb1b4b2e36c72">
+                        History shows police corruption is challenging for Canada
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">This week's corruption allegations against seven Toronto police officers and a retired officer have left the chief sombre, with a pledge to restore public trust. These allegations did not surprise Jim Lowry, who points out that similar issues have persisted in Canadian policing for decades. The Globe and Mail highlights the ongoing challenge of addressing systemic corruption within law enforcement.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it underscores the persistent issue of police integrity and accountability in Canada, affecting public confidence in law enforcement institutions.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://www.theglobeandmail.com/canada/article-history-shows-police-corruption-is-challenging-for-canada/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="9b6eb1b4b2e36c72">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="9b6eb1b4b2e36c72"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="9b6eb1b4b2e36c72"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="52591cbc4a69b87a"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Globe and Mail</span>
+                    </div>
+                    <span class="article-time">12:44 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theglobeandmail.com/business/article-montreal-home-sales-january-decline-housing-quebec/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="52591cbc4a69b87a">
+                        Montreal-area home sales fall 15% in January
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.theglobeandmail.com/business/article-montreal-home-sales-january-decline-housing-quebec/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="52591cbc4a69b87a">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="52591cbc4a69b87a"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="52591cbc4a69b87a"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="80270c5018b9311d"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            85%
+                        </div>
+                        <span class="source-name">Global News Canada</span>
+                    </div>
+                    <span class="article-time">2:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://globalnews.ca/news/11654870/man-arrested-damaging-inside-bc-ambulance-attempting-steal-it/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="80270c5018b9311d">
+                        Man arrested in connection to damaging, attempting to steal BC ambulance
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Brian Twaites said in a statement that a patient 'became combative and damaged the inside of a parked ambulance in the Vancouver General Hospital ambulance bay.'</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://globalnews.ca/news/11654870/man-arrested-damaging-inside-bc-ambulance-attempting-steal-it/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="80270c5018b9311d">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="80270c5018b9311d"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="80270c5018b9311d"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="5"
+                     data-hash="d81ff5035b05d5ad"
+                     data-category="canada">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge high">
+                            90%
+                        </div>
+                        <span class="source-name">Globe and Mail</span>
+                    </div>
+                    <span class="article-time">7:01 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.theglobeandmail.com/business/article-supreme-court-class-action-air-canada-pricing-case/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="d81ff5035b05d5ad">
+                        Supreme Court agrees to hear arguments in Air Canada pricing case
+                    </a>
+                </h3>
+
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.theglobeandmail.com/business/article-supreme-court-class-action-air-canada-pricing-case/"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="d81ff5035b05d5ad">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="d81ff5035b05d5ad"
+                                data-category="canada"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="d81ff5035b05d5ad"
+                                data-category="canada"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+        <section class="section">
+            <header class="section-header">
+                <h2 class="section-title">Wildcards & Emerging</h2>
+                <span class="section-count">4 stories</span>
+            </header>
+
+            
+            <article class="article"
+                     data-index="1"
+                     data-hash="313cf66bd1faa196"
+                     data-category="wildcards">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge low">
+                            75%
+                        </div>
+                        <span class="source-name">Slashdot</span>
+                    </div>
+                    <span class="article-time">2:00 AM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://slashdot.org/story/26/02/05/1930255/the-european-commission-is-testing-an-open-source-alternative-to-microsoft-teams?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="313cf66bd1faa196">
+                        The European Commission Is Testing an Open Source Alternative To Microsoft Teams
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">The European Commission is evaluating a communications platform based on the open-source Matrix protocol as an alternative to Microsoft Teams. This initiative follows issues with Signal, which was previously used as a backup tool but deemed too inflexible for such a large organization. The new solution aims to connect not only the Commission but also other EU bodies like the Parliament.</p>
+                
+
+                
+                <div class="article-why">
+                    This move underscores the growing trend towards open-source alternatives and data sovereignty in government IT infrastructure.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://slashdot.org/story/26/02/05/1930255/the-european-commission-is-testing-an-open-source-alternative-to-microsoft-teams?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="313cf66bd1faa196">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="313cf66bd1faa196"
+                                data-category="wildcards"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="313cf66bd1faa196"
+                                data-category="wildcards"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="2"
+                     data-hash="32086606dbc63a45"
+                     data-category="wildcards">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge low">
+                            75%
+                        </div>
+                        <span class="source-name">Slashdot</span>
+                    </div>
+                    <span class="article-time">11:30 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://news.slashdot.org/story/26/02/05/1924252/court-rules-that-ripping-youtube-clips-can-violate-the-dmca?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="32086606dbc63a45">
+                        Court Rules That Ripping YouTube Clips Can Violate the DMCA
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">A federal court in California has ruled that creators who use stream-ripping tools to download clips from YouTube for reaction and commentary videos may be liable under the DMCA's anti-circumvention provisions. This decision, made by U.S. Magistrate Judge Virginia K. DeMarchi, denies a motion to dismiss in Cordova v. Huneault, potentially altering how creators use copyrighted material on the platform.</p>
+                
+
+                
+                <div class="article-why">
+                    This ruling could significantly impact content creation on YouTube, affecting the legality and prevalence of reaction videos that rely on downloading clips for commentary.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://news.slashdot.org/story/26/02/05/1924252/court-rules-that-ripping-youtube-clips-can-violate-the-dmca?utm_source=rss1.0mainlinkanon&utm_medium=feed"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="32086606dbc63a45">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="32086606dbc63a45"
+                                data-category="wildcards"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="32086606dbc63a45"
+                                data-category="wildcards"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="3"
+                     data-hash="6633a5d35c8f3f63"
+                     data-category="wildcards">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">Lobsters</span>
+                    </div>
+                    <span class="article-time">1:41 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://martin.janiczek.cz/2026/02/05/the-llm-spectrum-and-responsible-llm-use.html"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="6633a5d35c8f3f63">
+                        The LLM spectrum and responsible LLM use
+                    </a>
+                </h3>
+
+                
+                <p class="article-summary">A discussion thread on the Lobsters platform delves into the landscape of large language models (LLMs), emphasizing responsible use and ethical considerations. Participants highlight concerns about bias, privacy issues, and the environmental impact of training these models. The conversation includes a call for transparency from tech companies regarding their LLM development practices.</p>
+                
+
+                
+                <div class="article-why">
+                    This matters because it underscores the need for industry-wide standards and regulations to ensure that AI technologies benefit society while minimizing risks.
+                </div>
+                
+
+                <div class="article-actions">
+                    <a href="https://martin.janiczek.cz/2026/02/05/the-llm-spectrum-and-responsible-llm-use.html"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="6633a5d35c8f3f63">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="6633a5d35c8f3f63"
+                                data-category="wildcards"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="6633a5d35c8f3f63"
+                                data-category="wildcards"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="article"
+                     data-index="4"
+                     data-hash="85941ebc759871df"
+                     data-category="wildcards">
+                <div class="article-top">
+                    <div class="article-source">
+                        <div class="reliability-badge medium">
+                            80%
+                        </div>
+                        <span class="source-name">Lobsters</span>
+                    </div>
+                    <span class="article-time">1:27 PM</span>
+                </div>
+
+                <h3 class="article-title">
+                    <a href="https://www.anthropic.com/engineering/building-c-compiler"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link-title"
+                       data-hash="85941ebc759871df">
+                        Building a C compiler with a team of parallel Claudes
+                    </a>
+                </h3>
+
+                
+                
+                <p class="article-summary">Comments</p>
+                
+
+                
+
+                <div class="article-actions">
+                    <a href="https://www.anthropic.com/engineering/building-c-compiler"
+                       target="_blank"
+                       rel="noopener"
+                       class="article-link"
+                       data-hash="85941ebc759871df">
+                        Read full article &rarr;
+                    </a>
+
+                    <div class="feedback-buttons">
+                        <button class="feedback-btn like-btn"
+                                data-hash="85941ebc759871df"
+                                data-category="wildcards"
+                                data-action="like"
+                                title="More like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/>
+                            </svg>
+                        </button>
+                        <button class="feedback-btn dislike-btn"
+                                data-hash="85941ebc759871df"
+                                data-category="wildcards"
+                                data-action="dislike"
+                                title="Less like this">
+                            <svg viewBox="0 0 24 24" width="18" height="18">
+                                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </article>
+            
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-meta">
+            Curated from 50+ sources &middot; Reliability-scored &middot; Learns your interests &middot; Ad-free
+        </p>
+        <nav class="footer-links">
+            <a href="about.html">How it works</a>
+            <a href="archive/">Archive</a>
+            <a href="https://github.com/axeandlord/news">Source</a>
+            <a href="#" id="exportFeedback" style="display:none">Export Feedback</a>
+        </nav>
+    </footer>
+
+    <script src="static/js/player.js"></script>
+    <script src="static/js/feedback.js"></script>
+    <script src="static/js/refresh.js"></script>
+</body>
+</html>

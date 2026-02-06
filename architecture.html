@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BRIEF - Architecture</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  body {
+    background: #1a1a2e;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    padding: 2rem;
+  }
+  h1 {
+    text-align: center;
+    color: #9a8a9f;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+  }
+  .diagram-section {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    background: #16213e;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid #2a2a4a;
+  }
+  .diagram-section h2 {
+    color: #b8a9bd;
+    margin-top: 0;
+    border-bottom: 1px solid #2a2a4a;
+    padding-bottom: 0.5rem;
+  }
+  .mermaid {
+    display: flex;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>BRIEF Architecture</h1>
+<p class="subtitle">RSS Aggregator + AI Briefing Generator + TTS Podcast</p>
+
+<div class="diagram-section">
+<h2>Main Pipeline</h2>
+<pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#2a2a4a', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#9a8a9f', 'lineColor': '#9a8a9f', 'secondaryColor': '#1a1a2e', 'tertiaryColor': '#16213e', 'edgeLabelBackground': '#1a1a2e' }}}%%
+flowchart TD
+    subgraph FETCH["1 - FETCH"]
+        F1[("56 RSS Feeds<br/>7 categories")]
+        F2["Async Fetcher<br/><i>aiohttp + feedparser</i>"]
+        F3["Full Text Extraction<br/><i>trafilatura / ThreadPool</i>"]
+        F4[("Source Health DB<br/><i>success/failure tracking</i>")]
+        F1 --> F2
+        F2 -->|"~900 articles"| F3
+        F2 -.->|"record health"| F4
+    end
+
+    subgraph CURATE["2 - CURATE"]
+        C0[("Learned Weights<br/><i>from user feedback</i>")]
+        C1["Deduplicate<br/><i>TF-IDF cosine similarity</i>"]
+        C2["Score Articles<br/><i>category + keywords + reliability<br/>+ recency + content quality</i>"]
+        C3["Cross-Reference Bonus<br/><i>multi-source stories boosted</i>"]
+        C4["AI Summaries<br/><i>Ollama qwen2.5:14b</i>"]
+        C5["Organize into 7 Sections<br/><i>~52 articles total</i>"]
+        C6[("Article Relations DB<br/><i>same_story / related_topic</i>")]
+        C0 -.-> C2
+        C1 -->|"~840 unique"| C2
+        C1 -.->|"similarity pairs"| C6
+        C2 --> C3
+        C3 --> C4
+        C4 --> C5
+    end
+
+    subgraph SCRIPT["3 - SCRIPT (JARVIS)"]
+        J1["Generate Podcast Script<br/><i>Ollama qwen2.5:14b draft</i>"]
+        J2["Polish Script<br/><i>Claude Sonnet via OpenRouter<br/>~$0.03-0.05/run</i>"]
+        J3["prepare_for_tts()<br/><i>strip symbols/formatting</i>"]
+        J1 --> J2
+        J2 --> J3
+    end
+
+    subgraph OUTPUT["4 - OUTPUT"]
+        O1["edge-tts<br/><i>en-GB-RyanNeural</i>"]
+        O2["HTML Generator<br/><i>Jinja2 templates</i>"]
+        O3["Archive<br/><i>daily snapshots</i>"]
+        O4(["index.html<br/><b>GitHub Pages</b>"])
+        O5(["brief-en.mp3<br/><b>Audio Briefing</b>"])
+        O1 --> O5
+        O2 --> O4
+        O2 --> O3
+    end
+
+    F3 --> C1
+    C5 --> J1
+    C5 --> O2
+    J3 --> O1
+
+    style FETCH fill:#1a2a1a,stroke:#4a8a4a
+    style CURATE fill:#1a1a2e,stroke:#6a6aaa
+    style SCRIPT fill:#2a1a2e,stroke:#8a4a8a
+    style OUTPUT fill:#2a2a1a,stroke:#8a8a4a
+</pre>
+</div>
+
+<div class="diagram-section">
+<h2>Learning Feedback Loop</h2>
+<pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#2a2a4a', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#9a8a9f', 'lineColor': '#9a8a9f', 'secondaryColor': '#1a1a2e', 'tertiaryColor': '#16213e', 'edgeLabelBackground': '#1a1a2e' }}}%%
+flowchart LR
+    subgraph BROWSER["Browser (GitHub Pages)"]
+        B1["User reads briefing"]
+        B2["Clicks articles"]
+        B3["Like / Dislike buttons"]
+        B4[("localStorage<br/><i>clicks + feedback</i>")]
+        B5["Export Feedback<br/><i>JSON download</i>"]
+        B1 --> B2 & B3
+        B2 & B3 --> B4
+        B4 --> B5
+    end
+
+    subgraph IMPORT["Import"]
+        I1["import_feedback.py<br/><i>python -m src.import_feedback</i>"]
+    end
+
+    subgraph DB["SQLite Learning Engine"]
+        D1["article_engagement<br/><i>shown / clicked / feedback</i>"]
+        D2["click_history<br/><i>patterns by time/category</i>"]
+        D3["user_preferences<br/><i>category + keyword weights</i>"]
+        D4["feedback_log<br/><i>like/dislike history</i>"]
+        D5["Decay Engine<br/><i>stale weights fade</i>"]
+        D1 --> D3
+        D2 --> D3
+        D4 --> D3
+        D5 -.->|"every 30 days"| D3
+    end
+
+    subgraph SCORING["Next Pipeline Run"]
+        S1["get_learned_weights()"]
+        S2["Adjusted category multipliers<br/><i>0.1x to 3.0x</i>"]
+        S3["Keyword boost/penalty"]
+        S1 --> S2 & S3
+    end
+
+    B5 -->|"feedback.json"| I1
+    I1 -->|"record_click()<br/>record_feedback()"| D1 & D2 & D4
+    D3 --> S1
+
+    style BROWSER fill:#1a2a2a,stroke:#4a8a8a
+    style IMPORT fill:#2a2a1a,stroke:#8a8a4a
+    style DB fill:#1a1a2e,stroke:#6a6aaa
+    style SCORING fill:#2a1a2e,stroke:#8a4a8a
+</pre>
+</div>
+
+<div class="diagram-section">
+<h2>Data Sources (7 Categories)</h2>
+<pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#2a2a4a', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#9a8a9f', 'lineColor': '#9a8a9f', 'secondaryColor': '#1a1a2e', 'tertiaryColor': '#16213e' }}}%%
+flowchart LR
+    subgraph AI["AI & Tech (12)"]
+        direction TB
+        a1["TechCrunch AI"]
+        a2["MIT Tech Review"]
+        a3["Ars Technica"]
+        a4["ArXiv AI/ML"]
+        a5["Wired AI / Verge AI"]
+        a6["IEEE Spectrum"]
+    end
+
+    subgraph FIN["Finance (10)"]
+        direction TB
+        f1["Bloomberg Markets/Tech"]
+        f2["CNBC Markets"]
+        f3["Financial Times"]
+        f4["Yahoo Finance"]
+        f5["Seeking Alpha"]
+        f6["Economist Finance"]
+    end
+
+    subgraph GEO["Geopolitics (10)"]
+        direction TB
+        g1["BBC World"]
+        g2["Al Jazeera"]
+        g3["The Guardian"]
+        g4["Foreign Policy"]
+        g5["War on the Rocks"]
+        g6["The Diplomat"]
+    end
+
+    subgraph MTL["Montreal (6)"]
+        direction TB
+        m1["Montreal Gazette"]
+        m2["La Presse"]
+        m3["Cult MTL"]
+        m4["Montreal City News"]
+    end
+
+    subgraph QC["Quebec (5)"]
+        direction TB
+        q1["Radio-Canada"]
+        q2["Le Devoir"]
+        q3["TVA Nouvelles"]
+    end
+
+    subgraph CA["Canada (5)"]
+        direction TB
+        c1["Globe and Mail"]
+        c2["Toronto Star"]
+        c3["National Post"]
+        c4["BNN Bloomberg"]
+        c5["Global News"]
+    end
+
+    subgraph WC["Wildcards (4)"]
+        direction TB
+        w1["Hacker News"]
+        w2["Product Hunt"]
+        w3["Lobsters"]
+        w4["Slashdot"]
+    end
+
+    style AI fill:#1a2a1a,stroke:#4a8a4a
+    style FIN fill:#2a2a1a,stroke:#8a8a4a
+    style GEO fill:#2a1a1a,stroke:#8a4a4a
+    style MTL fill:#1a1a2e,stroke:#6a6aaa
+    style QC fill:#1a2a2a,stroke:#4a8a8a
+    style CA fill:#2a1a2e,stroke:#8a4a8a
+    style WC fill:#2a2a2a,stroke:#6a6a6a
+</pre>
+</div>
+
+<div class="diagram-section">
+<h2>Database Schema</h2>
+<pre class="mermaid">
+%%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#2a2a4a', 'primaryTextColor': '#e0e0e0', 'primaryBorderColor': '#9a8a9f', 'lineColor': '#9a8a9f', 'secondaryColor': '#1a1a2e', 'tertiaryColor': '#16213e' }}}%%
+erDiagram
+    article_cache {
+        text article_hash PK
+        text title
+        text summary
+        text ai_summary
+        text source
+        text category
+        text url
+        timestamp published_at
+        text keywords
+    }
+
+    article_engagement {
+        text article_hash PK
+        text title
+        text source
+        text category
+        int clicked
+        int feedback
+        timestamp shown_at
+    }
+
+    article_relations {
+        text article_hash FK
+        text related_hash FK
+        text relation_type
+        real similarity_score
+    }
+
+    click_history {
+        text article_hash FK
+        text category
+        text keywords
+        int hour_of_day
+        int day_of_week
+    }
+
+    feedback_log {
+        text article_hash FK
+        text feedback_type
+        text category
+        text keywords
+    }
+
+    user_preferences {
+        text category
+        text keyword
+        real weight
+        text source
+    }
+
+    source_health {
+        text source_name PK
+        text url
+        int success_count
+        int failure_count
+        int avg_articles
+    }
+
+    article_cache ||--o{ article_relations : "has relations"
+    article_cache ||--o{ article_engagement : "tracked"
+    article_engagement ||--o{ click_history : "clicks"
+    article_engagement ||--o{ feedback_log : "feedback"
+    feedback_log }o--|| user_preferences : "adjusts"
+    click_history }o--|| user_preferences : "adjusts"
+</pre>
+</div>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+</script>
+</body>
+</html>
