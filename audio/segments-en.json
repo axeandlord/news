@@ -1,35 +1,124 @@
 {
-  "generated_at": "2026-02-07T00:30:40.510514+00:00",
+  "generated_at": "2026-02-07T15:34:52.656146+00:00",
   "segments": [
     {
       "index": 0,
-      "section": "Full Briefing",
+      "section": "Introduction",
       "file": "audio/segment-en-0.mp3",
-      "duration": 288.1,
+      "duration": 38.7,
+      "article_hashes": []
+    },
+    {
+      "index": 1,
+      "section": "Introduction",
+      "file": "audio/segment-en-1.mp3",
+      "duration": 25.5,
+      "article_hashes": []
+    },
+    {
+      "index": 2,
+      "section": "AI Advancements",
+      "file": "audio/segment-en-2.mp3",
+      "duration": 25.2,
       "article_hashes": [
-        "a628acbfee5bde61",
-        "19efe164445ef6da",
-        "2ba156947e12594e",
-        "f6e528254db40ac5",
-        "8e39297c4d2ec1fd",
-        "6cffa0745baa6310",
-        "f7acbd2affe6256d",
-        "1392c5b25d23fa1a",
-        "84242138a4dccb9e",
-        "438896eee85f5b5c",
-        "3d1d14a90166ffce",
-        "7d47bbf24d811d84",
-        "d87f6800d3f0f332",
-        "574fbef82ff6b8f7",
-        "14a3c3cba74b29ef",
-        "6b76e68d80c92286",
-        "3d8d2e94d0c6b940",
-        "730f40c00383f51b",
-        "e3ee080fc0e80154",
-        "4cda6314a41595b8",
-        "dd1a2fcb693581d0",
-        "58304864700598a1"
+        "35dd1d9a6d016758",
+        "d45b8131979530b6",
+        "85e32cc714f0ee9e",
+        "2f247ea0d74744dc"
       ]
+    },
+    {
+      "index": 3,
+      "section": "AI Research",
+      "file": "audio/segment-en-3.mp3",
+      "duration": 28.5,
+      "article_hashes": [
+        "35dd1d9a6d016758",
+        "d45b8131979530b6",
+        "85e32cc714f0ee9e",
+        "2f247ea0d74744dc"
+      ]
+    },
+    {
+      "index": 4,
+      "section": "Finance and Markets",
+      "file": "audio/segment-en-4.mp3",
+      "duration": 27.5,
+      "article_hashes": [
+        "4ac470428c52dfd6",
+        "2a4c1d2ed654af82",
+        "427cb30dc1f846eb"
+      ]
+    },
+    {
+      "index": 5,
+      "section": "Financial Outlook",
+      "file": "audio/segment-en-5.mp3",
+      "duration": 22.8,
+      "article_hashes": []
+    },
+    {
+      "index": 6,
+      "section": "Geopolitical Developments",
+      "file": "audio/segment-en-6.mp3",
+      "duration": 16.6,
+      "article_hashes": []
+    },
+    {
+      "index": 7,
+      "section": "Sports",
+      "file": "audio/segment-en-7.mp3",
+      "duration": 23.3,
+      "article_hashes": []
+    },
+    {
+      "index": 8,
+      "section": "City News",
+      "file": "audio/segment-en-8.mp3",
+      "duration": 19.7,
+      "article_hashes": []
+    },
+    {
+      "index": 9,
+      "section": "International Relations",
+      "file": "audio/segment-en-9.mp3",
+      "duration": 17.2,
+      "article_hashes": []
+    },
+    {
+      "index": 10,
+      "section": "Olympic Updates",
+      "file": "audio/segment-en-10.mp3",
+      "duration": 17.2,
+      "article_hashes": []
+    },
+    {
+      "index": 11,
+      "section": "Diplomatic Landscape",
+      "file": "audio/segment-en-11.mp3",
+      "duration": 18.7,
+      "article_hashes": []
+    },
+    {
+      "index": 12,
+      "section": "Diplomatic Leadership",
+      "file": "audio/segment-en-12.mp3",
+      "duration": 19.5,
+      "article_hashes": []
+    },
+    {
+      "index": 13,
+      "section": "Auto Industry Strategy",
+      "file": "audio/segment-en-13.mp3",
+      "duration": 25.5,
+      "article_hashes": []
+    },
+    {
+      "index": 14,
+      "section": "Tech Trends",
+      "file": "audio/segment-en-14.mp3",
+      "duration": 5.7,
+      "article_hashes": []
     }
   ]
 }
