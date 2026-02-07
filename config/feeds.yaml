@@ -57,6 +57,11 @@ sources:
       language: en
       reliability: 0.80
 
+    - name: GitHub Trending
+      url: https://mshibanami.github.io/GitHubTrendingRSS/daily/all.xml
+      language: en
+      reliability: 0.70
+
     - name: ScienceDaily Robotics
       url: https://www.sciencedaily.com/rss/computers_math/robotics.xml
       language: en

@@ -71,17 +71,25 @@ def main():
     # Step 3: Generate TTS audio (optional)
     audio_file = None
     audio_file_fr = None
+    segments_en = None
+    segments_fr = None
+    en_segments_list = None
     if not args.no_tts:
         print("\n[3/5] Generating audio brief...")
-        audio_file, en_briefing = generate_audio_brief(sections)
+        audio_file, en_segments_list, segments_en = generate_audio_brief(sections)
         if audio_file:
             print(f"  English audio: {audio_file}")
+            # Record segments in DB for heard tracking
+            if segments_en and segments_en.get("segments"):
+                from src.database import record_briefing_segments
+                briefing_id = segments_en.get("generated_at", "unknown")
+                record_briefing_segments(briefing_id, segments_en["segments"])
         else:
             print("  English audio generation skipped or failed")
 
-        # Generate French audio (translate English briefing)
+        # Generate French audio (translate per-segment)
         print("  Generating French audio brief...")
-        audio_file_fr = generate_audio_brief_fr(sections, en_briefing=en_briefing)
+        audio_file_fr, segments_fr = generate_audio_brief_fr(sections, en_segments=en_segments_list)
         if audio_file_fr:
             print(f"  French audio: {audio_file_fr}")
         else:
@@ -91,7 +99,14 @@ def main():
 
     # Step 4: Generate HTML
     print("\n[4/5] Generating HTML...")
-    generate_html(sections, audio_file=audio_file, audio_file_fr=audio_file_fr, output_path=args.output)
+    generate_html(
+        sections,
+        audio_file=audio_file,
+        audio_file_fr=audio_file_fr,
+        segments_en=segments_en,
+        segments_fr=segments_fr,
+        output_path=args.output,
+    )
 
     # Step 5: Archive today's brief
     print("\n[5/5] Archiving brief...")

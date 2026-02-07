@@ -14,6 +14,7 @@ import os
 import random
 import re
 import subprocess
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
@@ -21,6 +22,15 @@ import httpx
 import yaml
 
 from .curator import CuratedArticle
+
+
+@dataclass
+class BriefingSegment:
+    """A single topic segment of the audio briefing."""
+    section_name: str           # "AI & Technology"
+    text: str                   # TTS-ready text
+    article_hashes: list[str] = field(default_factory=list)
+    segment_index: int = 0
 
 # Local Ollama API (free, uses local GPU)
 OLLAMA_API_URL = "http://localhost:11434/api/chat"
@@ -232,7 +242,13 @@ ABSOLUTE TTS RULES (text-to-speech will sound terrible otherwise):
 CONTEXT:
 {chr(10).join(f"- {c}" for c in context_notes[:4]) if context_notes else "- Tech-savvy listener who appreciates depth over breadth"}
 
-OUTPUT: Pure spoken text. No formatting. No metadata. Just words that flow naturally when read aloud."""
+SECTION MARKERS (required for audio segmentation):
+- Before each topic section, insert exactly [SECTION: Section Name] on its own line
+- Use the section names from the story categories provided
+- First section should be [SECTION: Introduction] (for greeting + hook)
+- Last section should be [SECTION: Wrap-up] (for closing thoughts)
+
+OUTPUT: Pure spoken text with section markers. No other formatting. No metadata. Just words that flow naturally when read aloud."""
 
     # Build structured news content
     stories_text = []
@@ -282,15 +298,101 @@ Here are today's stories:
 
 Now write a natural, flowing podcast script (about 15 minutes when read aloud). Start with the greeting above, then hook immediately with the most compelling story. Weave connections between stories where they exist. End with a brief, thoughtful wrap-up.
 
-Remember: pure spoken text only, no symbols, no structure, no formatting. Write it exactly as you'd speak it to a smart friend."""
+Remember: pure spoken text only, no symbols, no structure, no formatting. Write it exactly as you'd speak it to a smart friend. Insert [SECTION: Name] markers between topic sections."""
 
     return system_prompt, user_prompt
+
+
+def split_script_into_segments(
+    raw_script: str,
+    sections: dict[str, list[CuratedArticle]],
+) -> list[BriefingSegment]:
+    """Split an AI-generated script into BriefingSegments using [SECTION: ...] markers.
+
+    Falls back to a single segment if no markers found.
+    """
+    # Build a map of section name -> article hashes
+    section_hashes = {}
+    for section_name, articles in sections.items():
+        section_hashes[section_name.lower()] = [
+            a.article.article_hash for a in articles
+        ]
+
+    # Split on [SECTION: Name] markers
+    parts = re.split(r'\[SECTION:\s*([^\]]+)\]', raw_script)
+
+    # parts = [text_before_first_marker, name1, text1, name2, text2, ...]
+    # If no markers found, parts has just one element
+    if len(parts) < 3:
+        # No markers - return single segment with all hashes
+        all_hashes = []
+        for hashes in section_hashes.values():
+            all_hashes.extend(hashes)
+        return [BriefingSegment(
+            section_name="Full Briefing",
+            text=prepare_for_tts(raw_script.strip()),
+            article_hashes=all_hashes,
+            segment_index=0,
+        )]
+
+    segments = []
+    idx = 0
+
+    # Handle any text before the first marker as intro
+    preamble = parts[0].strip()
+    if preamble:
+        segments.append(BriefingSegment(
+            section_name="Introduction",
+            text=prepare_for_tts(preamble),
+            article_hashes=[],
+            segment_index=idx,
+        ))
+        idx += 1
+
+    # Process marker/text pairs
+    for i in range(1, len(parts), 2):
+        name = parts[i].strip()
+        text = parts[i + 1].strip() if i + 1 < len(parts) else ""
+        if not text:
+            continue
+
+        # Match section name to article hashes (fuzzy, accumulate all matches)
+        hashes = []
+        name_lower = name.lower()
+        for sec_name, sec_hashes in section_hashes.items():
+            # Check substring match (either direction)
+            if sec_name in name_lower or name_lower in sec_name:
+                hashes.extend(sec_hashes)
+                continue
+            # Partial word match (any shared word)
+            sec_words = set(sec_name.replace("&", "").split())
+            name_words = set(name_lower.replace("&", "").split())
+            if sec_words & name_words:
+                hashes.extend(sec_hashes)
+        # Deduplicate while preserving order
+        seen = set()
+        unique_hashes = []
+        for h in hashes:
+            if h not in seen:
+                seen.add(h)
+                unique_hashes.append(h)
+        hashes = unique_hashes
+
+        segments.append(BriefingSegment(
+            section_name=name,
+            text=prepare_for_tts(text),
+            article_hashes=hashes,
+            segment_index=idx,
+        ))
+        idx += 1
+
+    return segments
 
 
 def generate_jarvis_briefing(
     sections: dict[str, list[CuratedArticle]],
     persona_path: str = "config/persona.yaml",
-) -> str:
+) -> list[BriefingSegment]:
     """
     Generate a complete JARVIS-style news briefing using the multi-pass pipeline.
 
@@ -347,7 +449,9 @@ def generate_jarvis_briefing(
         briefing = _try_openrouter(system_prompt, user_prompt, api_key, model=SCRIPT_MODEL)
         if briefing:
             print(f"  Script generated with {SCRIPT_MODEL} ({len(briefing)} chars)")
-            return prepare_for_tts(briefing)
+            segments = split_script_into_segments(briefing, limited_sections)
+            print(f"  Split into {len(segments)} segments")
+            return segments
         print("  [WARN] OpenRouter failed, trying Ollama fallback")
     else:
         print("  [WARN] No OpenRouter API key found, using Ollama")
@@ -366,16 +470,18 @@ Here's what happened today:
 {"STORY CONNECTIONS: " + cross_refs if cross_refs else ""}
 
 Write a natural podcast briefing about 12-15 minutes long. Start with the greeting: "{time_ctx.get('greeting', 'Good morning sir.')}"
-Pure spoken text, no symbols, no formatting. Hook with the best story first. Connect related stories where natural."""
+Pure spoken text, no symbols, no formatting. Hook with the best story first. Connect related stories where natural. Insert [SECTION: Name] markers between topic sections."""
 
         briefing = _call_ollama(old_user, system_prompt=old_system, max_tokens=8000, temperature=0.7)
         if briefing:
             print(f"  Generated briefing with Ollama ({LOCAL_MODEL})")
-            return prepare_for_tts(briefing)
+            segments = split_script_into_segments(briefing, limited_sections)
+            print(f"  Split into {len(segments)} segments")
+            return segments
 
     # Final fallback to template
     print("  [WARN] AI unavailable, using template style")
-    return generate_template_briefing(sections, persona, time_ctx)
+    return _build_template_segments(sections, persona, time_ctx)
 
 
 # ============================================================
@@ -482,7 +588,9 @@ WHAT MAKES IT GOOD:
 - Connect dots between related stories naturally
 - {user_name} knows about: {', '.join(expert_topics[:3]) if expert_topics else 'AI, tech'} - skip basic explanations
 
-OUTPUT: Pure spoken text. No formatting. No metadata. Just words that sound natural when read aloud."""
+SECTION MARKERS: Insert [SECTION: Section Name] on its own line before each topic section. Start with [SECTION: Introduction], end with [SECTION: Wrap-up].
+
+OUTPUT: Pure spoken text with section markers. No other formatting. No metadata. Just words that sound natural when read aloud."""
 
 
 # ============================================================
@@ -689,6 +797,86 @@ def generate_template_briefing(
     parts.append(closing)
 
     return prepare_for_tts("\n".join(parts))
+
+
+def _build_template_segments(
+    sections: dict[str, list[CuratedArticle]],
+    persona: dict,
+    time_ctx: dict,
+) -> list[BriefingSegment]:
+    """Build segments from the template fallback, one per section."""
+    # Use template to get full text, then split by section
+    # We'll build segments directly for better control
+    greetings = {
+        "morning": "Good morning sir.",
+        "morning_early": "Good morning sir.",
+        "afternoon": "Good afternoon sir.",
+        "evening": "Good evening sir.",
+        "late_night": "Evening sir.",
+    }
+
+    openings = [
+        "Here's what's going on.",
+        "Let me catch you up.",
+        "Here's what you need to know.",
+    ]
+
+    closings = [
+        "That's the rundown.",
+        "That covers the main points.",
+        "That's what you need to know.",
+    ]
+
+    greeting = greetings.get(time_ctx.get("time_of_day", "evening"), "Hello sir.")
+    opening = random.choice(openings)
+
+    segments = []
+    idx = 0
+
+    # Introduction segment
+    segments.append(BriefingSegment(
+        section_name="Introduction",
+        text=prepare_for_tts(f"{greeting} {opening}"),
+        article_hashes=[],
+        segment_index=idx,
+    ))
+    idx += 1
+
+    # One segment per section
+    for section_name, articles in sections.items():
+        if not articles:
+            continue
+
+        parts = []
+        for i, item in enumerate(articles):
+            article = item.article
+            summary = clean_summary(item.ai_summary or article.summary or "")
+            title = clean_summary(article.title).rstrip(".").strip()
+            source = article.source
+
+            if summary:
+                parts.append(f"{title}. {summary} That's from {source}.")
+            else:
+                parts.append(f"{title}. Via {source}.")
+
+        hashes = [a.article.article_hash for a in articles]
+        segments.append(BriefingSegment(
+            section_name=section_name,
+            text=prepare_for_tts(" ".join(parts)),
+            article_hashes=hashes,
+            segment_index=idx,
+        ))
+        idx += 1
+
+    # Closing segment
+    segments.append(BriefingSegment(
+        section_name="Wrap-up",
+        text=prepare_for_tts(random.choice(closings)),
+        article_hashes=[],
+        segment_index=idx,
+    ))
+
+    return segments
 
 
 # ============================================================

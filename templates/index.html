@@ -12,6 +12,12 @@
     <meta name="duration-fr" content="{{ duration_fr }}">
 </head>
 <body>
+    <!-- Segment data for playlist-mode player -->
+    <script>
+        window.BRIEF_SEGMENTS_EN = {{ segments_en_json|safe }};
+        window.BRIEF_SEGMENTS_FR = {{ segments_fr_json|safe }};
+    </script>
+
     <!-- Sticky Player (hidden by default, shows on scroll) -->
     <div class="sticky-player">
         <span class="logo">BRIEF</span>
@@ -23,7 +29,13 @@
         <div class="sticky-progress">
             <div class="sticky-progress-fill"></div>
         </div>
+        <span class="sticky-segment-label"></span>
         <button class="sticky-speed">1x</button>
+    </div>
+
+    <!-- Completion banner -->
+    <div id="completionBanner" class="completion-banner" style="display:none">
+        Briefing complete! Generating fresh news...
     </div>
 
     <!-- Pipeline progress bar -->
@@ -77,12 +89,13 @@
         </p>
 
         <div class="playback-controls">
-            <button class="skip-btn skip-back" aria-label="Back 15 seconds">
-                <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            <button class="skip-btn skip-back" aria-label="Previous segment">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
             </button>
             <span class="time-display">0:00 / 0:00</span>
-            <button class="skip-btn skip-forward" aria-label="Forward 15 seconds">
-                <svg viewBox="0 0 24 24"><path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/><text x="12" y="15" font-size="7" text-anchor="middle">15</text></svg>
+            <span class="segment-label" id="segmentLabel"></span>
+            <button class="skip-btn skip-forward" aria-label="Next segment">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
             </button>
             <button class="speed-btn">1x</button>
         </div>
@@ -91,6 +104,7 @@
             <div class="progress-bar">
                 <div class="progress-fill"></div>
                 <div class="progress-handle"></div>
+                <div class="segment-ticks" id="segmentTicks"></div>
             </div>
         </div>
 
@@ -208,7 +222,7 @@
     <script src="static/js/feedback.js"></script>
     <script src="static/js/refresh.js"></script>
     <script>
-    // Language toggle for EN/FR audio
+    // Language toggle for EN/FR audio + segments
     (function() {
         var toggle = document.querySelector('.lang-toggle');
         if (!toggle) return;
@@ -234,11 +248,15 @@
             // Stop current playback
             audio.pause();
             audio.currentTime = 0;
+
             if (player) {
                 player.isPlaying = false;
                 player.playBtn.classList.remove('playing');
                 player.checkedAnalyser = false;
                 player.analyserWorking = false;
+
+                // Swap segments data
+                player.loadSegments(lang === 'fr' ? window.BRIEF_SEGMENTS_FR : window.BRIEF_SEGMENTS_EN);
             }
 
             // Swap source on same element (preserves Web Audio connection)

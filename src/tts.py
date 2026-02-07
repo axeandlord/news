@@ -1,142 +1,208 @@
 """Text-to-Speech generation for news briefings.
 
-Uses XTTS v2 for high-quality British voice synthesis.
-Falls back to edge-tts if XTTS unavailable.
+Generates per-segment MP3 files for playlist-mode playback,
+plus a combined MP3 for backward compatibility.
+Falls back to edge-tts (Microsoft Azure neural voices).
 """
 
 import asyncio
+import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .curator import CuratedArticle
-from .jarvis import generate_jarvis_briefing
+from .jarvis import generate_jarvis_briefing, BriefingSegment
 
 
 def generate_audio_brief(
     sections: dict[str, list[CuratedArticle]],
     output_dir: str = "audio",
-    use_xtts: bool = False,  # Disabled - edge-tts sounds more natural
-) -> tuple[str | None, str | None]:
+) -> tuple[str | None, list[BriefingSegment] | None, dict | None]:
     """
     Generate JARVIS-style audio briefing from curated articles.
 
-    Uses AI to create personalized, intelligent briefings with personality,
-    then converts to speech using XTTS v2.
-
-    Args:
-        sections: Dict of section name to curated articles
-        output_dir: Directory to save audio files
-        use_xtts: Whether to use XTTS (True) or edge-tts fallback (False)
+    Generates per-segment MP3s + combined MP3 + segments metadata JSON.
 
     Returns:
-        Tuple of (path to audio file, briefing text) or (None, None) if failed.
+        Tuple of (combined_audio_path, segments_list, segments_metadata)
+        or (None, None, None) if failed.
     """
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    # Generate the JARVIS briefing text
+    # Generate the JARVIS briefing segments
     print("Generating JARVIS-style briefing...")
-    briefing = generate_jarvis_briefing(sections)
+    segments = generate_jarvis_briefing(sections)
 
-    if not briefing.strip():
-        print("  [WARN] No briefing text generated")
-        return None, None
+    if not segments:
+        print("  [WARN] No briefing segments generated")
+        return None, None, None
 
-    # Generate audio
-    wav_path = output_path / "brief-en.wav"
-    mp3_path = output_path / "brief-en.mp3"
+    # Check we have actual text
+    total_text = sum(len(s.text) for s in segments)
+    if total_text < 10:
+        print("  [WARN] Briefing segments have no text")
+        return None, None, None
 
-    success = False
+    # Generate per-segment audio
+    print(f"  Generating audio for {len(segments)} segments...")
+    from .audio_processor import process_audio, get_audio_info, get_audio_duration
 
-    if use_xtts:
-        print("Converting to speech with XTTS v2...")
-        success = _generate_xtts(briefing, str(wav_path))
+    segment_mp3s = []
+    segment_meta = []
 
-    if not success:
-        print("Converting to speech with edge-tts fallback...")
-        success = asyncio.run(_generate_edge_tts(briefing, str(wav_path)))
+    for seg in segments:
+        if not seg.text.strip():
+            continue
 
-    if not success:
-        print("  [WARN] Speech generation failed")
-        return None, briefing
+        wav_path = output_path / f"segment-en-{seg.segment_index}.wav"
+        mp3_path = output_path / f"segment-en-{seg.segment_index}.mp3"
 
-    # Post-process audio
-    print("Post-processing audio...")
-    from .audio_processor import process_audio, get_audio_info
+        # Generate TTS for this segment
+        success = asyncio.run(_generate_edge_tts(seg.text, str(wav_path)))
+        if not success:
+            print(f"    [WARN] TTS failed for segment {seg.segment_index}: {seg.section_name}")
+            continue
 
-    if not process_audio(str(wav_path), str(mp3_path)):
-        # Try direct copy if processing fails
+        # Post-process to MP3
+        if not process_audio(str(wav_path), str(mp3_path)):
+            import shutil
+            shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
+            mp3_path = mp3_path.with_suffix('.wav')
+
+        # Clean up WAV
+        if mp3_path.exists() and wav_path.exists():
+            wav_path.unlink()
+
+        # Get duration
+        duration = get_audio_duration(str(mp3_path))
+
+        segment_mp3s.append(str(mp3_path))
+        segment_meta.append({
+            "index": seg.segment_index,
+            "section": seg.section_name,
+            "file": f"audio/{mp3_path.name}",
+            "duration": round(duration, 1),
+            "article_hashes": seg.article_hashes,
+        })
+
+        print(f"    Segment {seg.segment_index} ({seg.section_name}): {duration:.1f}s")
+
+    if not segment_mp3s:
+        print("  [WARN] No segment audio generated")
+        return None, segments, None
+
+    # Concatenate all segments into combined MP3
+    combined_path = output_path / "brief-en.mp3"
+    from .audio_processor import concatenate_segments
+    if not concatenate_segments(segment_mp3s, str(combined_path)):
+        # If concat fails, use first segment as fallback
         import shutil
-        shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
-        mp3_path = mp3_path.with_suffix('.wav')
+        shutil.copy(segment_mp3s[0], combined_path)
 
-    # Clean up WAV if MP3 exists
-    if mp3_path.exists() and wav_path.exists():
-        wav_path.unlink()
+    # Build and write segments metadata JSON
+    segments_metadata = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "segments": segment_meta,
+    }
+    meta_path = output_path / "segments-en.json"
+    meta_path.write_text(json.dumps(segments_metadata, indent=2))
 
-    # Log info
-    info = get_audio_info(str(mp3_path))
+    # Log combined info
+    info = get_audio_info(str(combined_path))
     if info:
-        print(f"  Audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
+        print(f"  Combined audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
+    print(f"  Segments metadata: {meta_path}")
 
-    return f"audio/{mp3_path.name}", briefing
+    return f"audio/{combined_path.name}", segments, segments_metadata
 
 
 def generate_audio_brief_fr(
     sections: dict[str, list[CuratedArticle]],
-    en_briefing: str | None = None,
+    en_segments: list[BriefingSegment] | None = None,
     output_dir: str = "audio",
-) -> str | None:
+) -> tuple[str | None, dict | None]:
     """
-    Generate French audio briefing by translating the English script.
+    Generate French audio briefing by translating per-segment.
 
-    Uses Ollama to translate, then edge-tts with Quebec French voice.
+    Translates each segment individually (shorter = better quality),
+    then generates per-segment French audio + combined.
+
+    Returns:
+        Tuple of (combined_audio_path, segments_metadata) or (None, None).
     """
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    # Get English briefing text if not provided
-    if not en_briefing:
-        from .jarvis import generate_jarvis_briefing
-        en_briefing = generate_jarvis_briefing(sections)
+    if not en_segments:
+        print("  [WARN] No English segments to translate")
+        return None, None
 
-    if not en_briefing or not en_briefing.strip():
-        print("  [WARN] No English briefing to translate")
-        return None
+    from .audio_processor import process_audio, get_audio_info, get_audio_duration, concatenate_segments
 
-    # Translate to French via Ollama
-    print("  Translating briefing to French...")
-    fr_briefing = _translate_to_french(en_briefing)
-    if not fr_briefing:
-        print("  [WARN] French translation failed")
-        return None
+    segment_mp3s = []
+    segment_meta = []
 
-    # Generate French audio
-    wav_path = output_path / "brief-fr.wav"
-    mp3_path = output_path / "brief-fr.mp3"
+    for seg in en_segments:
+        if not seg.text.strip():
+            continue
 
-    print("  Converting French text to speech...")
-    success = asyncio.run(_generate_edge_tts_fr(fr_briefing, str(wav_path)))
+        # Translate this segment
+        fr_text = _translate_to_french(seg.text)
+        if not fr_text:
+            print(f"    [WARN] Translation failed for segment {seg.segment_index}")
+            continue
 
-    if not success:
-        print("  [WARN] French speech generation failed")
-        return None
+        wav_path = output_path / f"segment-fr-{seg.segment_index}.wav"
+        mp3_path = output_path / f"segment-fr-{seg.segment_index}.mp3"
 
-    # Post-process audio
-    from .audio_processor import process_audio, get_audio_info
+        # Generate French TTS
+        success = asyncio.run(_generate_edge_tts_fr(fr_text, str(wav_path)))
+        if not success:
+            continue
 
-    if not process_audio(str(wav_path), str(mp3_path)):
+        # Post-process to MP3
+        if not process_audio(str(wav_path), str(mp3_path)):
+            import shutil
+            shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
+            mp3_path = mp3_path.with_suffix('.wav')
+
+        if mp3_path.exists() and wav_path.exists():
+            wav_path.unlink()
+
+        duration = get_audio_duration(str(mp3_path))
+        segment_mp3s.append(str(mp3_path))
+        segment_meta.append({
+            "index": seg.segment_index,
+            "section": seg.section_name,
+            "file": f"audio/{mp3_path.name}",
+            "duration": round(duration, 1),
+            "article_hashes": seg.article_hashes,
+        })
+
+    if not segment_mp3s:
+        print("  [WARN] No French segment audio generated")
+        return None, None
+
+    # Concatenate into combined French MP3
+    combined_path = output_path / "brief-fr.mp3"
+    if not concatenate_segments(segment_mp3s, str(combined_path)):
         import shutil
-        shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
-        mp3_path = mp3_path.with_suffix('.wav')
+        shutil.copy(segment_mp3s[0], combined_path)
 
-    if mp3_path.exists() and wav_path.exists():
-        wav_path.unlink()
+    # Write French segments metadata
+    segments_metadata = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "segments": segment_meta,
+    }
+    meta_path = output_path / "segments-fr.json"
+    meta_path.write_text(json.dumps(segments_metadata, indent=2))
 
-    info = get_audio_info(str(mp3_path))
+    info = get_audio_info(str(combined_path))
     if info:
         print(f"  French audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
 
-    return f"audio/{mp3_path.name}"
+    return f"audio/{combined_path.name}", segments_metadata
 
 
 def _translate_to_french(text: str) -> str | None:
@@ -158,7 +224,6 @@ def _translate_to_french(text: str) -> str | None:
         )
         if response.status_code == 200:
             result = response.json()["message"]["content"]
-            print(f"    Translated ({len(result)} chars)")
             return result
     except Exception as e:
         print(f"    [WARN] Translation error: {e}")
@@ -173,7 +238,6 @@ async def _generate_edge_tts_fr(text: str, output_path: str) -> bool:
         print("  [WARN] edge-tts not installed")
         return False
 
-    # Quebec French male voice - natural and warm
     voice = "fr-CA-AntoineNeural"
     rate = "+5%"
     pitch = "+0Hz"
@@ -181,77 +245,28 @@ async def _generate_edge_tts_fr(text: str, output_path: str) -> bool:
     try:
         communicate = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
         await communicate.save(output_path)
-        print(f"  Generated {output_path} (edge-tts: {voice})")
         return True
     except Exception as e:
         print(f"  [WARN] French edge-tts error: {e}")
         return False
 
 
-def _generate_xtts(text: str, output_path: str) -> bool:
-    """Generate speech using XTTS v2."""
-    try:
-        from .tts_xtts import generate_xtts
-        return generate_xtts(text, output_path)
-    except ImportError as e:
-        print(f"  [WARN] XTTS not available: {e}")
-        return False
-    except Exception as e:
-        print(f"  [WARN] XTTS error: {e}")
-        return False
-
-
 async def _generate_edge_tts(text: str, output_path: str) -> bool:
-    """Generate speech using edge-tts (Microsoft Azure neural voices).
-
-    These are high-quality neural voices that sound very natural.
-    """
+    """Generate speech using edge-tts (Microsoft Azure neural voices)."""
     try:
         import edge_tts
     except ImportError:
         print("  [WARN] edge-tts not installed")
         return False
 
-    # British male voice - natural, warm, professional
     voice = "en-GB-RyanNeural"
-
-    # Slightly faster for natural flow - tested as best balance
     rate = "+10%"
     pitch = "+0Hz"
 
     try:
         communicate = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
         await communicate.save(output_path)
-        print(f"  Generated {output_path} (edge-tts: {voice})")
         return True
     except Exception as e:
         print(f"  [WARN] edge-tts error: {e}")
         return False
-
-
-if __name__ == "__main__":
-    # Test
-    from .fetcher import Article
-    from datetime import datetime, timezone
-
-    test_article = Article(
-        title="OpenAI announces new model",
-        link="https://example.com",
-        summary="OpenAI has announced a new language model with improved reasoning capabilities.",
-        source="TechCrunch",
-        published=datetime.now(timezone.utc),
-        category="tech_ai",
-        language="en",
-        reliability=0.8,
-    )
-
-    test_curated = CuratedArticle(
-        article=test_article,
-        score=0.9,
-        ai_summary="OpenAI unveiled a new AI model today with significantly improved reasoning.",
-        why_it_matters="This could change how developers build AI applications.",
-    )
-
-    sections = {"Top Stories": [test_curated]}
-    result = generate_audio_brief(sections)
-    print(f"Result: {result}")

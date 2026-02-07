@@ -15,6 +15,8 @@ def generate_html(
     sections: dict[str, list[CuratedArticle]],
     audio_file: str | None = None,
     audio_file_fr: str | None = None,
+    segments_en: dict | None = None,
+    segments_fr: dict | None = None,
     output_path: str = "index.html"
 ) -> str:
     """
@@ -67,10 +69,13 @@ def generate_html(
                 duration_fr = info_fr["duration_str"]
 
     # Render template
+    import json
     html = template.render(
         sections=sections,
         audio_file=audio_file,
         audio_file_fr=audio_file_fr,
+        segments_en_json=json.dumps(segments_en) if segments_en else "null",
+        segments_fr_json=json.dumps(segments_fr) if segments_fr else "null",
         date_display=date_display,
         article_count=article_count,
         duration=duration,

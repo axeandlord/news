@@ -17,11 +17,11 @@ from pydantic import BaseModel
 
 # Ensure src package is importable
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from src.database import init_database, record_click, record_feedback
+from src.database import init_database, record_click, record_feedback, mark_segments_heard
 
 PROJECT_ROOT = Path(__file__).parent.parent
 WEBHOOK_TOKEN = os.environ.get("BRIEF_WEBHOOK_TOKEN", "")
-RATE_LIMIT_SECONDS = 600  # 10 minutes between runs
+RATE_LIMIT_SECONDS = 300  # 5 minutes between runs
 
 STEP_LABELS = {
     1: "Fetching RSS feeds",
@@ -111,6 +111,19 @@ async def feedback(event: FeedbackEvent):
         record_feedback(event.hash, event.action, event.category)
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
+    return {"status": "ok"}
+
+
+class HeardEvent(BaseModel):
+    heard_hashes: list[str]
+
+
+@app.post("/heard")
+async def report_heard(event: HeardEvent):
+    """Record which briefing segments the user has listened to."""
+    if not event.heard_hashes:
+        raise HTTPException(status_code=400, detail="No hashes provided")
+    mark_segments_heard(event.heard_hashes)
     return {"status": "ok"}
 
 

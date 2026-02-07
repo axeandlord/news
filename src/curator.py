@@ -17,6 +17,7 @@ from .database import (
     cache_article,
     decay_old_preferences,
     record_article_relation,
+    get_heard_article_hashes,
 )
 from .utils.reliability import calculate_cross_reference_bonus
 
@@ -361,6 +362,15 @@ def curate_articles(
 
     scored.sort(key=lambda c: c.score, reverse=True)
     print(f"  {len(scored)} articles above threshold")
+
+    # Exclude already-heard articles
+    heard_hashes = get_heard_article_hashes(hours=12)
+    if heard_hashes:
+        before = len(scored)
+        scored = [c for c in scored if c.article.article_hash not in heard_hashes]
+        excluded = before - len(scored)
+        if excluded > 0:
+            print(f"  Excluded {excluded} already-heard articles")
 
     # Cross-reference bonus: reward stories covered by multiple sources
     cross_ref_weight = scoring_config.get("cross_reference_bonus", 0.15)

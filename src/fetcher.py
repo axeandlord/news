@@ -223,6 +223,12 @@ async def extract_full_texts(
                 article.full_text = article.summary[:3000]
             return article
 
+        # GitHub repos (trending): use RSS summary (repo description + stats)
+        if 'github.com' in article.link and '/trending' not in article.link:
+            if article.summary and len(article.summary) > 50:
+                article.full_text = article.summary[:3000]
+            return article
+
         try:
             downloaded = trafilatura.fetch_url(article.link)
             if downloaded:

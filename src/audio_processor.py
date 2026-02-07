@@ -86,6 +86,58 @@ def process_audio(
         return False
 
 
+def concatenate_segments(paths: list[str], output: str) -> bool:
+    """Concatenate multiple MP3 files into one using ffmpeg concat demuxer.
+
+    Args:
+        paths: List of MP3 file paths in order
+        output: Output file path
+
+    Returns:
+        True if successful
+    """
+    if not paths:
+        return False
+
+    if len(paths) == 1:
+        import shutil
+        shutil.copy(paths[0], output)
+        return True
+
+    # Write concat list file
+    list_path = Path(output).parent / "concat_list.txt"
+    try:
+        with open(list_path, "w") as f:
+            for p in paths:
+                # ffmpeg concat requires absolute paths with escaped quotes
+                f.write(f"file '{Path(p).absolute()}'\n")
+
+        cmd = [
+            "ffmpeg", "-y",
+            "-f", "concat",
+            "-safe", "0",
+            "-i", str(list_path),
+            "-c", "copy",
+            str(output),
+        ]
+
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+
+        if result.returncode == 0:
+            print(f"  Concatenated {len(paths)} segments into {output}")
+            return True
+        else:
+            print(f"  [WARN] Concat error: {result.stderr[-300:]}")
+            return False
+
+    except Exception as e:
+        print(f"  [WARN] Concat error: {e}")
+        return False
+    finally:
+        if list_path.exists():
+            list_path.unlink()
+
+
 def get_audio_duration(path: str) -> float:
     """Get audio duration in seconds."""
     cmd = [

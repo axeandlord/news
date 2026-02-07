@@ -138,12 +138,26 @@ def init_database():
             )
         """)
 
+        # Briefing segments - track what user has heard
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS briefing_segments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                briefing_id TEXT NOT NULL,
+                segment_index INTEGER,
+                section_name TEXT,
+                article_hashes TEXT,
+                heard INTEGER DEFAULT 0,
+                generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         # Create indexes for performance
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_engagement_hash ON article_engagement(article_hash)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_engagement_category ON article_engagement(category)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_click_history_category ON click_history(category)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_article_cache_hash ON article_cache(article_hash)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_article_cache_date ON article_cache(fetched_at)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_briefing_segments_id ON briefing_segments(briefing_id)")
 
         print(f"Database initialized at {get_db_path()}")
 
@@ -406,6 +420,71 @@ def get_engagement_stats() -> dict:
             'overall': overall,
             'by_category': by_category
         }
+
+
+def record_briefing_segments(briefing_id: str, segments: list[dict]):
+    """Record briefing segments after TTS generation."""
+    import json
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        for seg in segments:
+            cursor.execute("""
+                INSERT INTO briefing_segments
+                (briefing_id, segment_index, section_name, article_hashes)
+                VALUES (?, ?, ?, ?)
+            """, (
+                briefing_id,
+                seg.get("index", 0),
+                seg.get("section", ""),
+                json.dumps(seg.get("article_hashes", [])),
+            ))
+
+
+def mark_segments_heard(heard_hashes: list[str]):
+    """Mark segments as heard based on article hashes from the client."""
+    import json
+    if not heard_hashes:
+        return
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Find segments containing these hashes and mark as heard
+        cursor.execute("""
+            SELECT id, article_hashes FROM briefing_segments
+            WHERE heard = 0
+            ORDER BY generated_at DESC
+            LIMIT 100
+        """)
+        heard_set = set(heard_hashes)
+        for row in cursor.fetchall():
+            try:
+                seg_hashes = set(json.loads(row["article_hashes"]))
+            except (json.JSONDecodeError, TypeError):
+                continue
+            if seg_hashes & heard_set:
+                cursor.execute("UPDATE briefing_segments SET heard = 1 WHERE id = ?", (row["id"],))
+
+
+def get_heard_article_hashes(hours: int = 12) -> set[str]:
+    """Get article hashes from segments marked as heard within the last N hours."""
+    import json
+    cutoff = datetime.now() - timedelta(hours=hours)
+    heard = set()
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT article_hashes FROM briefing_segments
+            WHERE heard = 1 AND generated_at > ?
+        """, (cutoff,))
+        for row in cursor.fetchall():
+            try:
+                hashes = json.loads(row["article_hashes"])
+                heard.update(hashes)
+            except (json.JSONDecodeError, TypeError):
+                continue
+
+    return heard
 
 
 # Initialize on import

@@ -63,6 +63,18 @@
 .lang-btn:hover:not(.active){opacity:.8;color:var(--text-primary)}
 .lang-divider{color:var(--border);font-size:.7rem;opacity:.5}
 
+/* Segment label */
+.segment-label{font-size:.8rem;color:var(--accent);opacity:.8;min-width:120px;text-align:center}
+.sticky-segment-label{font-size:.7rem;color:var(--accent);opacity:.8;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis}
+
+/* Segment tick marks on progress bar */
+.segment-ticks{position:absolute;top:0;left:0;right:0;height:100%;pointer-events:none}
+.segment-tick{position:absolute;top:-2px;width:2px;height:8px;background:var(--text-muted);opacity:.4;border-radius:1px;transform:translateX(-50%)}
+
+/* Completion banner */
+.completion-banner{background:rgba(92,184,92,.12);border-bottom:1px solid rgba(92,184,92,.3);padding:.8rem 2rem;text-align:center;font-size:.9rem;color:var(--trust-high);position:fixed;top:0;left:0;right:0;z-index:1002;animation:fadeSlideIn .5s ease}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(-100%)}to{opacity:1;transform:translateY(0)}}
+
 /* Stale content warning */
 .stale-banner{background:rgba(240,173,78,.12);border-bottom:1px solid rgba(240,173,78,.3);padding:.6rem 2rem;text-align:center;font-size:.85rem;color:var(--trust-medium);display:flex;justify-content:center;align-items:center;gap:1rem}
 .stale-refresh{color:var(--accent);text-decoration:none;font-weight:600}.stale-refresh:hover{text-decoration:underline}
