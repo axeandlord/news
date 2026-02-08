@@ -214,6 +214,9 @@ class BriefPlayer {
         // Show back button
         this._showBackButton(true);
 
+        // Highlight active card
+        this._setActiveCard(category);
+
         // Start playing first segment
         this.loadSegment(0, true);
     }
@@ -246,6 +249,7 @@ class BriefPlayer {
         this.updateTimeDisplay();
         this.drawIdleWaveform();
         this._showBackButton(false);
+        this._setActiveCard(null);
 
         this.isPlaying = false;
         this.playBtn.classList.remove('playing');
@@ -267,6 +271,18 @@ class BriefPlayer {
             }
         } else {
             if (existing) existing.remove();
+        }
+    }
+
+    _setActiveCard(category) {
+        // Remove playing state from all cards
+        document.querySelectorAll('.deep-dive-card').forEach(function(card) {
+            card.classList.remove('playing');
+        });
+        // Set active card
+        if (category) {
+            var card = document.getElementById('ddCard-' + category);
+            if (card) card.classList.add('playing');
         }
     }
 

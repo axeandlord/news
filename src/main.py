@@ -184,10 +184,28 @@ def main():
                         duration_min = int(total_duration / 60)
                         duration_label = f"~{duration_min} min" if duration_min > 0 else "~1 min"
 
+                        # Extract thesis from script opening (first ~300 chars)
+                        thesis = ""
+                        if dd_segments:
+                            opening = dd_segments[0].text[:500] if dd_segments[0].text else ""
+                            # Use first 1-2 sentences as the hook
+                            sentences = opening.replace("...", ".").split(". ")
+                            if len(sentences) >= 2:
+                                thesis = sentences[0].strip() + ". " + sentences[1].strip()
+                                if not thesis.endswith("."):
+                                    thesis += "."
+                            elif sentences:
+                                thesis = sentences[0].strip()
+                                if not thesis.endswith("."):
+                                    thesis += "."
+                            # Cap at 200 chars
+                            if len(thesis) > 200:
+                                thesis = thesis[:197].rsplit(" ", 1)[0] + "..."
+
                         deep_dives.append({
                             "topic": topic_name,
                             "category": category,
-                            "summary": f"Deep analytical dive into today's {topic_name.lower()} stories.",
+                            "summary": thesis or f"Deep analytical dive into today's {topic_name.lower()} stories.",
                             "duration_label": duration_label,
                             "source_count": len(topic["articles"]),
                             "audio_en": dd_audio,
