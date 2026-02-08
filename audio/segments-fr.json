@@ -1,11 +1,92 @@
 {
-  "generated_at": "2026-02-07T16:16:35.859557+00:00",
+  "generated_at": "2026-02-08T01:41:20.527763+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-fr-0.mp3",
-      "duration": 270.0,
+      "duration": 5.0,
+      "article_hashes": []
+    },
+    {
+      "index": 1,
+      "section": "Introduction",
+      "file": "audio/segment-fr-1.mp3",
+      "duration": 61.8,
+      "article_hashes": []
+    },
+    {
+      "index": 2,
+      "section": "AI and Technology",
+      "file": "audio/segment-fr-2.mp3",
+      "duration": 50.6,
+      "article_hashes": [
+        "24fa3d371bf92566",
+        "cd4a48cf5b342ef1",
+        "85e32cc714f0ee9e",
+        "35dd1d9a6d016758"
+      ]
+    },
+    {
+      "index": 3,
+      "section": "Finance and Markets",
+      "file": "audio/segment-fr-3.mp3",
+      "duration": 61.5,
+      "article_hashes": [
+        "9dc546289236a71f",
+        "1e999b6b31b413ef",
+        "434235d522627c70"
+      ]
+    },
+    {
+      "index": 4,
+      "section": "World and Geopolitics",
+      "file": "audio/segment-fr-4.mp3",
+      "duration": 58.1,
+      "article_hashes": [
+        "84242138a4dccb9e",
+        "98242bbd9cd55c81",
+        "8878b2d5d33fa1b5"
+      ]
+    },
+    {
+      "index": 5,
+      "section": "Montreal",
+      "file": "audio/segment-fr-5.mp3",
+      "duration": 34.4,
+      "article_hashes": [
+        "695d202dab06af6e",
+        "3e07044cbc09dc5a",
+        "3d1d14a90166ffce"
+      ]
+    },
+    {
+      "index": 6,
+      "section": "Quebec",
+      "file": "audio/segment-fr-6.mp3",
+      "duration": 43.3,
+      "article_hashes": [
+        "0ab55e32bc520da7",
+        "c581d5c18d654155",
+        "3a0ea3c70266ae9d"
+      ]
+    },
+    {
+      "index": 7,
+      "section": "Wildcards and Emerging",
+      "file": "audio/segment-fr-7.mp3",
+      "duration": 61.0,
+      "article_hashes": [
+        "3d66b0729b1fc300",
+        "bc6841fd534b20d6",
+        "f926167bb2806603"
+      ]
+    },
+    {
+      "index": 8,
+      "section": "Wrap-up",
+      "file": "audio/segment-fr-8.mp3",
+      "duration": 12.3,
       "article_hashes": []
     }
   ]
