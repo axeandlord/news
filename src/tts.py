@@ -205,6 +205,162 @@ def generate_audio_brief_fr(
     return f"audio/{combined_path.name}", segments_metadata
 
 
+def generate_deep_dive_audio(
+    category: str,
+    segments: list[BriefingSegment],
+    output_dir: str = "audio",
+) -> tuple[str | None, dict | None]:
+    """Generate audio for a deep dive topic.
+
+    Same pattern as generate_audio_brief() but with dd-{category} file naming.
+
+    Returns:
+        Tuple of (combined_audio_path, segments_metadata) or (None, None).
+    """
+    if not segments:
+        return None, None
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    from .audio_processor import process_audio, get_audio_info, get_audio_duration, concatenate_segments
+
+    segment_mp3s = []
+    segment_meta = []
+
+    for seg in segments:
+        if not seg.text.strip():
+            continue
+
+        wav_path = output_path / f"dd-{category}-segment-en-{seg.segment_index}.wav"
+        mp3_path = output_path / f"dd-{category}-segment-en-{seg.segment_index}.mp3"
+
+        success = asyncio.run(_generate_edge_tts(seg.text, str(wav_path)))
+        if not success:
+            print(f"    [WARN] TTS failed for dd segment {seg.segment_index}: {seg.section_name}")
+            continue
+
+        if not process_audio(str(wav_path), str(mp3_path)):
+            import shutil
+            shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
+            mp3_path = mp3_path.with_suffix('.wav')
+
+        if mp3_path.exists() and wav_path.exists():
+            wav_path.unlink()
+
+        duration = get_audio_duration(str(mp3_path))
+        segment_mp3s.append(str(mp3_path))
+        segment_meta.append({
+            "index": seg.segment_index,
+            "section": seg.section_name,
+            "file": f"audio/{mp3_path.name}",
+            "duration": round(duration, 1),
+            "article_hashes": seg.article_hashes,
+        })
+
+        print(f"    DD Segment {seg.segment_index} ({seg.section_name}): {duration:.1f}s")
+
+    if not segment_mp3s:
+        return None, None
+
+    # Concatenate into combined deep dive MP3
+    combined_path = output_path / f"dd-{category}-en.mp3"
+    if not concatenate_segments(segment_mp3s, str(combined_path)):
+        import shutil
+        shutil.copy(segment_mp3s[0], combined_path)
+
+    segments_metadata = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "category": category,
+        "segments": segment_meta,
+    }
+    meta_path = output_path / f"dd-{category}-segments-en.json"
+    meta_path.write_text(json.dumps(segments_metadata, indent=2))
+
+    info = get_audio_info(str(combined_path))
+    if info:
+        print(f"  DD {category} audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
+
+    return f"audio/{combined_path.name}", segments_metadata
+
+
+def generate_deep_dive_audio_fr(
+    category: str,
+    en_segments: list[BriefingSegment],
+    output_dir: str = "audio",
+) -> tuple[str | None, dict | None]:
+    """Generate French audio for a deep dive by translating per-segment.
+
+    Returns:
+        Tuple of (combined_audio_path, segments_metadata) or (None, None).
+    """
+    if not en_segments:
+        return None, None
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    from .audio_processor import process_audio, get_audio_info, get_audio_duration, concatenate_segments
+
+    segment_mp3s = []
+    segment_meta = []
+
+    for seg in en_segments:
+        if not seg.text.strip():
+            continue
+
+        fr_text = _translate_to_french(seg.text)
+        if not fr_text:
+            continue
+
+        wav_path = output_path / f"dd-{category}-segment-fr-{seg.segment_index}.wav"
+        mp3_path = output_path / f"dd-{category}-segment-fr-{seg.segment_index}.mp3"
+
+        success = asyncio.run(_generate_edge_tts_fr(fr_text, str(wav_path)))
+        if not success:
+            continue
+
+        if not process_audio(str(wav_path), str(mp3_path)):
+            import shutil
+            shutil.copy(wav_path, mp3_path.with_suffix('.wav'))
+            mp3_path = mp3_path.with_suffix('.wav')
+
+        if mp3_path.exists() and wav_path.exists():
+            wav_path.unlink()
+
+        duration = get_audio_duration(str(mp3_path))
+        segment_mp3s.append(str(mp3_path))
+        segment_meta.append({
+            "index": seg.segment_index,
+            "section": seg.section_name,
+            "file": f"audio/{mp3_path.name}",
+            "duration": round(duration, 1),
+            "article_hashes": seg.article_hashes,
+        })
+
+    if not segment_mp3s:
+        return None, None
+
+    combined_path = output_path / f"dd-{category}-fr.mp3"
+    if not concatenate_segments(segment_mp3s, str(combined_path)):
+        import shutil
+        shutil.copy(segment_mp3s[0], combined_path)
+
+    segments_metadata = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "category": category,
+        "segments": segment_meta,
+    }
+    meta_path = output_path / f"dd-{category}-segments-fr.json"
+    meta_path.write_text(json.dumps(segments_metadata, indent=2))
+
+    info = get_audio_info(str(combined_path))
+    if info:
+        print(f"  DD {category} FR audio: {info['duration_str']} ({info['size_kb']:.0f} KB)")
+
+    return f"audio/{combined_path.name}", segments_metadata
+
+
 def _translate_to_french(text: str) -> str | None:
     """Translate English briefing text to French using Ollama."""
     try:

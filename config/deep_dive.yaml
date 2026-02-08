@@ -1,0 +1,29 @@
+# Deep Dive Configuration
+# Per-topic analytical deep dives (~12 min each)
+
+deep_dive:
+  enabled: true
+  max_per_run: 2
+  min_articles_threshold: 4
+  tavily_queries_per_topic: 6
+  tavily_results_per_query: 3
+  target_duration_minutes: 12
+
+  topics:
+    - name: "AI & Technology"
+      category: tech_ai
+      analysis_lens: |
+        Focus on: architecture and infrastructure significance, competitive landscape,
+        builder and developer impact, enterprise adoption implications, compute economics
+
+    - name: "Finance & Markets"
+      category: finance
+      analysis_lens: |
+        Focus on: market dynamics and drivers, winners and losers analysis,
+        policy and regulation signals, risk assessment, positioning opportunities
+
+    - name: "World & Geopolitics"
+      category: geopolitics
+      analysis_lens: |
+        Focus on: power dynamics and leverage shifts, historical parallels,
+        economic warfare dimensions, scenario planning, regional spillover to Canada and Quebec

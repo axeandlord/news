@@ -121,6 +121,32 @@
     </audio>
     {% endif %}
 
+    <!-- Deep Dives -->
+    {% if deep_dives %}
+    <script>window.DEEP_DIVES = {{ deep_dives_json|safe }};</script>
+    <section class="deep-dives" id="deepDives">
+        <div class="deep-dives-inner">
+            <h2 class="deep-dives-title">Deep Dives</h2>
+            <p class="deep-dives-sub">In-depth analytical briefings on today's biggest stories</p>
+            <div class="deep-dive-cards">
+                {% for dd in deep_dives %}
+                <div class="deep-dive-card" data-category="{{ dd.category }}">
+                    <h3>{{ dd.topic }}</h3>
+                    <p class="dd-summary">{{ dd.summary }}</p>
+                    <div class="dd-meta">
+                        <span class="dd-duration">{{ dd.duration_label }}</span>
+                        <span class="dd-sources">{{ dd.source_count }} sources</span>
+                    </div>
+                    <button class="dd-play-btn" onclick="briefPlayer.loadDeepDive('{{ dd.category }}')">
+                        Play Deep Dive
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
     <!-- Main Content -->
     <main class="content" id="stories">
         {% for section_name, articles in sections.items() %}

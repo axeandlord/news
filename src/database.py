@@ -151,6 +151,26 @@ def init_database():
             )
         """)
 
+        # Research cache (Tavily results)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS research_cache (
+                query TEXT PRIMARY KEY,
+                results TEXT,
+                searched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Deep dive generation history
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS deep_dive_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                topic TEXT NOT NULL,
+                category TEXT NOT NULL,
+                research_queries TEXT,
+                generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
         # Create indexes for performance
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_engagement_hash ON article_engagement(article_hash)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_engagement_category ON article_engagement(category)")
@@ -485,6 +505,47 @@ def get_heard_article_hashes(hours: int = 12) -> set[str]:
                 continue
 
     return heard
+
+
+def get_research_cache(query: str, ttl_hours: int = 12) -> list[dict] | None:
+    """Get cached research results if fresh enough."""
+    import json
+    cutoff = datetime.now() - timedelta(hours=ttl_hours)
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT results FROM research_cache WHERE query = ? AND searched_at > ?",
+            (query, cutoff),
+        )
+        row = cursor.fetchone()
+        if row:
+            try:
+                return json.loads(row["results"])
+            except (json.JSONDecodeError, TypeError):
+                return None
+    return None
+
+
+def set_research_cache(query: str, results: list[dict]):
+    """Store research results in cache."""
+    import json
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT OR REPLACE INTO research_cache (query, results, searched_at) VALUES (?, ?, ?)",
+            (query, json.dumps(results), datetime.now()),
+        )
+
+
+def record_deep_dive(topic: str, category: str, queries: list[str]):
+    """Record a deep dive generation."""
+    import json
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO deep_dive_history (topic, category, research_queries) VALUES (?, ?, ?)",
+            (topic, category, json.dumps(queries)),
+        )
 
 
 # Initialize on import

@@ -79,4 +79,23 @@
 .stale-banner{background:rgba(240,173,78,.12);border-bottom:1px solid rgba(240,173,78,.3);padding:.6rem 2rem;text-align:center;font-size:.85rem;color:var(--trust-medium);display:flex;justify-content:center;align-items:center;gap:1rem}
 .stale-refresh{color:var(--accent);text-decoration:none;font-weight:600}.stale-refresh:hover{text-decoration:underline}
 
-@media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}}
+/* Deep Dives section */
+.deep-dives{padding:2rem 0;border-bottom:1px solid var(--border)}
+.deep-dives-inner{max-width:900px;margin:0 auto;padding:0 2rem}
+.deep-dives-title{font-size:1.25rem;font-weight:600;color:var(--text-primary);margin-bottom:.25rem}
+.deep-dives-sub{font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem}
+.deep-dive-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.deep-dive-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:border-color .2s}
+.deep-dive-card:hover{border-color:var(--accent)}
+.deep-dive-card h3{font-size:1.1rem;font-weight:600;color:var(--text-primary);margin-bottom:.5rem}
+.dd-summary{font-size:.9rem;color:var(--text-body);line-height:1.5;margin-bottom:1rem}
+.dd-meta{display:flex;gap:1rem;margin-bottom:1rem;font-size:.8rem;color:var(--text-muted)}
+.dd-duration,.dd-sources{display:inline-flex;align-items:center;gap:.25rem}
+.dd-play-btn{width:100%;padding:.6rem 1rem;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:8px;font-size:.9rem;font-weight:500;cursor:pointer;transition:all .2s}
+.dd-play-btn:hover{background:var(--accent);color:var(--bg-primary)}
+
+/* Back to briefing button */
+.back-to-briefing-btn{background:transparent;border:1px solid var(--border);color:var(--text-muted);padding:.25rem .75rem;border-radius:4px;font-size:.8rem;cursor:pointer;transition:all .2s;margin-left:.5rem}
+.back-to-briefing-btn:hover{color:var(--accent);border-color:var(--accent)}
+
+@media(max-width:768px){.header{padding:1rem}.hero{min-height:70vh;padding:2rem 1rem}.greeting{font-size:2rem}.content{padding:2rem 1rem}.article{padding:1rem}.sticky-waveform{display:none}.feedback-buttons{gap:.25rem}.feedback-btn{padding:.3rem .5rem}.deep-dives-inner{padding:0 1rem}.deep-dive-cards{grid-template-columns:1fr}}

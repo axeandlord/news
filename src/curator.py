@@ -2,7 +2,7 @@
 
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 
 import httpx
@@ -29,12 +29,14 @@ class CuratedArticle:
     score: float
     ai_summary: str = ""
     why_it_matters: str = ""
+    research_context: list = field(default_factory=list)
 
     def to_dict(self) -> dict:
         d = self.article.to_dict()
         d["score"] = self.score
         d["ai_summary"] = self.ai_summary
         d["why_it_matters"] = self.why_it_matters
+        d["research_context"] = self.research_context
         return d
 
 

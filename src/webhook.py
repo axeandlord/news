@@ -26,11 +26,13 @@ RATE_LIMIT_SECONDS = 300  # 5 minutes between runs
 STEP_LABELS = {
     1: "Fetching RSS feeds",
     2: "Curating articles",
-    3: "Generating audio",
-    4: "Generating HTML",
-    5: "Archiving brief",
+    3: "Researching stories",
+    4: "Generating audio",
+    5: "Generating deep dives",
+    6: "Generating HTML",
+    7: "Archiving brief",
 }
-TOTAL_STEPS = 5
+TOTAL_STEPS = 7
 
 app = FastAPI(title="BRIEF Webhook", docs_url=None, redoc_url=None)
 init_database()
@@ -53,8 +55,8 @@ _state = {
     "progress": 0,
 }
 
-# Regex to match [N/5] step markers from main.py
-_step_re = re.compile(r"\[(\d)/5\]")
+# Regex to match [N/7] step markers from main.py
+_step_re = re.compile(r"\[(\d)/7\]")
 
 
 def _verify_token(request: Request):

@@ -49,6 +49,11 @@ class BriefPlayer {
         this.HEARD_KEY = 'brief_heard';
         this.WEBHOOK_URL = 'https://refresh.bezman.ca';
 
+        // Deep dive state
+        this.isDeepDive = false;
+        this.briefingSegmentsBackup = null;
+        this.briefingSourceBackup = null;
+
         // Web Audio
         this.audioCtx = null;
         this.analyser = null;
@@ -168,6 +173,103 @@ class BriefPlayer {
         }
     }
 
+    // === Deep Dive ===
+
+    loadDeepDive(category) {
+        if (!window.DEEP_DIVES) return;
+
+        var dd = null;
+        for (var i = 0; i < window.DEEP_DIVES.length; i++) {
+            if (window.DEEP_DIVES[i].category === category) {
+                dd = window.DEEP_DIVES[i];
+                break;
+            }
+        }
+        if (!dd || !dd.segments_en) return;
+
+        // Backup current briefing state
+        if (!this.isDeepDive) {
+            this.briefingSegmentsBackup = {
+                segments: this.segments,
+                currentSegment: this.currentSegment,
+                totalDuration: this.totalDuration,
+                hasSegments: this.hasSegments,
+            };
+            this.briefingSourceBackup = this.audio.src;
+        }
+
+        // Stop current playback
+        this.audio.pause();
+        this.audio.currentTime = 0;
+
+        // Load deep dive segments
+        this.isDeepDive = true;
+        this.loadSegments(dd.segments_en);
+
+        // Update UI label
+        if (this.segmentLabel) {
+            this.segmentLabel.textContent = 'Deep Dive: ' + dd.topic;
+        }
+
+        // Show back button
+        this._showBackButton(true);
+
+        // Start playing first segment
+        this.loadSegment(0, true);
+    }
+
+    returnToBriefing() {
+        if (!this.isDeepDive || !this.briefingSegmentsBackup) return;
+
+        // Stop current playback
+        this.audio.pause();
+        this.audio.currentTime = 0;
+
+        // Restore briefing state
+        this.segments = this.briefingSegmentsBackup.segments;
+        this.currentSegment = this.briefingSegmentsBackup.currentSegment;
+        this.totalDuration = this.briefingSegmentsBackup.totalDuration;
+        this.hasSegments = this.briefingSegmentsBackup.hasSegments;
+
+        this.isDeepDive = false;
+        this.briefingSegmentsBackup = null;
+
+        // Restore audio source
+        if (this.briefingSourceBackup) {
+            this.audio.src = this.briefingSourceBackup;
+            this.audio.load();
+            this.briefingSourceBackup = null;
+        }
+
+        this.updateSegmentLabel();
+        this.renderSegmentTicks();
+        this.updateTimeDisplay();
+        this.drawIdleWaveform();
+        this._showBackButton(false);
+
+        this.isPlaying = false;
+        this.playBtn.classList.remove('playing');
+    }
+
+    _showBackButton(show) {
+        var existing = document.getElementById('backToBriefing');
+        if (show) {
+            if (!existing) {
+                var btn = document.createElement('button');
+                btn.id = 'backToBriefing';
+                btn.className = 'back-to-briefing-btn';
+                btn.textContent = 'Back to Briefing';
+                btn.addEventListener('click', () => this.returnToBriefing());
+                // Insert after segment label
+                if (this.segmentLabel && this.segmentLabel.parentNode) {
+                    this.segmentLabel.parentNode.insertBefore(btn, this.segmentLabel.nextSibling);
+                }
+            }
+        } else {
+            if (existing) existing.remove();
+        }
+    }
+
     // === Heard Tracking ===
 
     markSegmentHeard(index) {
@@ -240,7 +342,8 @@ class BriefPlayer {
         }
 
         var seg = this.segments[this.currentSegment];
-        var label = seg.section + ' (' + (this.currentSegment + 1) + '/' + this.segments.length + ')';
+        var prefix = this.isDeepDive ? 'Deep Dive: ' : '';
+        var label = prefix + seg.section + ' (' + (this.currentSegment + 1) + '/' + this.segments.length + ')';
         this.segmentLabel.textContent = label;
         if (this.stickySegmentLabel) this.stickySegmentLabel.textContent = label;
     }
@@ -467,6 +570,12 @@ class BriefPlayer {
         if (this.hasSegments && this.currentSegment < this.segments.length - 1) {
             // Auto-advance to next segment
             this.loadSegment(this.currentSegment + 1, true);
+        } else if (this.isDeepDive) {
+            // Deep dive complete - return to briefing
+            this.isPlaying = false;
+            this.playBtn.classList.remove('playing');
+            this.drawIdleWaveform();
+            this.returnToBriefing();
         } else {
             // Briefing complete
             this.isPlaying = false;

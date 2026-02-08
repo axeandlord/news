@@ -96,20 +96,51 @@ def summarize_articles_ollama(
     """Generate concise summaries for each article using local Ollama.
 
     Uses full article text when available, falls back to RSS summary.
-    Updates ai_summary and why_it_matters on each CuratedArticle.
+    Top articles with research context get enriched prompts with
+    CONTEXT and SIGNIFICANCE fields for deeper analysis.
     """
     print("  Pass 1: Summarizing articles with Ollama...")
+
+    # Build flat ranked list to identify top articles
+    all_articles = []
+    for section_name, articles in sections.items():
+        all_articles.extend(articles)
+    all_articles.sort(key=lambda a: a.score, reverse=True)
+    top_hashes = {a.article.article_hash for a in all_articles[:8]}
 
     count = 0
     for section_name, articles in sections.items():
         for item in articles:
             article = item.article
-            # Use full text if available, otherwise RSS summary
             content = article.full_text if hasattr(article, 'full_text') and article.full_text else article.summary
             if not content:
                 continue
 
-            prompt = f"""Summarize this news article in 3-4 concise sentences. Include key facts, numbers, and quotes if present. Then add one sentence on why this matters.
+            is_top = article.article_hash in top_hashes
+            has_research = bool(item.research_context)
+
+            if is_top and has_research:
+                # Enriched prompt for top articles with research context
+                research_text = "\n".join(
+                    f"- {r.get('title', '')}: {r.get('content', '')[:300]}"
+                    for r in item.research_context[:4]
+                )
+                prompt = f"""Summarize this news article and its background context. Include key facts and data points.
+
+ARTICLE:
+Title: {article.title}
+Source: {article.source}
+Content: {content[:2000]}
+
+BACKGROUND RESEARCH:
+{research_text}
+
+Respond in this exact format:
+SUMMARY: [3-4 sentence summary with specific facts and numbers]
+CONTEXT: [2-3 sentences of background from research -- historical precedent, market data, expert views]
+SIGNIFICANCE: [1 sentence -- who benefits, who loses, what changes]"""
+            else:
+                prompt = f"""Summarize this news article in 3-4 concise sentences. Include key facts, numbers, and quotes if present. Then add one sentence on why this matters.
 
 Title: {article.title}
 Source: {article.source}
@@ -119,13 +150,21 @@ Respond in this exact format:
 SUMMARY: [your 3-4 sentence summary]
 WHY: [one sentence on broader significance]"""
 
-            result = _call_ollama(prompt, max_tokens=400, temperature=0.3)
+            result = _call_ollama(prompt, max_tokens=500 if is_top else 400, temperature=0.3)
             if result:
-                summary_match = re.search(r"SUMMARY:\s*(.+?)(?=WHY:|$)", result, re.DOTALL)
+                summary_match = re.search(r"SUMMARY:\s*(.+?)(?=(?:CONTEXT|WHY|SIGNIFICANCE):|$)", result, re.DOTALL)
+                context_match = re.search(r"CONTEXT:\s*(.+?)(?=SIGNIFICANCE:|$)", result, re.DOTALL)
+                sig_match = re.search(r"SIGNIFICANCE:\s*(.+)", result, re.DOTALL)
                 why_match = re.search(r"WHY:\s*(.+)", result, re.DOTALL)
+
                 if summary_match:
                     item.ai_summary = summary_match.group(1).strip()
-                if why_match:
+                    # Append context to summary for richer content
+                    if context_match:
+                        item.ai_summary += " " + context_match.group(1).strip()
+                if sig_match:
+                    item.why_it_matters = sig_match.group(1).strip()
+                elif why_match:
                     item.why_it_matters = why_match.group(1).strip()
                 count += 1
 
@@ -168,6 +207,9 @@ Identify:
 1. CLUSTERS: Groups of stories about the same event or topic (list the story numbers)
 2. THREADS: Thematic threads that span multiple sections (e.g., "AI regulation" appearing in tech and geopolitics)
 3. TENSIONS: Any contradictions or different perspectives between sources on the same topic
+4. TRENDS: What broader narratives do these stories collectively suggest?
+5. POWER SHIFTS: Who is gaining or losing influence across these stories?
+6. PREDICTIONS: What might happen next based on these developments?
 
 Be concise. Use story numbers to reference articles. Only include genuine connections, not forced ones.
 
@@ -177,7 +219,13 @@ CLUSTERS:
 THREADS:
 - brief description connecting [numbers]
 TENSIONS:
-- [numbers]: what they disagree on"""
+- [numbers]: what they disagree on
+TRENDS:
+- brief description of emerging narrative
+POWER SHIFTS:
+- who gains/loses and why
+PREDICTIONS:
+- what to watch for next"""
 
     result = _call_ollama(prompt, max_tokens=800, temperature=0.3)
     if result:
@@ -223,14 +271,22 @@ Example tone:
 NARRATIVE STRUCTURE:
 1. Start with the personalized greeting provided, then immediately hook with the single most compelling story of the day
 2. Flow through 3-4 thematic sections (3-4 minutes each), leading each with the strongest story
-3. Connect related stories across sections: "This feeds directly into something happening in..." / "Remember that AI story? Well..."
+3. Connect related stories across sections: "Remember that inference compute story? Here's why it matters for your portfolio..." / "This feeds directly into something happening in..."
 4. Close with one forward-looking thought that ties the briefing together
 
+ANALYSIS DEPTH BY TOPIC:
+- AI and Tech: explain architectural significance, competitive implications, what it means for builders
+- Finance and Markets: who wins or loses, market dynamics, second-order effects, pricing implications
+- Geopolitics: power dynamics, historical parallels, scenario planning
+- Local news: direct impact on Montreal residents, policy implications
+
 DEPTH REQUIREMENTS:
-- Top 5 stories: Explain WHY it matters, WHO benefits or loses, WHAT happens next
-- Other stories: 2-3 sentences with one genuine insight
+- Top 5-6 stories: Structure each as What happened then Why it matters then Who benefits or loses then What happens next. Spend sixty to ninety seconds of speaking time on each
+- Briefly mention 2-3 other notable stories per section
+- SKIP the rest entirely. Quality over quantity. Do not try to cover everything
 - When sources disagree, say so: "Reuters reports X, but Al Jazeera frames it as Y"
 - {user_name} knows: {', '.join(expert_topics[:4]) if expert_topics else 'AI, tech, LLMs'} - skip basic explanations, go deeper
+- When research context or background data is provided with a story, weave it in naturally: cite the source, use specific numbers
 
 ABSOLUTE TTS RULES (text-to-speech will sound terrible otherwise):
 - ZERO SYMBOLS: no hashtags, asterisks, bullets, dashes, percent signs, dollar signs
@@ -250,7 +306,13 @@ SECTION MARKERS (required for audio segmentation):
 
 OUTPUT: Pure spoken text with section markers. No other formatting. No metadata. Just words that flow naturally when read aloud."""
 
-    # Build structured news content
+    # Build structured news content with research context for top articles
+    all_flat = []
+    for section_name, articles in sections.items():
+        all_flat.extend(articles)
+    all_flat.sort(key=lambda a: a.score, reverse=True)
+    top_hashes = {a.article.article_hash for a in all_flat[:8]}
+
     stories_text = []
     for section_name, articles in sections.items():
         if not articles:
@@ -266,6 +328,18 @@ OUTPUT: Pure spoken text with section markers. No other formatting. No metadata.
             entry = f"TITLE: {title}\nSOURCE: {source}\nSUMMARY: {summary}"
             if why:
                 entry += f"\nSIGNIFICANCE: {why}"
+
+            # Include research context for top articles
+            if article.article_hash in top_hashes and item.research_context:
+                research_bits = []
+                for r in item.research_context[:3]:
+                    r_title = r.get("title", "")
+                    r_content = r.get("content", "")[:200]
+                    if r_title and r_content:
+                        research_bits.append(f"{r_title}: {r_content}")
+                if research_bits:
+                    entry += "\nBACKGROUND: " + " | ".join(research_bits)
+
             section_stories.append(entry)
 
         stories_text.append(f"=== {section_name} ===\n" + "\n---\n".join(section_stories))

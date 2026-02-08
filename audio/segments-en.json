@@ -1,80 +1,77 @@
 {
-  "generated_at": "2026-02-08T13:14:46.812301+00:00",
+  "generated_at": "2026-02-08T20:45:29.271978+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-en-0.mp3",
-      "duration": 290.7,
+      "duration": 72.5,
       "article_hashes": []
     },
     {
       "index": 1,
-      "section": "Government Support for Postal Services",
+      "section": "AI and Technology",
       "file": "audio/segment-en-1.mp3",
-      "duration": 17.1,
-      "article_hashes": []
+      "duration": 177.6,
+      "article_hashes": [
+        "35dd1d9a6d016758",
+        "d45b8131979530b6",
+        "0c5929f57221484b",
+        "1cbf4b3d79fb045a"
+      ]
     },
     {
       "index": 2,
-      "section": "Political Developments Around the Globe",
+      "section": "Finance and Markets",
       "file": "audio/segment-en-2.mp3",
-      "duration": 33.4,
-      "article_hashes": []
+      "duration": 194.9,
+      "article_hashes": [
+        "2f0832997408a69d",
+        "e0300d90aecf3196",
+        "398afa6d491dbdaf"
+      ]
     },
     {
       "index": 3,
-      "section": "Inuit Concerns in Canada",
+      "section": "Geopolitics and Global Affairs",
       "file": "audio/segment-en-3.mp3",
-      "duration": 17.2,
+      "duration": 217.6,
       "article_hashes": [
-        "9d15712d0977c085",
-        "d83ac107682d9169",
-        "e7eecb06f1e73407"
+        "84242138a4dccb9e",
+        "b6e4aff5e0a96b65",
+        "180adaec22fca8ce"
       ]
     },
     {
       "index": 4,
-      "section": "Climate Change Progress",
+      "section": "Montreal and Quebec",
       "file": "audio/segment-en-4.mp3",
-      "duration": 19.2,
-      "article_hashes": []
+      "duration": 161.9,
+      "article_hashes": [
+        "0a4fdae0d8ec12a1",
+        "e1fa5a70ade7855d",
+        "80e81586b5c30f9d",
+        "0ab55e32bc520da7",
+        "412de35e6e638934",
+        "dc9643980dff4487"
+      ]
     },
     {
       "index": 5,
-      "section": "Emerging Tech Innovations",
+      "section": "Wildcards",
       "file": "audio/segment-en-5.mp3",
-      "duration": 20.7,
+      "duration": 98.1,
       "article_hashes": [
-        "8a37ff29c00ef45b",
-        "3d66b0729b1fc300",
-        "3b9e1e0e1310ff70"
+        "d6086fcc497edb82",
+        "b9a70f0fcdca774d",
+        "bc6841fd534b20d6"
       ]
     },
     {
       "index": 6,
-      "section": "Security Vulnerabilities",
+      "section": "Wrap-up",
       "file": "audio/segment-en-6.mp3",
-      "duration": 16.2,
-      "article_hashes": []
-    },
-    {
-      "index": 7,
-      "section": "AI Contextual Reasoning Challenges",
-      "file": "audio/segment-en-7.mp3",
-      "duration": 34.9,
-      "article_hashes": [
-        "7527fabb6cf872ed",
-        "35dd1d9a6d016758",
-        "d45b8131979530b6",
-        "2f247ea0d74744dc"
-      ]
-    },
-    {
-      "index": 8,
-      "section": "Wrap Up",
-      "file": "audio/segment-en-8.mp3",
-      "duration": 11.3,
+      "duration": 71.3,
       "article_hashes": []
     }
   ]

@@ -17,6 +17,7 @@ def generate_html(
     audio_file_fr: str | None = None,
     segments_en: dict | None = None,
     segments_fr: dict | None = None,
+    deep_dives: list[dict] | None = None,
     output_path: str = "index.html"
 ) -> str:
     """
@@ -68,14 +69,20 @@ def generate_html(
             if info_fr.get("duration_str"):
                 duration_fr = info_fr["duration_str"]
 
-    # Render template
+    # Build deep dive data for template
     import json
+    deep_dives_data = deep_dives or []
+    deep_dives_json = json.dumps(deep_dives_data) if deep_dives_data else "[]"
+
+    # Render template
     html = template.render(
         sections=sections,
         audio_file=audio_file,
         audio_file_fr=audio_file_fr,
         segments_en_json=json.dumps(segments_en) if segments_en else "null",
         segments_fr_json=json.dumps(segments_fr) if segments_fr else "null",
+        deep_dives=deep_dives_data,
+        deep_dives_json=deep_dives_json,
         date_display=date_display,
         article_count=article_count,
         duration=duration,
