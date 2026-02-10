@@ -1,85 +1,85 @@
 {
-  "generated_at": "2026-02-08T20:53:41.519392+00:00",
+  "generated_at": "2026-02-10T19:31:47.511019+00:00",
   "category": "tech_ai",
   "segments": [
     {
       "index": 0,
       "section": "The Setup",
       "file": "audio/dd-tech_ai-segment-en-0.mp3",
-      "duration": 112.2,
+      "duration": 48.8,
       "article_hashes": [
+        "980f67c451d329ff",
         "35dd1d9a6d016758",
         "d45b8131979530b6",
-        "0c5929f57221484b",
-        "1cbf4b3d79fb045a",
-        "f5da5b5460bd058f",
-        "ce5a11c9a442a4f7",
+        "2f247ea0d74744dc",
+        "e8ac1766c5866c05",
+        "2dbc8af8522f03a8",
+        "259192816d2d8aa7",
         "37b584533030718d",
         "3cfd4c03bc63a764",
-        "87f4ebed3ce94e7f",
-        "7527fabb6cf872ed",
-        "5e16373e41d5ccf2",
-        "935531accf4403b6"
+        "683da84ed0e00e2b",
+        "21ab1f28a545d1e7",
+        "ecdbe725facf83a0"
       ]
     },
     {
       "index": 1,
       "section": "The Evidence",
       "file": "audio/dd-tech_ai-segment-en-1.mp3",
-      "duration": 261.6,
+      "duration": 84.3,
       "article_hashes": [
+        "980f67c451d329ff",
         "35dd1d9a6d016758",
         "d45b8131979530b6",
-        "0c5929f57221484b",
-        "1cbf4b3d79fb045a",
-        "f5da5b5460bd058f",
-        "ce5a11c9a442a4f7",
+        "2f247ea0d74744dc",
+        "e8ac1766c5866c05",
+        "2dbc8af8522f03a8",
+        "259192816d2d8aa7",
         "37b584533030718d",
         "3cfd4c03bc63a764",
-        "87f4ebed3ce94e7f",
-        "7527fabb6cf872ed",
-        "5e16373e41d5ccf2",
-        "935531accf4403b6"
+        "683da84ed0e00e2b",
+        "21ab1f28a545d1e7",
+        "ecdbe725facf83a0"
       ]
     },
     {
       "index": 2,
       "section": "The Analysis",
       "file": "audio/dd-tech_ai-segment-en-2.mp3",
-      "duration": 346.3,
+      "duration": 93.0,
       "article_hashes": [
+        "980f67c451d329ff",
         "35dd1d9a6d016758",
         "d45b8131979530b6",
-        "0c5929f57221484b",
-        "1cbf4b3d79fb045a",
-        "f5da5b5460bd058f",
-        "ce5a11c9a442a4f7",
+        "2f247ea0d74744dc",
+        "e8ac1766c5866c05",
+        "2dbc8af8522f03a8",
+        "259192816d2d8aa7",
         "37b584533030718d",
         "3cfd4c03bc63a764",
-        "87f4ebed3ce94e7f",
-        "7527fabb6cf872ed",
-        "5e16373e41d5ccf2",
-        "935531accf4403b6"
+        "683da84ed0e00e2b",
+        "21ab1f28a545d1e7",
+        "ecdbe725facf83a0"
       ]
     },
     {
       "index": 3,
       "section": "The Outlook",
       "file": "audio/dd-tech_ai-segment-en-3.mp3",
-      "duration": 262.2,
+      "duration": 57.6,
       "article_hashes": [
+        "980f67c451d329ff",
         "35dd1d9a6d016758",
         "d45b8131979530b6",
-        "0c5929f57221484b",
-        "1cbf4b3d79fb045a",
-        "f5da5b5460bd058f",
-        "ce5a11c9a442a4f7",
+        "2f247ea0d74744dc",
+        "e8ac1766c5866c05",
+        "2dbc8af8522f03a8",
+        "259192816d2d8aa7",
         "37b584533030718d",
         "3cfd4c03bc63a764",
-        "87f4ebed3ce94e7f",
-        "7527fabb6cf872ed",
-        "5e16373e41d5ccf2",
-        "935531accf4403b6"
+        "683da84ed0e00e2b",
+        "21ab1f28a545d1e7",
+        "ecdbe725facf83a0"
       ]
     }
   ]

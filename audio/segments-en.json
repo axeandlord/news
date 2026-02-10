@@ -1,77 +1,70 @@
 {
-  "generated_at": "2026-02-08T20:45:29.271978+00:00",
+  "generated_at": "2026-02-10T19:29:10.934946+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-en-0.mp3",
-      "duration": 72.5,
+      "duration": 34.2,
       "article_hashes": []
     },
     {
       "index": 1,
-      "section": "AI and Technology",
+      "section": "AI Regulation and Ethics",
       "file": "audio/segment-en-1.mp3",
-      "duration": 177.6,
+      "duration": 57.4,
       "article_hashes": [
+        "980f67c451d329ff",
         "35dd1d9a6d016758",
         "d45b8131979530b6",
-        "0c5929f57221484b",
-        "1cbf4b3d79fb045a"
+        "2f247ea0d74744dc"
       ]
     },
     {
       "index": 2,
-      "section": "Finance and Markets",
+      "section": "International Relations and Infrastructure Disputes",
       "file": "audio/segment-en-2.mp3",
-      "duration": 194.9,
-      "article_hashes": [
-        "2f0832997408a69d",
-        "e0300d90aecf3196",
-        "398afa6d491dbdaf"
-      ]
+      "duration": 61.0,
+      "article_hashes": []
     },
     {
       "index": 3,
-      "section": "Geopolitics and Global Affairs",
+      "section": "Montreal News",
       "file": "audio/segment-en-3.mp3",
-      "duration": 217.6,
+      "duration": 42.3,
       "article_hashes": [
-        "84242138a4dccb9e",
-        "b6e4aff5e0a96b65",
-        "180adaec22fca8ce"
+        "7418bdbb0b76b0d2",
+        "05dddfdc7c2c0ed4",
+        "8c9a7e149158bf33"
       ]
     },
     {
       "index": 4,
-      "section": "Montreal and Quebec",
+      "section": "Quebec Health and Education",
       "file": "audio/segment-en-4.mp3",
-      "duration": 161.9,
+      "duration": 20.8,
       "article_hashes": [
-        "0a4fdae0d8ec12a1",
-        "e1fa5a70ade7855d",
-        "80e81586b5c30f9d",
-        "0ab55e32bc520da7",
-        "412de35e6e638934",
-        "dc9643980dff4487"
+        "7907ec6351d60870",
+        "9c51f1ade05c119c",
+        "b10498f5774218b9"
       ]
     },
     {
       "index": 5,
-      "section": "Wildcards",
+      "section": "Quebec Science",
       "file": "audio/segment-en-5.mp3",
-      "duration": 98.1,
+      "duration": 16.9,
       "article_hashes": [
-        "d6086fcc497edb82",
-        "b9a70f0fcdca774d",
-        "bc6841fd534b20d6"
+        "7907ec6351d60870",
+        "9c51f1ade05c119c",
+        "b10498f5774218b9"
       ]
     },
     {
       "index": 6,
       "section": "Wrap-up",
       "file": "audio/segment-en-6.mp3",
-      "duration": 71.3,
+      "duration": 28.2,
       "article_hashes": []
     }
   ]

@@ -1,6 +1,12 @@
 {
   "briefs": [
     {
+      "date": "2026-02-10",
+      "article_count": 52,
+      "has_audio": true,
+      "filename": "2026-02-10.html"
+    },
+    {
       "date": "2026-02-08",
       "article_count": 52,
       "has_audio": false,
