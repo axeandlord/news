@@ -1,70 +1,61 @@
 {
-  "generated_at": "2026-02-10T19:30:17.291289+00:00",
+  "generated_at": "2026-02-12T15:13:03.487204+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-fr-0.mp3",
-      "duration": 38.5,
+      "duration": 66.6,
       "article_hashes": []
     },
     {
       "index": 1,
-      "section": "AI Regulation and Ethics",
+      "section": "AI Regulation",
       "file": "audio/segment-fr-1.mp3",
-      "duration": 62.1,
+      "duration": 44.5,
       "article_hashes": [
-        "980f67c451d329ff",
-        "35dd1d9a6d016758",
-        "d45b8131979530b6",
-        "2f247ea0d74744dc"
+        "92b73680795a43ca",
+        "21f5970f2c9d016a",
+        "2f247ea0d74744dc",
+        "cea47e6230733496"
       ]
     },
     {
       "index": 2,
-      "section": "International Relations and Infrastructure Disputes",
+      "section": "Geopolitical Tensions with Russia",
       "file": "audio/segment-fr-2.mp3",
-      "duration": 70.7,
+      "duration": 43.3,
       "article_hashes": []
     },
     {
       "index": 3,
-      "section": "Montreal News",
+      "section": "AI in Daily Life",
       "file": "audio/segment-fr-3.mp3",
-      "duration": 45.8,
+      "duration": 49.7,
       "article_hashes": [
-        "7418bdbb0b76b0d2",
-        "05dddfdc7c2c0ed4",
-        "8c9a7e149158bf33"
+        "92b73680795a43ca",
+        "21f5970f2c9d016a",
+        "2f247ea0d74744dc",
+        "cea47e6230733496"
       ]
     },
     {
       "index": 4,
-      "section": "Quebec Health and Education",
+      "section": "Geopolitical Challenges for Technology Companies",
       "file": "audio/segment-fr-4.mp3",
-      "duration": 24.0,
+      "duration": 40.2,
       "article_hashes": [
-        "7907ec6351d60870",
-        "9c51f1ade05c119c",
-        "b10498f5774218b9"
+        "92b73680795a43ca",
+        "21f5970f2c9d016a",
+        "2f247ea0d74744dc",
+        "cea47e6230733496"
       ]
     },
     {
       "index": 5,
-      "section": "Quebec Science",
-      "file": "audio/segment-fr-5.mp3",
-      "duration": 16.5,
-      "article_hashes": [
-        "7907ec6351d60870",
-        "9c51f1ade05c119c",
-        "b10498f5774218b9"
-      ]
-    },
-    {
-      "index": 6,
       "section": "Wrap-up",
-      "file": "audio/segment-fr-6.mp3",
-      "duration": 32.9,
+      "file": "audio/segment-fr-5.mp3",
+      "duration": 64.2,
       "article_hashes": []
     }
   ]
