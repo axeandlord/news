@@ -1,62 +1,53 @@
 {
-  "generated_at": "2026-02-12T15:13:03.487204+00:00",
+  "generated_at": "2026-02-18T15:08:35.286342+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-fr-0.mp3",
-      "duration": 66.6,
+      "duration": 281.5,
       "article_hashes": []
     },
     {
       "index": 1,
-      "section": "AI Regulation",
+      "section": "Introduction",
       "file": "audio/segment-fr-1.mp3",
-      "duration": 44.5,
-      "article_hashes": [
-        "92b73680795a43ca",
-        "21f5970f2c9d016a",
-        "2f247ea0d74744dc",
-        "cea47e6230733496"
-      ]
-    },
-    {
-      "index": 2,
-      "section": "Geopolitical Tensions with Russia",
-      "file": "audio/segment-fr-2.mp3",
-      "duration": 43.3,
+      "duration": 20.7,
       "article_hashes": []
     },
     {
-      "index": 3,
-      "section": "AI in Daily Life",
-      "file": "audio/segment-fr-3.mp3",
-      "duration": 49.7,
+      "index": 2,
+      "section": "AI and Technology Advancements",
+      "file": "audio/segment-fr-2.mp3",
+      "duration": 20.6,
       "article_hashes": [
-        "92b73680795a43ca",
-        "21f5970f2c9d016a",
-        "2f247ea0d74744dc",
-        "cea47e6230733496"
+        "285b97ad395790bc",
+        "681bdc46906d778d",
+        "facb782766810ae5",
+        "c44e30bae975e13a"
+      ]
+    },
+    {
+      "index": 3,
+      "section": "Finance and Markets",
+      "file": "audio/segment-fr-3.mp3",
+      "duration": 24.1,
+      "article_hashes": [
+        "a76f4288b62a33e9",
+        "a13985ee28e3e1c4",
+        "42c8aec084baf9e0"
       ]
     },
     {
       "index": 4,
-      "section": "Geopolitical Challenges for Technology Companies",
+      "section": "World and Geopolitics",
       "file": "audio/segment-fr-4.mp3",
-      "duration": 40.2,
+      "duration": 14.5,
       "article_hashes": [
-        "92b73680795a43ca",
-        "21f5970f2c9d016a",
-        "2f247ea0d74744dc",
-        "cea47e6230733496"
+        "997b8f1b74ece74d",
+        "a18c3e6704e4514b",
+        "1f9c7867518919c4"
       ]
-    },
-    {
-      "index": 5,
-      "section": "Wrap-up",
-      "file": "audio/segment-fr-5.mp3",
-      "duration": 64.2,
-      "article_hashes": []
     }
   ]
 }

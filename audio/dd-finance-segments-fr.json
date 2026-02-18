@@ -1,77 +1,77 @@
 {
-  "generated_at": "2026-02-12T15:17:32.934341+00:00",
+  "generated_at": "2026-02-18T15:12:56.112425+00:00",
   "category": "finance",
   "segments": [
     {
       "index": 0,
       "section": "The Setup",
       "file": "audio/dd-finance-segment-fr-0.mp3",
-      "duration": 41.4,
+      "duration": 43.5,
       "article_hashes": [
-        "20d07281fd3e9652",
-        "96e7abb8a83a88b0",
-        "2230e29f72750f5f",
-        "75bc68916ca99b8e",
-        "8950294aeca77a0d",
-        "1c3477ab49c1ac8d",
-        "39181738c5205bae",
-        "851a4f9780e0caf5",
-        "2fcb3fda3ea67639",
-        "6472afd21a512ac4"
+        "a76f4288b62a33e9",
+        "a13985ee28e3e1c4",
+        "42c8aec084baf9e0",
+        "774c00873f8ade7c",
+        "d0b19e3f331a71ba",
+        "2aa52a8196570ffe",
+        "7d9bcb0667666cda",
+        "4377e96e70babdca",
+        "14cbd48680734b81",
+        "dbfefc87befe0a67"
       ]
     },
     {
       "index": 1,
       "section": "The Evidence",
       "file": "audio/dd-finance-segment-fr-1.mp3",
-      "duration": 131.5,
+      "duration": 110.1,
       "article_hashes": [
-        "20d07281fd3e9652",
-        "96e7abb8a83a88b0",
-        "2230e29f72750f5f",
-        "75bc68916ca99b8e",
-        "8950294aeca77a0d",
-        "1c3477ab49c1ac8d",
-        "39181738c5205bae",
-        "851a4f9780e0caf5",
-        "2fcb3fda3ea67639",
-        "6472afd21a512ac4"
+        "a76f4288b62a33e9",
+        "a13985ee28e3e1c4",
+        "42c8aec084baf9e0",
+        "774c00873f8ade7c",
+        "d0b19e3f331a71ba",
+        "2aa52a8196570ffe",
+        "7d9bcb0667666cda",
+        "4377e96e70babdca",
+        "14cbd48680734b81",
+        "dbfefc87befe0a67"
       ]
     },
     {
       "index": 2,
       "section": "The Analysis",
       "file": "audio/dd-finance-segment-fr-2.mp3",
-      "duration": 109.9,
+      "duration": 88.8,
       "article_hashes": [
-        "20d07281fd3e9652",
-        "96e7abb8a83a88b0",
-        "2230e29f72750f5f",
-        "75bc68916ca99b8e",
-        "8950294aeca77a0d",
-        "1c3477ab49c1ac8d",
-        "39181738c5205bae",
-        "851a4f9780e0caf5",
-        "2fcb3fda3ea67639",
-        "6472afd21a512ac4"
+        "a76f4288b62a33e9",
+        "a13985ee28e3e1c4",
+        "42c8aec084baf9e0",
+        "774c00873f8ade7c",
+        "d0b19e3f331a71ba",
+        "2aa52a8196570ffe",
+        "7d9bcb0667666cda",
+        "4377e96e70babdca",
+        "14cbd48680734b81",
+        "dbfefc87befe0a67"
       ]
     },
     {
       "index": 3,
       "section": "The Outlook",
       "file": "audio/dd-finance-segment-fr-3.mp3",
-      "duration": 57.5,
+      "duration": 108.5,
       "article_hashes": [
-        "20d07281fd3e9652",
-        "96e7abb8a83a88b0",
-        "2230e29f72750f5f",
-        "75bc68916ca99b8e",
-        "8950294aeca77a0d",
-        "1c3477ab49c1ac8d",
-        "39181738c5205bae",
-        "851a4f9780e0caf5",
-        "2fcb3fda3ea67639",
-        "6472afd21a512ac4"
+        "a76f4288b62a33e9",
+        "a13985ee28e3e1c4",
+        "42c8aec084baf9e0",
+        "774c00873f8ade7c",
+        "d0b19e3f331a71ba",
+        "2aa52a8196570ffe",
+        "7d9bcb0667666cda",
+        "4377e96e70babdca",
+        "14cbd48680734b81",
+        "dbfefc87befe0a67"
       ]
     }
   ]
