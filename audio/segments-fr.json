@@ -1,53 +1,68 @@
 {
-  "generated_at": "2026-02-18T15:08:35.286342+00:00",
+  "generated_at": "2026-02-18T15:21:34.049076+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-fr-0.mp3",
-      "duration": 281.5,
+      "duration": 13.7,
       "article_hashes": []
     },
     {
       "index": 1,
-      "section": "Introduction",
+      "section": "Experiment Automation Agents (EAA)",
       "file": "audio/segment-fr-1.mp3",
-      "duration": 20.7,
+      "duration": 70.0,
       "article_hashes": []
     },
     {
       "index": 2,
-      "section": "AI and Technology Advancements",
+      "section": "Profitable Cloud Business",
       "file": "audio/segment-fr-2.mp3",
-      "duration": 20.6,
-      "article_hashes": [
-        "285b97ad395790bc",
-        "681bdc46906d778d",
-        "facb782766810ae5",
-        "c44e30bae975e13a"
-      ]
+      "duration": 51.7,
+      "article_hashes": []
     },
     {
       "index": 3,
-      "section": "Finance and Markets",
+      "section": "Tech in Olympic Curling",
       "file": "audio/segment-fr-3.mp3",
-      "duration": 24.1,
-      "article_hashes": [
-        "a76f4288b62a33e9",
-        "a13985ee28e3e1c4",
-        "42c8aec084baf9e0"
-      ]
+      "duration": 56.9,
+      "article_hashes": []
     },
     {
       "index": 4,
-      "section": "World and Geopolitics",
+      "section": "AlphaGenome Breakthrough",
       "file": "audio/segment-fr-4.mp3",
-      "duration": 14.5,
-      "article_hashes": [
-        "997b8f1b74ece74d",
-        "a18c3e6704e4514b",
-        "1f9c7867518919c4"
-      ]
+      "duration": 49.4,
+      "article_hashes": []
+    },
+    {
+      "index": 5,
+      "section": "Andersons Earnings Call",
+      "file": "audio/segment-fr-5.mp3",
+      "duration": 52.1,
+      "article_hashes": []
+    },
+    {
+      "index": 6,
+      "section": "Global Anti-Trump Trade Alliance",
+      "file": "audio/segment-fr-6.mp3",
+      "duration": 46.2,
+      "article_hashes": []
+    },
+    {
+      "index": 7,
+      "section": "Geopolitical Tensions Affecting Individuals",
+      "file": "audio/segment-fr-7.mp3",
+      "duration": 65.5,
+      "article_hashes": []
+    },
+    {
+      "index": 8,
+      "section": "Conclusion",
+      "file": "audio/segment-fr-8.mp3",
+      "duration": 25.8,
+      "article_hashes": []
     }
   ]
 }
