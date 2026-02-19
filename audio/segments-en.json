@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-02-18T16:01:55.164146+00:00",
+  "generated_at": "2026-02-19T15:35:54.386305+00:00",
   "segments": [
     {
       "index": 0,
       "section": "Introduction",
       "file": "audio/segment-en-0.mp3",
-      "duration": 322.2,
+      "duration": 307.1,
       "article_hashes": []
     },
     {
       "index": 1,
       "section": "Wrap-up",
       "file": "audio/segment-en-1.mp3",
-      "duration": 6.1,
+      "duration": 22.8,
       "article_hashes": []
     }
   ]
